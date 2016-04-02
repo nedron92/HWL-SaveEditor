@@ -1,0 +1,38 @@
+#pragma once
+
+// CZeldaEditGeneralDlg-Dialogfeld
+
+class CZeldaEditGeneralDlg : public CDialogEx
+{
+	DECLARE_DYNAMIC(CZeldaEditGeneralDlg)
+
+public:
+	CZeldaEditGeneralDlg(CWnd* pParent = NULL);   // Standardkonstruktor
+	virtual ~CZeldaEditGeneralDlg();
+
+// Dialogfelddaten
+	enum { IDD = IDD_EDIT_GENERAL };
+
+protected:
+	HICON m_hIcon;
+
+	HWLSaveEdit::HWLSaveEditor *save;
+
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV-Unterstützung
+
+	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnBnClickedSave();
+	afx_msg void OnBnClickedExit();
+	afx_msg void OnMenuEditCharactersStats();
+	afx_msg void OnMenuAbout();
+	afx_msg void OnEnChangeRubyEdit();
+	afx_msg void OnMenuMainFileOpen();
+
+	int get_active_window_id();
+	afx_msg void OnMenuMainFileClose();
+	afx_msg void OnMenuMainExit();
+	afx_msg void OnMenuEditMaterialsBronze();
+	afx_msg void OnMenuEditMaterialsSilver();
+	afx_msg void OnMenuEditMaterialsGold();
+};

@@ -1,0 +1,435 @@
+//needed for including in a MFC-App
+#ifdef __MFC__
+#include "../gui/stdafx.h" 
+#endif // __MFC__
+
+
+#include "HWLSaveEditor.h"
+#include <stdio.h>
+#include <iostream>
+
+using namespace HWLSaveEdit;
+
+//offsets definitions
+/* @var rubyOffset			the offset-begin for rubies */
+const int HWLSaveEditor::fileHeaderOffsetBegin = 0x0;
+
+/* @var rubyOffset			the offset-begin for rubies */
+const int HWLSaveEditor::rubyOffset = 0xde;
+
+/* @var rubyOffsetLength	length for ruby-offset */
+const int HWLSaveEditor::rubyOffsetLength = 0x3;
+
+/* @var rubyMax				max value for rubies */
+const int HWLSaveEditor::rubyMax = 9999999;
+
+/* @var playerOffsetBegin	beginning of player-offsets (first character) */
+const int HWLSaveEditor::playerOffsetBegin = 0x2EBF2;
+
+/* @var playerOffsetLength	length of one player/character */
+const int HWLSaveEditor::playerOffsetLength = 0x30;
+
+/* @var vs_players			vector for holding all names of the characters */
+const vector<string> HWLSaveEditor::vs_players =
+{
+	"Link",
+	"Zelda",
+	"Sheik",
+	"Impa",
+	"Ganon",
+	"Darunia",
+	"Ruto",
+	"Agitha",
+	"Imp Midna",
+	"Fi",
+	"Ghirahim",
+	"Zant",
+	"Lana",
+	"Cia",
+	"Volga",
+	"Wizzro",
+	"Twili Midna",
+	"Young Link",
+	"Tingle",
+	"???",
+	"???",
+	"Linkle",
+	"Skull Kid",
+	"Toon Link",
+	"Tetra",
+	"King Daphnes"
+};
+
+/* @var bronzeMaterialsOffsetBegin	offset begin of first bronze-material */
+const int HWLSaveEditor::bronzeMaterialsOffsetBegin = 0x1924; 
+
+/* @var bronzeMaterialsOffsetBegin	offset begin of first new bronze-material */
+const int HWLSaveEditor::bronzeMaterialsOffsetBeginNew = 0x19BE;
+
+/* @var vs_bronzeMaterials			vector for holding all names of bronze Materials */
+const vector<string> HWLSaveEditor::vs_bronzeMaterials =
+{
+	"Metal Plate",
+	"Monster Tooth",
+	"Old Rag",
+	"Soldier's Uniform",
+	"Rock",
+	"Aeralfos Leather",
+	"Fiery Aeralfos Leather",
+	"Gibdo Bandage",
+	"Redead Bandage",
+	"Lizalfos Scale",
+	"Dinolfos Fang",
+	"Moblin Flank",
+	"Sheild-Moblin Helmet",
+	"Piece of Darknut Armor",
+	"Stalmaster Wrist Bone",
+	"Big Poe Necklace",
+	"Essence of Icy Big Poe",
+	"Hylian Captain Gauntlet",
+	"Goron Armor Breastplate",
+	"Big Blin Hide",
+	"Stone Blin Buckler",
+	"Monster Horn"
+};
+
+/* @var silverMaterialsOffsetBeginNew	offset begin of first silver-material */
+const int HWLSaveEditor::silverMaterialsOffsetBegin = 0x194A;
+
+/* @var silverMaterialsOffsetBeginNew	offset begin of first new silver-material */
+const int HWLSaveEditor::silverMaterialsOffsetBeginNew = 0x19C4;
+
+/* @var vs_silverMaterials				vector for holding all names of silver Materials */
+const vector<string> HWLSaveEditor::vs_silverMaterials =
+{
+	"Ganon's Mane",
+	"King Dodongo's Claw",
+	"Gohma's Acid",
+	"Manhandla's Toxic Dust",
+	"Argorok's Ember",
+	"Imprisoned Scale",
+	"Cia's Bracelet",
+	"Volga's Helmet",
+	"Wizzro's Robe",
+	"Link's Boots",
+	"Lana's Hair Clip",
+	"Zelda's Brooch",
+	"Impa's Hair Band",
+	"Ganondorf's Gauntlet",
+	"Sheik's Kunai",
+	"Darunia's Spikes",
+	"Ruto's Earrings",
+	"Agitha's Basket",
+	"Midna's Hair",
+	"Fi's Heels",
+	"Ghirahim's Sash",
+	"Zant's Magic Gem",
+	"Round Aeralfos Shield",
+	"Fiery Aeralfos Wing",
+	"Heavy Gibdo Sword",
+	"ReDead Knight Ashes",
+	"Lizalfos Gauntlet",
+	"Dinolfos Arm Guard",
+	"Moblin Spear",
+	"Metal Moblin Shield",
+	"Large Darknut Sword",
+	"Stalmaster's Skull",
+	"Big Poe's Lantern",
+	"Icy Big Poe's Talisman",
+	"Holy Hylian Shield",
+	"Thick Goron Helmet",
+	"Big Blin Club",
+	"Stone Blin Helmet",
+	"Helmaroc Plume",
+	"Phantom Ganon's Cape",
+	"Twili Midna's Hairpin",
+	"Young Link's Belt",
+	"Tingle's Map",
+	"Linkle's Boots",
+	"Skull Kid's Hat",
+	"Pirate's Charm",
+	"Tetra's Sandals",
+	"King Daphnes's Robe"
+};
+
+/* @var goldMaterialsOffsetBegin	offset begin of first gold-material */
+const int HWLSaveEditor::goldMaterialsOffsetBegin = 0x1992;
+
+/* @var goldMaterialsOffsetBegin	offset begin of first gold-material */
+const int HWLSaveEditor::goldMaterialsOffsetBeginNew = 0x19DC;
+
+/* @var vs_goldMaterials			vector for holding all names of gold Materials */
+const vector<string> HWLSaveEditor::vs_goldMaterials =
+{
+	"Ganon's Fang",
+	"King Dodongo's Crystal",
+	"Gohma's Lens",
+	"Manhandla's Sapling",
+	"Argorok's Stone",
+	"The Imprisoned's Pillar",
+	"Cia's Staff",
+	"Volga's Dragon Spear",
+	"Wizzro's Ring",
+	"Link's Scarf",
+	"Lana's Cloak",
+	"Zelda's Tiara",
+	"Impa's Breastplate",
+	"Ganondorf's Jewel",
+	"Sheik's Turban",
+	"Darunia's Bracelet",
+	"Ruto's Scale",
+	"Agitha's Pendant",
+	"Midna's Fused Shadow",
+	"Fi's Crystal",
+	"Ghirahim's Cape",
+	"Zant's Helmet",
+	"Helmaroc King's Mask",
+	"Phantom Ganon's Sword",
+	"Twili Midna's Robe",
+	"Keaton Mask",
+	"Tingle's Watch",
+	"Linkle's Compass",
+	"Majora's Mask",
+	"Island Outfit",
+	"Tetra's Bandana",
+	"King Daphnes's Crown",
+};
+
+HWLSaveEditor::HWLSaveEditor(string s_filepathname)
+{
+	//set the needed values for the file and program
+	//(path/name of file and open it)
+	this->s_filepathname = s_filepathname;
+	this->fs_filehandler = fstream(s_filepathname, 
+		fstream::binary | fstream::in | fstream::out );
+	
+	//check if file is open, else (throw later) set error
+	if (this->fs_filehandler.is_open())
+	{
+		
+		//do not skip whitespaces and calculate file-length
+		this->fs_filehandler >> std::noskipws;
+		this->fs_filehandler.seekg(0, this->fs_filehandler.end);
+		this->i_filelength = this->fs_filehandler.tellg();
+		this->fs_filehandler.seekg(0, this->fs_filehandler.beg);
+
+		//allocate memory for file-content and read the file
+		cp_filecontent = new unsigned char[this->i_filelength];
+		this->fs_filehandler.read((char*)cp_filecontent, this->i_filelength);
+
+		//calculate rubies, players and materials
+		if (this->check_savefile())
+		{
+			this->i_rubies = this->calc_rubies();
+			this->calc_players();
+			this->calc_materials();
+		}
+		else{
+			this->i_error = 400;
+			string s_tmp = "File '" + s_filepathname + "' is not valid. Sorry ;(";
+			char *cstr = new char[s_tmp.length() + 1];
+			strcpy(cstr, s_tmp.c_str());
+			throw HWLException(cstr, this->i_error);
+
+			delete[] cstr;
+		}
+
+	}
+	else{
+		this->i_error = 404;
+		string s_tmp = "File '" + s_filepathname + "' not found ";
+		char *cstr = new char[s_tmp.length() + 1];
+		strcpy(cstr, s_tmp.c_str());
+		throw HWLException(cstr, this->i_error);
+
+		delete[] cstr;
+	}
+}
+
+HWLSaveEditor::~HWLSaveEditor()
+{
+	if (this->fs_filehandler.is_open())
+	{
+		this->fs_filehandler.clear();
+		this->fs_filehandler.close();
+		delete cp_filecontent;
+	}
+}
+
+int HWLSaveEditor::calc_rubies()
+{
+	string s_rubies;
+	int i_ruby_offset = this->rubyOffset;
+
+	s_rubies = this->getHexStringFromFileContent(i_ruby_offset, this->rubyOffsetLength);
+
+	return this->HexStringToInt(s_rubies);
+}
+
+void HWLSaveEditor::calc_players()
+{
+	int i_offset = this->playerOffsetBegin;
+
+	for (int i = 0; i < this->vs_players.size(); i++)
+	{
+		shared_ptr<HWLPlayer> hwlp_tmp = make_shared<HWLPlayer>(vs_players[i], i_offset);
+		this->m_players[this->vs_players[i]] = hwlp_tmp;
+		i_offset = i_offset + this->playerOffsetLength;
+	}
+
+}
+
+void HWLSaveEditor::calc_materials()
+{
+	int i_offset = this->bronzeMaterialsOffsetBegin;
+
+	for (int i = 0; i < this->vs_bronzeMaterials.size(); i++)
+	{
+		if (i == (this->vs_bronzeMaterials.size() - 3))
+			i_offset = this->bronzeMaterialsOffsetBeginNew;
+
+		shared_ptr<HWLMaterial> hwlm_tmp = make_shared<HWLMaterial>(vs_bronzeMaterials[i], i_offset,0);
+		this->m_materials[this->vs_bronzeMaterials[i]] = hwlm_tmp;
+		i_offset = i_offset + this->materialOffsetLength;
+	}
+
+	i_offset = this->silverMaterialsOffsetBegin;
+
+	for (int i = 0; i < this->vs_silverMaterials.size(); i++)
+	{
+		if (i == (this->vs_silverMaterials.size() - 12))
+			i_offset = this->silverMaterialsOffsetBeginNew;
+
+		shared_ptr<HWLMaterial> hwlm_tmp = make_shared<HWLMaterial>(vs_silverMaterials[i], i_offset, 1);
+		this->m_materials[this->vs_silverMaterials[i]] = hwlm_tmp;
+		i_offset = i_offset + this->materialOffsetLength;
+	}
+
+	i_offset = this->goldMaterialsOffsetBegin;
+
+	for (int i = 0; i < this->vs_goldMaterials.size(); i++)
+	{
+		if (i == (this->vs_goldMaterials.size() - 10))
+			i_offset = this->goldMaterialsOffsetBeginNew;
+
+		shared_ptr<HWLMaterial> hwlm_tmp = make_shared<HWLMaterial>(vs_goldMaterials[i], i_offset, 2);
+		this->m_materials[this->vs_goldMaterials[i]] = hwlm_tmp;
+		i_offset = i_offset + this->materialOffsetLength;
+	}
+}
+
+void HWLSaveEditor::save_rubies()
+{
+	int i_ruby_tmp = this->i_rubies;
+	string s_rubies;
+	int i_ruby_offset = this->rubyOffset;
+
+	s_rubies = this->intToHexString(i_ruby_tmp, false);
+	this->addZeroToHexString(s_rubies, this->rubyOffsetLength * 2);
+
+	this->setHexStringToFileContent(s_rubies, i_ruby_offset);
+}
+
+
+int HWLSaveEditor::get_error()
+{
+	return this->i_error;
+}
+
+int HWLSaveEditor::get_rubies()
+{
+	return this->i_rubies;
+}
+
+shared_ptr<HWLPlayer> HWLSaveEditor::get_player(int i_id)
+{
+	shared_ptr<HWLPlayer> hwlp_tmp = this->m_players[this->vs_players[i_id]];
+
+	return hwlp_tmp;
+}
+
+shared_ptr<HWLPlayer> HWLSaveEditor::get_player(string s_name)
+{
+	shared_ptr<HWLPlayer> hwlp_tmp = this->m_players[s_name];
+
+	return hwlp_tmp;
+}
+
+shared_ptr<HWLMaterial> HWLSaveEditor::get_material(int i_id, int i_type)
+{
+	shared_ptr<HWLMaterial> hwlm_tmp;
+	switch (i_type)
+	{
+		case 0:
+			hwlm_tmp = this->m_materials[this->vs_bronzeMaterials[i_id]];
+			break;
+		case 1:
+			hwlm_tmp = this->m_materials[this->vs_silverMaterials[i_id]];
+			break;
+		case 2:
+			hwlm_tmp = this->m_materials[this->vs_goldMaterials[i_id]];
+			break;
+	}
+
+
+	return hwlm_tmp;
+}
+
+shared_ptr<HWLMaterial> HWLSaveEditor::get_material(string s_name)
+{
+	shared_ptr<HWLMaterial> hwlm_tmp = this->m_materials[s_name];
+
+	return hwlm_tmp;
+}
+
+
+void HWLSaveEditor::set_rubies(int i_rubies)
+{
+	if (i_rubies < 0)
+		i_rubies = 0;
+	else if (i_rubies > this->rubyMax)
+		i_rubies = rubyMax;
+
+	this->i_rubies = i_rubies;
+}
+
+
+
+
+void HWLSaveEditor::save_file()
+{
+	if (this->fs_filehandler.is_open())
+	{
+		this->save_rubies();
+
+		this->fs_filehandler.seekp(0, this->fs_filehandler.beg);
+		this->fs_filehandler.clear();
+
+		this->fs_filehandler.write((char*)cp_filecontent, this->i_filelength);
+	}
+	else{
+		this->i_error = 401;
+		string s_tmp = "File '" + this->s_filepathname + "' is not writeable.";
+		char *cstr = new char[s_tmp.length() + 1];
+		strcpy(cstr, s_tmp.c_str());
+		throw HWLException(cstr, this->i_error);
+
+		delete[] cstr;
+	}
+}
+
+bool HWLSaveEditor::check_savefile()
+{
+	string s_file_header[5];
+
+	for (int i = 0; i < 5; i++)
+	{
+		s_file_header[i] = this->getHexStringFromFileContent(this->fileHeaderOffsetBegin + i, 1);
+	}
+
+	if (s_file_header[0] == "00" && s_file_header[1] == "26" && s_file_header[2] == "10" && s_file_header[3] == "15"
+		&& s_file_header[4] == "00")
+		return true;
+	else
+		return false;
+}

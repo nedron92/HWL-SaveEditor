@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{B3A66ECD-1D60-4BCD-B5EF-ECD2C5BEE3D5}</ProjectGuid>
+    <RootNamespace>ZeldaHWLSaveEditor</RootNamespace>
+    <ProjectName>ZeldaHWLSaveEditorConsole</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <TargetName>HWLSaveEditor</TargetName>
+    <IntDir>tmp\$(ProjectName)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <TargetName>HWLSaveEditor</TargetName>
+    <IntDir>tmp\$(ProjectName)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OutputFile>bin\$(Configuration)\$(Platform)\$(TargetName)$(TargetExt)</OutputFile>
+    </Link>
+    <PostBuildEvent>
+      <Command>rd /s /q "$(TargetDir)"</Command>
+    </PostBuildEvent>
+    <BuildLog>
+      <Path />
+    </BuildLog>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <OutputFile>bin\$(Configuration)\$(Platform)\$(TargetName)$(TargetExt)</OutputFile>
+    </Link>
+    <PostBuildEvent>
+      <Command>rd /s /q "$(TargetDir)"</Command>
+    </PostBuildEvent>
+    <BuildLog>
+      <Path />
+    </BuildLog>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="source\console\main.cpp" />
+    <ClCompile Include="source\core\HWLException.cpp" />
+    <ClCompile Include="source\core\HWLMaterial.cpp" />
+    <ClCompile Include="source\core\HWLPlayer.cpp" />
+    <ClCompile Include="source\core\HWLSaveEditor.cpp" />
+    <ClCompile Include="source\core\HWLSaveEditorCore.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\console\resource.h" />
+    <ClInclude Include="source\core\HWLException.h" />
+    <ClInclude Include="source\core\HWLMaterial.h" />
+    <ClInclude Include="source\core\HWLPlayer.h" />
+    <ClInclude Include="source\core\HWLSaveEditor.h" />
+    <ClInclude Include="source\core\HWLSaveEditorCore.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="source\core\res\ZeldaHWLSaveEditorGUI.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="source\console\ZeldaHWLSaveEditorConsole.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

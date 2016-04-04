@@ -31,7 +31,7 @@ int main()
 
 		while (1)
 		{
-			cout << "Hyrule Warriors Legends - SaveEditor, V1.1" << endl;
+			cout << "Hyrule Warriors Legends - SaveEditor, V1.2" << endl;
 			cout << "__________________________________________" << endl << endl;
 
 			cout << "Menue: " << endl;
@@ -64,7 +64,7 @@ int main()
 	}
 	catch (HWLSaveEdit::HWLException &e)
 	{
-		cout << "Hyrule Warriors Legends - SaveEditor, V1.1" << endl;
+		cout << "Hyrule Warriors Legends - SaveEditor, V1.2" << endl;
 		cout << "__________________________________________" << endl << endl;
 		save = nullptr;
 		cout << e.what() << endl;
@@ -838,6 +838,8 @@ void get_amItem_menu()
 		cout << "2 - Maximize Adventure-Map Items" << endl;
 		cout << "3 - Maximize GreatSea-Map Items" << endl;
 		cout << "4 - Maximize MasterQuest-Map Items" << endl;
+		cout << "5 - Maximize Twilight-Map Items" << endl;
+		cout << "6 - Maximize Termina-Map Items" << endl;
 		cout << "0 - back" << endl;
 		cout << "Your choose: ";
 		cin >> c_choose;
@@ -892,13 +894,19 @@ void change_amItem_values(int i_choose)
 	case 2:
 	case 3:
 	case 4:
+	case 5:
+	case 6:
 	{
 			  if (i_choose == 2)
 				  cout << "Maximize Value of all Adventure-Map Items" << endl;
 			  else if (i_choose == 3)
 				  cout << "Maximize Value of all GreatSea-Map Items" << endl;
-			  else
+			  else if (i_choose == 4)
 				  cout << "Maximize Value of all MasterQuest-Map Items" << endl;
+			  else if (i_choose == 5)
+				  cout << "Maximize Value of all Twilight-Map Items" << endl;
+			  else
+				  cout << "Maximize Value of all Termina-Map Items" << endl;
 
 			  for (int i = 0; i < HWLSaveEdit::HWLAdventureModeItems::amItemPerMapMax; i++)
 			  {

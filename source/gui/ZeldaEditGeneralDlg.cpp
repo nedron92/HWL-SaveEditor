@@ -72,6 +72,8 @@ BEGIN_MESSAGE_MAP(CZeldaEditGeneralDlg, CDialogEx)
 	ON_COMMAND(ID_MENU_EDIT_AM_MQMAP, &CZeldaEditGeneralDlg::OnMenuEditAmMqmap)
 	ON_COMMAND(ID_MENU_EDIT_GENERAL, &CZeldaEditGeneralDlg::OnMenuEditGeneral)
 	ON_BN_CLICKED(IDC_RUBY_MAX, &CZeldaEditGeneralDlg::OnBnClickedRubyMax)
+	ON_COMMAND(ID_MENU_EDIT_AM_TLMAP, &CZeldaEditGeneralDlg::OnMenuEditAmTlmap)
+	ON_COMMAND(ID_MENU_EDIT_AM_TMMAP, &CZeldaEditGeneralDlg::OnMenuEditAmTmmap)
 END_MESSAGE_MAP()
 
 
@@ -313,6 +315,22 @@ void CZeldaEditGeneralDlg::OnMenuEditAmMqmap()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditAdventureModeItem dlg(NULL, 2);
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+void CZeldaEditGeneralDlg::OnMenuEditAmTlmap()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditAdventureModeItem dlg(NULL, 3);
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+void CZeldaEditGeneralDlg::OnMenuEditAmTmmap()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditAdventureModeItem dlg(NULL, 4);
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }

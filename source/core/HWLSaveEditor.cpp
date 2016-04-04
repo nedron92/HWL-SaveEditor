@@ -337,14 +337,24 @@ const vector<int> HWLSaveEditor::amItemOffsetBegin =
 {
 	0x2EFA,  //Start of Adventure-Map Items
 	0xEB73,  //Start of GreatSea-Map Items (WindWaker and so on)
-	0x7A52,   //Start of MasterQuest-Map Items
+	0x7A52,  //Start of MasterQuest-Map Items
+	0xA00A,  //Start of Twilight-Map Items (Lantern and so on)
+	0xC5BE	 //Start of Termina-Map Items (Song of Time and so on)
+
 };
 
 /* @var amItemOffsetBegin	vector for holding the offsets-begin for AdventureMode items */
 const vector<int> HWLSaveEditor::amItemOffsetBeginSpecial =
 {
 	0xEB56,  //Compass of GreatSea-Map
-	0xEB5F   //Hookshot of GreatSea-Map
+	0xEB5F,  //Hookshot of GreatSea-Map
+
+	0x9FFE,  //Compass of Twilight-Map (+1 = Bombs)
+	0xA003,  //Waterbombs of Twilight-Map (+1 = Digging Mitts)
+
+	0xC5AA, //Compass of Termina-Map (+1 = Bombs)
+	0xC5B1, //Ice Arrow of Termina-Map
+
 };
 
 
@@ -391,32 +401,30 @@ const vector<string> HWLSaveEditor::vs_amItems =
 	"Goddess's Harp",  //MasterQuest-Map Items End
 
 	"Compass",  //Twilight-Map Items Begin
-	"Lantern",
 	"Bombs",
+	"Water Bombs",
+	"Digging Mitts",
+	"Lantern",
 	"Jar",
 	"Fishing Rod",
 	"Clawshot",
 	"Spinner",
-	"Water Bombs",
-	"Digging Mitts",
 	"Ooccoo",
 	"Tears of Light",
 	"Tears of Twilight", //Twilight-Map Items End
 
 	"Compass",  //Termina-Map Items Begin
+	"Bombs",
+	"Ice Arrow",
+	"Song of Time",
+	"Song of Time (Inv.)",
+	"Deku Stick",
 	"Deku Mask",
 	"Goron Mask",
 	"Zora Mask",
 	"Mask of Truth",
 	"Majora's Mask",
-	"Deku Stick",
-	"Bombs",
-	"Ice Arrow",
-	"Song of Time",
-	"Inverted Song of Time",
 	"Giants"  //Termina-Map Items End
-
-
 };
 
 HWLSaveEditor::HWLSaveEditor(string s_filepathname)
@@ -571,17 +579,48 @@ void HWLSaveEditor::calc_amItems()
 			if (i_type == this->amItemOffsetBegin.size())
 				break;
 
-			if (i == 12)
+			switch (i)
+			{
+			case 12: 
 				i_offset = this->amItemOffsetBeginSpecial[0];
-			else
+				break;
+
+			case 36:
+				i_offset = this->amItemOffsetBeginSpecial[2];
+				break;
+
+			case 48:
+				i_offset = this->amItemOffsetBeginSpecial[4];
+				break;
+
+			default:
 				i_offset = this->amItemOffsetBegin[i_type];
+				break;
+			}
+
 		}
 
-		if (i == 13)
+		switch (i)
+		{
+		case 13:
 			i_offset = this->amItemOffsetBeginSpecial[1];
-		else if (i == 14)
-			i_offset = this->amItemOffsetBegin[i_type];
+			break;
 
+		case 14:
+		case 40:
+		case 51:
+			i_offset = this->amItemOffsetBegin[i_type];
+			break;
+
+		case 38:
+			i_offset = this->amItemOffsetBeginSpecial[3];
+			break;
+
+		case 50:
+			i_offset = this->amItemOffsetBeginSpecial[5];
+			break;
+
+		}
 
 		shared_ptr<HWLAdventureModeItems> hwlami_tmp = make_shared<HWLAdventureModeItems>(vs_amItems[i], i_offset, i_type);
 		this->m_amItem[i] = hwlami_tmp;

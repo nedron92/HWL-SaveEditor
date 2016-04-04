@@ -51,4 +51,6 @@ public:
 	afx_msg void OnMenuEditAmGsmap();
 	afx_msg void OnMenuEditAmMqmap();
 	afx_msg void OnBnClickedMaterialMaxValueAll();
+	afx_msg void OnMenuEditAmTlmap();
+	afx_msg void OnMenuEditAmTmmap();
 };

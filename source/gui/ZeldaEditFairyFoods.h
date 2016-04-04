@@ -51,4 +51,6 @@ public:
 	afx_msg void OnBnClickedFairyfoodMaxValuePage();
 	afx_msg void OnBnClickedFairyfoodMaxValueAll();
 	afx_msg void OnBnClickedFairyfoodMaxValueGratitude();
+	afx_msg void OnMenuEditAmTlmap();
+	afx_msg void OnMenuEditAmTmmap();
 };

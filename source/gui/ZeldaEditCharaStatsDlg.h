@@ -47,5 +47,7 @@ public:
 	afx_msg void OnBnClickedCharaMaxExpAll();
 	afx_msg void OnBnClickedCharaMaxAtkAll();
 	afx_msg void OnBnClickedCharaUnlockAll();
+	afx_msg void OnMenuEditAmTlmap();
+	afx_msg void OnMenuEditAmTmmap();
 };
 

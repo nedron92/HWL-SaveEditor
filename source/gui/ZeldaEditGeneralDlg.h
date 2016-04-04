@@ -41,4 +41,6 @@ public:
 	afx_msg void OnMenuEditAmMqmap();
 	afx_msg void OnMenuEditGeneral();
 	afx_msg void OnBnClickedRubyMax();
+	afx_msg void OnMenuEditAmTlmap();
+	afx_msg void OnMenuEditAmTmmap();
 };

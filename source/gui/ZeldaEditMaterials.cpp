@@ -151,6 +151,8 @@ BEGIN_MESSAGE_MAP(CZeldaEditMaterials, CDialogEx)
 	ON_COMMAND(ID_MENU_EDIT_AM_GSMAP, &CZeldaEditMaterials::OnMenuEditAmGsmap)
 	ON_COMMAND(ID_MENU_EDIT_AM_MQMAP, &CZeldaEditMaterials::OnMenuEditAmMqmap)
 	ON_BN_CLICKED(IDC_MATERIAL_MAX_VALUE_ALL, &CZeldaEditMaterials::OnBnClickedMaterialMaxValueAll)
+	ON_COMMAND(ID_MENU_EDIT_AM_TLMAP, &CZeldaEditMaterials::OnMenuEditAmTlmap)
+	ON_COMMAND(ID_MENU_EDIT_AM_TMMAP, &CZeldaEditMaterials::OnMenuEditAmTmmap)
 END_MESSAGE_MAP()
 
 
@@ -424,6 +426,21 @@ void CZeldaEditMaterials::OnMenuEditAmMqmap()
 	dlg.DoModal();
 }
 
+void CZeldaEditMaterials::OnMenuEditAmTlmap()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditAdventureModeItem dlg(NULL, 3);
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+void CZeldaEditMaterials::OnMenuEditAmTmmap()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditAdventureModeItem dlg(NULL, 4);
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
 
 void CZeldaEditMaterials::OnBnClickedMaterialMaxValueAll()
 {
@@ -463,3 +480,4 @@ void CZeldaEditMaterials::OnBnClickedMaterialMaxValueAll()
 	}
 
 }
+

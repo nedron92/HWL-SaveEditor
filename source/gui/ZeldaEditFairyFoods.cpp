@@ -118,6 +118,8 @@ BEGIN_MESSAGE_MAP(CZeldaEditFairyFoods, CDialogEx)
 	ON_BN_CLICKED(IDC_FAIRYFOOD_MAX_VALUE_PAGE, &CZeldaEditFairyFoods::OnBnClickedFairyfoodMaxValuePage)
 	ON_BN_CLICKED(IDC_FAIRYFOOD_MAX_VALUE_ALL, &CZeldaEditFairyFoods::OnBnClickedFairyfoodMaxValueAll)
 	ON_BN_CLICKED(IDC_FAIRYFOOD_MAX_VALUE_GRATITUDE, &CZeldaEditFairyFoods::OnBnClickedFairyfoodMaxValueGratitude)
+	ON_COMMAND(ID_MENU_EDIT_AM_TLMAP, &CZeldaEditFairyFoods::OnMenuEditAmTlmap)
+	ON_COMMAND(ID_MENU_EDIT_AM_TMMAP, &CZeldaEditFairyFoods::OnMenuEditAmTmmap)
 END_MESSAGE_MAP()
 
 
@@ -337,6 +339,22 @@ void CZeldaEditFairyFoods::OnMenuEditAmMqmap()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditAdventureModeItem dlg(NULL, 2);
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+void CZeldaEditFairyFoods::OnMenuEditAmTlmap()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditAdventureModeItem dlg(NULL, 3);
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+void CZeldaEditFairyFoods::OnMenuEditAmTmmap()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditAdventureModeItem dlg(NULL, 4);
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }

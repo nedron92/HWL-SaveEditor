@@ -125,6 +125,8 @@ BEGIN_MESSAGE_MAP(CZeldaEditCharaStatsDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_CHARA_MAX_EXP_ALL, &CZeldaEditCharaStatsDlg::OnBnClickedCharaMaxExpAll)
 	ON_BN_CLICKED(IDC_CHARA_MAX_ATK_ALL, &CZeldaEditCharaStatsDlg::OnBnClickedCharaMaxAtkAll)
 	ON_BN_CLICKED(IDC_CHARA_UNLOCK_ALL, &CZeldaEditCharaStatsDlg::OnBnClickedCharaUnlockAll)
+	ON_COMMAND(ID_MENU_EDIT_AM_TLMAP, &CZeldaEditCharaStatsDlg::OnMenuEditAmTlmap)
+	ON_COMMAND(ID_MENU_EDIT_AM_TMMAP, &CZeldaEditCharaStatsDlg::OnMenuEditAmTmmap)
 END_MESSAGE_MAP()
 
 
@@ -413,6 +415,22 @@ void CZeldaEditCharaStatsDlg::OnMenuEditAmMqmap()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditAdventureModeItem dlg(NULL, 2);
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+void CZeldaEditCharaStatsDlg::OnMenuEditAmTlmap()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditAdventureModeItem dlg(NULL, 3);
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+void CZeldaEditCharaStatsDlg::OnMenuEditAmTmmap()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditAdventureModeItem dlg(NULL, 4);
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }

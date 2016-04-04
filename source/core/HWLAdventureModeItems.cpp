@@ -91,6 +91,14 @@ string HWLAdventureModeItems::get_type(bool b_get_string)
 		return "MasterQuest-Map Item ";
 		break;
 
+	case 3:
+		return "Twilight-Map Item ";
+		break;
+
+	case 4:
+		return "Termina-Map Item ";
+		break;
+
 	default:
 		return to_string(i_type);
 	}

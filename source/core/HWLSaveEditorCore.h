@@ -19,7 +19,10 @@ namespace HWLSaveEdit
 			*/						
 			static unsigned char* cp_filecontent;
 
+			static const int playerOffsetLength;
 			static const int materialOffsetLength;
+			static const int fairyFoodOffsetLength;
+			static const int amItemOffsetLength;
 
 		public:
 			/* Constructor and pure-virtual Destructor 

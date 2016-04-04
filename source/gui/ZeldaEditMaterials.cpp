@@ -146,6 +146,11 @@ BEGIN_MESSAGE_MAP(CZeldaEditMaterials, CDialogEx)
 	ON_BN_CLICKED(IDC_MATERIAL_PAGE_NEXT, &CZeldaEditMaterials::OnBnClickedMaterialPageNext)
 	ON_COMMAND(ID_MENU_EDIT_MATERIALS_GOLD, &CZeldaEditMaterials::OnMenuEditMaterialsGold)
 	ON_COMMAND(ID_MENU_MAIN_EXIT, &CZeldaEditMaterials::OnMenuMainExit)
+	ON_COMMAND(ID_MENU_EDIT_FAIRYFOODS, &CZeldaEditMaterials::OnMenuEditFairyfoods)
+	ON_COMMAND(ID_MENU_EDIT_AM_AVMAP, &CZeldaEditMaterials::OnMenuEditAmAvmap)
+	ON_COMMAND(ID_MENU_EDIT_AM_GSMAP, &CZeldaEditMaterials::OnMenuEditAmGsmap)
+	ON_COMMAND(ID_MENU_EDIT_AM_MQMAP, &CZeldaEditMaterials::OnMenuEditAmMqmap)
+	ON_BN_CLICKED(IDC_MATERIAL_MAX_VALUE_ALL, &CZeldaEditMaterials::OnBnClickedMaterialMaxValueAll)
 END_MESSAGE_MAP()
 
 
@@ -173,7 +178,6 @@ void CZeldaEditMaterials::OnBnClickedExit()
 {
 	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
 	CZeldaEditMaterials::OnOK();
-	//this->DestroyWindow();
 }
 
 
@@ -186,6 +190,7 @@ void CZeldaEditMaterials::OnBnClickedCancel()
 
 void CZeldaEditMaterials::OnBnClickedSave()
 {
+	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
 	if (save != nullptr)
 	{
 		try
@@ -203,7 +208,6 @@ void CZeldaEditMaterials::OnBnClickedSave()
 		CString str("There is no SaveFile opened!");
 		MessageBox(str, L"Error");
 	}
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
 }
 
 void CZeldaEditMaterials::calc_materials()
@@ -246,10 +250,10 @@ void CZeldaEditMaterials::calc_materials()
 			e_test->SetLimitText(4);
 		}
 		else{
-			if (GetDlgItem(IDC_STATIC_MATERIAL1 + i)->IsWindowVisible())
+			if (GetDlgItem(IDC_STATIC_MATERIAL1 + i)->IsWindowVisible() || this->i_type == 0)
 				GetDlgItem(IDC_STATIC_MATERIAL1 + i)->ShowWindow(SW_HIDE);
 
-			if (GetDlgItem(IDC_EDIT_MATERIAL1 + i)->IsWindowVisible())
+			if (GetDlgItem(IDC_EDIT_MATERIAL1 + i)->IsWindowVisible() || this->i_type == 0)
 				GetDlgItem(IDC_EDIT_MATERIAL1 + i)->ShowWindow(SW_HIDE);
 
 		}
@@ -382,4 +386,80 @@ void CZeldaEditMaterials::OnMenuMainExit()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditMaterials::OnOK();
+}
+
+
+void CZeldaEditMaterials::OnMenuEditFairyfoods()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditFairyFoods dlg;
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+
+void CZeldaEditMaterials::OnMenuEditAmAvmap()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditAdventureModeItem dlg(NULL, 0);
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+
+void CZeldaEditMaterials::OnMenuEditAmGsmap()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditAdventureModeItem dlg(NULL, 1);
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+
+void CZeldaEditMaterials::OnMenuEditAmMqmap()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditAdventureModeItem dlg(NULL, 2);
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+
+void CZeldaEditMaterials::OnBnClickedMaterialMaxValueAll()
+{
+	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	if (save != nullptr)
+	{
+		int i_size;
+		switch (this->i_type)
+		{
+		case 0: {
+					i_size = save->vs_bronzeMaterials.size();
+					break;
+		}
+
+		case 1: {
+					i_size = save->vs_silverMaterials.size();
+					break;
+		}
+
+		case 2: {
+					i_size = save->vs_goldMaterials.size();
+					break;
+		}
+
+		}
+
+		for (int i = 0; i < i_size; i++)
+		{
+			save->get_material(i, this->i_type)->set_value(HWLSaveEdit::HWLMaterial::materialValueMax);
+			save->get_material(i, this->i_type)->save_Material();
+		}
+
+		this->UpdateData();
+
+		CString str("Finish! All needed Values are updated.");
+		MessageBox(str, L"Information", MB_OK | MB_ICONINFORMATION);
+	}
+
 }

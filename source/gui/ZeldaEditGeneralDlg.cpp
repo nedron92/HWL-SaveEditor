@@ -66,6 +66,12 @@ BEGIN_MESSAGE_MAP(CZeldaEditGeneralDlg, CDialogEx)
 	ON_COMMAND(ID_MENU_EDIT_MATERIALS_BRONZE, &CZeldaEditGeneralDlg::OnMenuEditMaterialsBronze)
 	ON_COMMAND(ID_MENU_EDIT_MATERIALS_SILVER, &CZeldaEditGeneralDlg::OnMenuEditMaterialsSilver)
 	ON_COMMAND(ID_MENU_EDIT_MATERIALS_GOLD, &CZeldaEditGeneralDlg::OnMenuEditMaterialsGold)
+	ON_COMMAND(ID_MENU_EDIT_FAIRYFOODS, &CZeldaEditGeneralDlg::OnMenuEditFairyfoods)
+	ON_COMMAND(ID_MENU_EDIT_AM_AVMAP, &CZeldaEditGeneralDlg::OnMenuEditAmAvmap)
+	ON_COMMAND(ID_MENU_EDIT_AM_GSMAP, &CZeldaEditGeneralDlg::OnMenuEditAmGsmap)
+	ON_COMMAND(ID_MENU_EDIT_AM_MQMAP, &CZeldaEditGeneralDlg::OnMenuEditAmMqmap)
+	ON_COMMAND(ID_MENU_EDIT_GENERAL, &CZeldaEditGeneralDlg::OnMenuEditGeneral)
+	ON_BN_CLICKED(IDC_RUBY_MAX, &CZeldaEditGeneralDlg::OnBnClickedRubyMax)
 END_MESSAGE_MAP()
 
 
@@ -100,25 +106,6 @@ void CZeldaEditGeneralDlg::OnBnClickedExit()
 	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
 	CZeldaEditGeneralDlg::OnOK();
 
-}
-
-
-void CZeldaEditGeneralDlg::OnMenuEditCharactersStats()
-{
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
-	CZeldaEditCharaStatsDlg dlg;
-	EndDialog(this->IDD);
-	dlg.DoModal();
-
-}
-
-
-void CZeldaEditGeneralDlg::OnMenuAbout()
-{
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
-	CZeldaAboutDlg about;
-	about.DoModal();
-	
 }
 
 void CZeldaEditGeneralDlg::OnEnChangeRubyEdit()
@@ -251,6 +238,22 @@ void CZeldaEditGeneralDlg::OnMenuMainExit()
 
 }
 
+void CZeldaEditGeneralDlg::OnMenuAbout()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaAboutDlg about;
+	about.DoModal();
+
+}
+
+void CZeldaEditGeneralDlg::OnMenuEditCharactersStats()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditCharaStatsDlg dlg;
+	EndDialog(this->IDD);
+	dlg.DoModal();
+
+}
 
 void CZeldaEditGeneralDlg::OnMenuEditMaterialsBronze()
 {
@@ -276,4 +279,63 @@ void CZeldaEditGeneralDlg::OnMenuEditMaterialsGold()
 	CZeldaEditMaterials dlg(NULL, 2);
 	EndDialog(this->IDD);
 	dlg.DoModal();
+}
+
+
+void CZeldaEditGeneralDlg::OnMenuEditFairyfoods()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditFairyFoods dlg;
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+
+void CZeldaEditGeneralDlg::OnMenuEditAmAvmap()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditAdventureModeItem dlg(NULL, 0);
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+
+void CZeldaEditGeneralDlg::OnMenuEditAmGsmap()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditAdventureModeItem dlg(NULL, 1);
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+
+void CZeldaEditGeneralDlg::OnMenuEditAmMqmap()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditAdventureModeItem dlg(NULL, 2);
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+
+void CZeldaEditGeneralDlg::OnMenuEditGeneral()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+}
+
+
+void CZeldaEditGeneralDlg::OnBnClickedRubyMax()
+{
+	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	if (save != nullptr)
+	{
+		CString cs_ruby_value;
+
+		save->set_rubies(save->rubyMax);
+		cs_ruby_value.Format(L"%d", save->get_rubies());
+		SetDlgItemText(IDC_RUBY_EDIT, cs_ruby_value);
+
+		CString str("Finish! All needed Values are updated.");
+		MessageBox(str, L"Information", MB_OK | MB_ICONINFORMATION);
+	}
 }

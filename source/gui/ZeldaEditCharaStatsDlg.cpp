@@ -118,6 +118,13 @@ BEGIN_MESSAGE_MAP(CZeldaEditCharaStatsDlg, CDialogEx)
 	ON_COMMAND(ID_MENU_EDIT_MATERIALS_SILVER, &CZeldaEditCharaStatsDlg::OnMenuEditMaterialsSilver)
 	ON_COMMAND(ID_MENU_EDIT_MATERIALS_GOLD, &CZeldaEditCharaStatsDlg::OnMenuEditMaterialsGold)
 	ON_COMMAND(ID_MENU_MAIN_EXIT, &CZeldaEditCharaStatsDlg::OnMenuMainExit)
+	ON_COMMAND(ID_MENU_EDIT_FAIRYFOODS, &CZeldaEditCharaStatsDlg::OnMenuEditFairyfoods)
+	ON_COMMAND(ID_MENU_EDIT_AM_AVMAP, &CZeldaEditCharaStatsDlg::OnMenuEditAmAvmap)
+	ON_COMMAND(ID_MENU_EDIT_AM_GSMAP, &CZeldaEditCharaStatsDlg::OnMenuEditAmGsmap)
+	ON_COMMAND(ID_MENU_EDIT_AM_MQMAP, &CZeldaEditCharaStatsDlg::OnMenuEditAmMqmap)
+	ON_BN_CLICKED(IDC_CHARA_MAX_EXP_ALL, &CZeldaEditCharaStatsDlg::OnBnClickedCharaMaxExpAll)
+	ON_BN_CLICKED(IDC_CHARA_MAX_ATK_ALL, &CZeldaEditCharaStatsDlg::OnBnClickedCharaMaxAtkAll)
+	ON_BN_CLICKED(IDC_CHARA_UNLOCK_ALL, &CZeldaEditCharaStatsDlg::OnBnClickedCharaUnlockAll)
 END_MESSAGE_MAP()
 
 
@@ -372,4 +379,134 @@ void CZeldaEditCharaStatsDlg::OnMenuMainExit()
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditCharaStatsDlg::OnOK();
 
+}
+
+
+void CZeldaEditCharaStatsDlg::OnMenuEditFairyfoods()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditFairyFoods dlg;
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+
+void CZeldaEditCharaStatsDlg::OnMenuEditAmAvmap()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditAdventureModeItem dlg(NULL, 0);
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+
+void CZeldaEditCharaStatsDlg::OnMenuEditAmGsmap()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditAdventureModeItem dlg(NULL, 1);
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+
+void CZeldaEditCharaStatsDlg::OnMenuEditAmMqmap()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditAdventureModeItem dlg(NULL, 2);
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+
+void CZeldaEditCharaStatsDlg::OnBnClickedCharaMaxExpAll()
+{
+	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+
+	if (save != nullptr)
+	{
+		int unused_charas = 0;
+
+		for (int i = 0; i < save->vs_players.size(); i++)
+		{
+			CString s_player_name(save->get_player(i)->get_name().c_str());
+
+			if (s_player_name == L"???")
+			{
+				unused_charas++;
+				continue;
+			}
+
+			save->get_player(i)->set_exp(HWLSaveEdit::HWLPlayer::playerEXPMax);
+			save->get_player(i)->save_Player();
+		}
+
+		this->UpdateData();
+
+		CString str("Finish! All needed Values are updated.");
+		MessageBox(str, L"Information", MB_OK | MB_ICONINFORMATION);
+	}
+
+}
+
+
+void CZeldaEditCharaStatsDlg::OnBnClickedCharaMaxAtkAll()
+{
+	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+
+	if (save != nullptr)
+	{
+		int unused_charas = 0;
+
+		for (int i = 0; i < save->vs_players.size(); i++)
+		{
+			CString s_player_name(save->get_player(i)->get_name().c_str());
+
+			if (s_player_name == L"???")
+			{
+				unused_charas++;
+				continue;
+			}
+
+			save->get_player(i)->set_atk(HWLSaveEdit::HWLPlayer::playerATKMax);
+			save->get_player(i)->save_Player();
+		}
+
+		this->UpdateData();
+
+		CString str("Finish! All needed Values are updated.");
+		MessageBox(str, L"Information", MB_OK | MB_ICONINFORMATION);
+
+	}
+}
+
+
+void CZeldaEditCharaStatsDlg::OnBnClickedCharaUnlockAll()
+{
+	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+
+	if (save != nullptr)
+	{
+		int unused_charas = 0;
+
+		for (int i = 0; i < save->vs_players.size(); i++)
+		{
+			CString s_player_name(save->get_player(i)->get_name().c_str());
+			CButton *cb_check;
+
+			if (s_player_name == L"???")
+			{
+				unused_charas++;
+				continue;
+			}
+
+			save->get_player(i)->set_isUnlock(true);
+			save->get_player(i)->save_Player();
+		}
+
+		this->UpdateData();
+
+		CString str("Finish! All needed Values are updated.");
+		MessageBox(str, L"Information", MB_OK | MB_ICONINFORMATION);
+
+	}
 }

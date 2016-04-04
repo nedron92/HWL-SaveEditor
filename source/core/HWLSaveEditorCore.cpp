@@ -11,8 +11,17 @@ using namespace HWLSaveEdit;
 //initialize the static-member
 unsigned char* HWLSaveEditorCore::cp_filecontent = 0;
 
+/* @var playerOffsetLength		length of one player/character */
+const int HWLSaveEditorCore::playerOffsetLength = 0x30;
+
 /* @var materialOffsetLength	length for all material-offsets */
 const int HWLSaveEditorCore::materialOffsetLength = 0x2;
+
+/* @var fairyFoodOffsetLength	length for all fairyFood-offsets */
+const int HWLSaveEditorCore::fairyFoodOffsetLength = 0x1;
+
+/* @var amItemOffsetLength		length for all adventureMode-Item-offsets */
+const int HWLSaveEditorCore::amItemOffsetLength = 0x1;
 
 /** 
 * Only the initialization of the normal-constructor

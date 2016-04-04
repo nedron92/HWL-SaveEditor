@@ -3,7 +3,6 @@
 #include "../gui/stdafx.h" 
 #endif // __MFC__
 
-
 #include "HWLException.h"
 
 //use the project-namespace

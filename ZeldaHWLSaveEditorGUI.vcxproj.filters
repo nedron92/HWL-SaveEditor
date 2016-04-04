@@ -54,6 +54,18 @@
     <ClInclude Include="source\core\HWLSaveEditorCore.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="source\core\HWLAdventureModeItems.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\HWLFairyFood.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gui\ZeldaEditFairyFoods.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gui\ZeldaEditAdventureModeItem.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\gui\stdafx.cpp">
@@ -87,6 +99,18 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="source\core\HWLSaveEditorCore.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\HWLAdventureModeItems.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\HWLFairyFood.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gui\ZeldaEditFairyFoods.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gui\ZeldaEditAdventureModeItem.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>

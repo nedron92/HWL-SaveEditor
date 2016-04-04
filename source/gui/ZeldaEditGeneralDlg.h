@@ -35,4 +35,10 @@ public:
 	afx_msg void OnMenuEditMaterialsBronze();
 	afx_msg void OnMenuEditMaterialsSilver();
 	afx_msg void OnMenuEditMaterialsGold();
+	afx_msg void OnMenuEditFairyfoods();
+	afx_msg void OnMenuEditAmAvmap();
+	afx_msg void OnMenuEditAmGsmap();
+	afx_msg void OnMenuEditAmMqmap();
+	afx_msg void OnMenuEditGeneral();
+	afx_msg void OnBnClickedRubyMax();
 };

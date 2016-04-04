@@ -40,5 +40,12 @@ public:
 	afx_msg void OnMenuEditMaterialsSilver();
 	afx_msg void OnMenuEditMaterialsGold();
 	afx_msg void OnMenuMainExit();
+	afx_msg void OnMenuEditFairyfoods();
+	afx_msg void OnMenuEditAmAvmap();
+	afx_msg void OnMenuEditAmGsmap();
+	afx_msg void OnMenuEditAmMqmap();
+	afx_msg void OnBnClickedCharaMaxExpAll();
+	afx_msg void OnBnClickedCharaMaxAtkAll();
+	afx_msg void OnBnClickedCharaUnlockAll();
 };
 

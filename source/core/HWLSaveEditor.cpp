@@ -11,25 +11,22 @@
 using namespace HWLSaveEdit;
 
 //offsets definitions
-/* @var rubyOffset			the offset-begin for rubies */
+/* @var fileHeaderOffsetBegin	the offset-begin for the file-header */
 const int HWLSaveEditor::fileHeaderOffsetBegin = 0x0;
 
-/* @var rubyOffset			the offset-begin for rubies */
+/* @var rubyOffset				the offset-begin for rubies */
 const int HWLSaveEditor::rubyOffset = 0xde;
 
-/* @var rubyOffsetLength	length for ruby-offset */
+/* @var rubyOffsetLength		length for ruby-offset */
 const int HWLSaveEditor::rubyOffsetLength = 0x3;
 
-/* @var rubyMax				max value for rubies */
+/* @var rubyMax					max value for rubies */
 const int HWLSaveEditor::rubyMax = 9999999;
 
-/* @var playerOffsetBegin	beginning of player-offsets (first character) */
+/* @var playerOffsetBegin		beginning of player-offsets (first character) */
 const int HWLSaveEditor::playerOffsetBegin = 0x2EBF2;
 
-/* @var playerOffsetLength	length of one player/character */
-const int HWLSaveEditor::playerOffsetLength = 0x30;
-
-/* @var vs_players			vector for holding all names of the characters */
+/* @var vs_players				vector for holding all names of the characters */
 const vector<string> HWLSaveEditor::vs_players =
 {
 	"Link",
@@ -195,6 +192,233 @@ const vector<string> HWLSaveEditor::vs_goldMaterials =
 	"King Daphnes's Crown",
 };
 
+/* @var fairyFoodOffsetBegin	offset begin of first fairyfood-item */
+const int HWLSaveEditor::fairyFoodOffsetBegin = 0x233A;
+
+/* @var vs_fairyFood			vector for holding all names of fairyFood-Items */
+const vector<string> HWLSaveEditor::vs_fairyFood =
+{
+	"Weird Egg",
+	"Tasty Weird Egg",
+	"Delicious Weird Egg",
+	"Lon Lon Milk",
+	"Tasty Lon Lon Milk",
+	"Delicious Lon Lon Milk",
+	"Odd Mushroom",
+	"Tasty Odd Mushroom",
+	"Delicious Odd Mushroom",
+	"Deku Nut",
+	"Tasty Deku Nut",
+	"Delicious Deku Nut",
+	"Magic Beans",
+	"Tasty Magic Beans",
+	"Delicious Magic Beans",
+	"Pumpkin Soup",
+	"Tasty Pumpkin Soup",
+	"Delicious Pumpkin Soup",
+	"Sacred Water",
+	"Tasty Sacred Water",
+	"Delicious Sacred Water",
+	"Life Tree Fruit",
+	"Tasty Life Tree Fruit",
+	"Delicious Life Tree Fruit",
+	"Light Fruit",
+	"Tasty Light Fruit",
+	"Delicious Light Fruit",
+	"Stamina Fruit",
+	"Tasty Stamina Fruit",
+	"Delicious Stamina Fruit",
+	"Water Fruit",
+	"Tasty Water Fruit",
+	"Delicious Water Fruit",
+	"Mushroom Spores",
+	"Tasty Mushroom Spores",
+	"Delicious Mushroom Spores",
+	"All-Purpose Bait",
+	"Tasty All-Purpose Bait",
+	"Delicious All-Purpose Bait",
+	"Elixir Soup",
+	"Tasty Elixir Soup",
+	"Delicious Elixir Soup",
+	"Hyoi Pear",
+	"Tasty Hyoi Pear",
+	"Delicious Hyoi Pear",
+	"Ordon Goat Cheese",
+	"Tasty Ordon Goat Cheese",
+	"Delicious Ordon Goat Cheese",
+	"Great Fairy's Tears",
+	"Tasty Great Fairy's Tears",
+	"Delicious Great Fairy's Tears",
+	"Greengill",
+	"Tasty Greengill",
+	"Delicious Greengill",
+	"Ordon Catfish",
+	"Tasty Ordon Catfish",
+	"Delicious Ordon Catfish",
+	"Hyrule Bass",
+	"Tasty Hyrule Bass",
+	"Delicious Hyrule Bass",
+	"Hylian Pike",
+	"Tasty Hylian Pike",
+	"Delicious Hylian Pike",
+	"Reekfish",
+	"Tasty Reekfish",
+	"Delicious Reekfish",
+	"Hylian Loach",
+	"Tasty Hylian Loach",
+	"Delicious Hylian Loach",
+	"Skullfish",
+	"Tasty Skullfish",
+	"Delicious Skullfish",
+	"Bombfish",
+	"Tasty Bombfish",
+	"Delicious Bombfish",
+	"Chu Jelly",
+	"Tasty Chu Jelly",
+	"Delicious Chu Jelly",
+	"Bee Larvae",
+	"Tasty Bee Larvae",
+	"Delicious Bee Larvae",
+	"Chateau Romani",
+	"Tasty Chateau Romani",
+	"Delicious Chateau Romani",
+	"Bottled Water",
+	"Tasty Bottled Water",
+	"Delicious Bottled Water",
+	"Hot Spring Water",
+	"Tasty Hot Spring Water",
+	"Delicious Hot Spring Water",
+	"Rock Sirloin",
+	"Tasty Rock Sirloin",
+	"Delicious Rock Sirloin",
+	"Meat",
+	"Tasty Meat",
+	"Delicious Meat",
+	"Carrot",
+	"Tasty Carrot",
+	"Delicious Carrot",
+	"Ember Seeds",
+	"Tasty Ember Seeds",
+	"Delicious Ember Seeds",
+	"Scent Seeds",
+	"Tasty Scent Seeds",
+	"Delicious Scent Seeds",
+	"Pegasus Seeds",
+	"Tasty Pegasus Seeds",
+	"Delicious Pegasus Seeds",
+	"Gale Seeds",
+	"Tasty Gale Seeds",
+	"Delicious Gale Seeds",
+	"Mystery Seeds",
+	"Tasty Mystery Seeds",
+	"Delicious Mystery Seeds",
+	"Gratitude Crystal Red S",
+	"Gratitude Crystal Red M",
+	"Gratitude Crystal Red L",            
+	"Gratitude Crystal Blue S",
+	"Gratitude Crystal Blue M",
+	"Gratitude Crystal Blue L",         
+	"Gratitude Crystal Orange S",
+	"Gratitude Crystal Orange M",
+	"Gratitude Crystal Orange L",        
+	"Gratitude Crystal Pink S",
+	"Gratitude Crystal Pink M",
+	"Gratitude Crystal Pink L",         
+	"Gratitude Crystal Purple S",
+	"Gratitude Crystal Purple M",
+	"Gratitude Crystal Purple L",        
+	"Pumpkin",
+	"Tasty Pumpkin",
+	"Delicious Pumpkin"
+};
+
+/* @var amItemOffsetBegin	vector for holding the offsets-begin for AdventureMode items */
+const vector<int> HWLSaveEditor::amItemOffsetBegin =
+{
+	0x2EFA,  //Start of Adventure-Map Items
+	0xEB73,  //Start of GreatSea-Map Items (WindWaker and so on)
+	0x7A52,   //Start of MasterQuest-Map Items
+};
+
+/* @var amItemOffsetBegin	vector for holding the offsets-begin for AdventureMode items */
+const vector<int> HWLSaveEditor::amItemOffsetBeginSpecial =
+{
+	0xEB56,  //Compass of GreatSea-Map
+	0xEB5F   //Hookshot of GreatSea-Map
+};
+
+
+/* @var vs_amItems			vector for holding all names of AdventureMode-Items */
+const vector<string> HWLSaveEditor::vs_amItems =
+{
+	"Compass", //Adventure-Map Items Begin
+	"Bombs",
+	"Candle",
+	"Ladder",
+	"Power Bracelet",
+	"Water Bombs",
+	"Digging Mitts",
+	"Ice Arrow",
+	"Raft",
+	"Hookshot",
+	"Recorder",
+	"Goddess's Harp",  //Adventure-Map Items End
+
+	"Compass", //GreatSea-Map Items Begin
+	"Hookshot",
+	"Wind Waker",
+	"Cannon",
+	"Boomerang",
+	"Hero's Bow",
+	"Grappling Hook",
+	"Hyoi Pears",
+	"Deku Leaf",
+	"Sea Chart",
+	"Power Bracelet",
+	"Hammer",  //GreatSea-Map Items End
+
+	"Compass",  //MasterQuest-Map Items Begin
+	"Bombs",
+	"Candle",
+	"Ladder",
+	"Power Bracelet",
+	"Water Bombs",
+	"Digging Mitts",
+	"Ice Arrow",
+	"Raft",
+	"Hookshot",
+	"Recorder",
+	"Goddess's Harp",  //MasterQuest-Map Items End
+
+	"Compass",  //Twilight-Map Items Begin
+	"Lantern",
+	"Bombs",
+	"Jar",
+	"Fishing Rod",
+	"Clawshot",
+	"Spinner",
+	"Water Bombs",
+	"Digging Mitts",
+	"Ooccoo",
+	"Tears of Light",
+	"Tears of Twilight", //Twilight-Map Items End
+
+	"Compass",  //Termina-Map Items Begin
+	"Deku Mask",
+	"Goron Mask",
+	"Zora Mask",
+	"Mask of Truth",
+	"Majora's Mask",
+	"Deku Stick",
+	"Bombs",
+	"Ice Arrow",
+	"Song of Time",
+	"Inverted Song of Time",
+	"Giants"  //Termina-Map Items End
+
+
+};
+
 HWLSaveEditor::HWLSaveEditor(string s_filepathname)
 {
 	//set the needed values for the file and program
@@ -223,6 +447,8 @@ HWLSaveEditor::HWLSaveEditor(string s_filepathname)
 			this->i_rubies = this->calc_rubies();
 			this->calc_players();
 			this->calc_materials();
+			this->calc_fairyFood();
+			this->calc_amItems();
 		}
 		else{
 			this->i_error = 400;
@@ -318,6 +544,52 @@ void HWLSaveEditor::calc_materials()
 	}
 }
 
+void HWLSaveEditor::calc_fairyFood()
+{
+	int i_offset = this->fairyFoodOffsetBegin;
+
+	for (int i = 0; i < this->vs_fairyFood.size(); i++)
+	{
+		shared_ptr<HWLFairyFood> hwlff_tmp = make_shared<HWLFairyFood>(vs_fairyFood[i], i_offset);
+		this->m_fairyfood[this->vs_fairyFood[i]] = hwlff_tmp;
+		i_offset = i_offset + this->fairyFoodOffsetLength;
+	}
+
+}
+
+void HWLSaveEditor::calc_amItems()
+{
+	int i_offset = this->amItemOffsetBegin[0];
+	int i_type = 0;
+
+	for (int i = 0; i < this->vs_amItems.size(); i++)
+	{
+		if (i == HWLSaveEdit::HWLAdventureModeItems::amItemPerMapMax * (i_type + 1))
+		{
+			i_type++;
+
+			if (i_type == this->amItemOffsetBegin.size())
+				break;
+
+			if (i == 12)
+				i_offset = this->amItemOffsetBeginSpecial[0];
+			else
+				i_offset = this->amItemOffsetBegin[i_type];
+		}
+
+		if (i == 13)
+			i_offset = this->amItemOffsetBeginSpecial[1];
+		else if (i == 14)
+			i_offset = this->amItemOffsetBegin[i_type];
+
+
+		shared_ptr<HWLAdventureModeItems> hwlami_tmp = make_shared<HWLAdventureModeItems>(vs_amItems[i], i_offset, i_type);
+		this->m_amItem[i] = hwlami_tmp;
+		i_offset = i_offset + this->amItemOffsetLength;
+	}
+
+}
+
 void HWLSaveEditor::save_rubies()
 {
 	int i_ruby_tmp = this->i_rubies;
@@ -380,6 +652,45 @@ shared_ptr<HWLMaterial> HWLSaveEditor::get_material(string s_name)
 	shared_ptr<HWLMaterial> hwlm_tmp = this->m_materials[s_name];
 
 	return hwlm_tmp;
+}
+
+shared_ptr<HWLFairyFood> HWLSaveEditor::get_fairyFood(int i_id)
+{
+	shared_ptr<HWLFairyFood> hwlff_tmp = this->m_fairyfood[this->vs_fairyFood[i_id]];
+
+	return hwlff_tmp;
+}
+
+shared_ptr<HWLFairyFood> HWLSaveEditor::get_fairyFood(string s_name)
+{
+	shared_ptr<HWLFairyFood> hwlff_tmp = this->m_fairyfood[s_name];
+
+	return hwlff_tmp;
+}
+
+shared_ptr<HWLAdventureModeItems> HWLSaveEditor::get_amItem(int i_id)
+{
+	shared_ptr<HWLAdventureModeItems> hwlami_tmp = this->m_amItem[i_id];
+
+	return hwlami_tmp;
+}
+
+shared_ptr<HWLAdventureModeItems> HWLSaveEditor::get_amItem(int i_id, int i_type)
+{
+	if (i_type >= this->amItemOffsetBegin.size())
+		i_type = 0;
+
+	if (i_type != 0)
+		i_id = i_id + (HWLSaveEdit::HWLAdventureModeItems::amItemPerMapMax * i_type);
+
+	shared_ptr<HWLAdventureModeItems> hwlami_tmp = this->m_amItem[i_id];
+
+	return hwlami_tmp;
+}
+
+int HWLSaveEditor::get_adventureMode_maxItemCount()
+{
+	return this->amItemOffsetBegin.size();
 }
 
 

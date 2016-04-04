@@ -14,6 +14,8 @@
 #include "ZeldaEditCharaStatsDlg.h"
 #include "ZeldaEditGeneralDlg.h"
 #include "ZeldaEditMaterials.h"
+#include "ZeldaEditFairyFoods.h"
+#include "ZeldaEditAdventureModeItem.h"
 
 // CZeldaHWLSaveEditorGUIApp:
 // See ZeldaHWLSaveEditorGUI.cpp for the implementation of this class

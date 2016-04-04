@@ -6,9 +6,11 @@
 
 //include the other needed classes
 #include "HWLSaveEditorCore.h"
+#include "HWLException.h"
 #include "HWLPlayer.h"
 #include "HWLMaterial.h"
-#include "HWLException.h"
+#include "HWLFairyFood.h"
+#include "HWLAdventureModeItems.h"
 
 //add the class to the project-namespace
 namespace HWLSaveEdit{
@@ -40,7 +42,6 @@ namespace HWLSaveEdit{
 			static const int rubyOffsetLength;
 
 			static const int playerOffsetBegin;
-			static const int playerOffsetLength;
 
 			static const int bronzeMaterialsOffsetBegin;
 			static const int bronzeMaterialsOffsetBeginNew;
@@ -52,16 +53,29 @@ namespace HWLSaveEdit{
 			static const int goldMaterialsOffsetBegin;
 			static const int goldMaterialsOffsetBeginNew;
 
+			static const int fairyFoodOffsetBegin;
+
+			static const vector<int> amItemOffsetBegin;
+			static const vector<int> amItemOffsetBeginSpecial;
+
 			/* @var m_players		map for holding all playable characters */
 			map< string, shared_ptr<HWLPlayer> > m_players;
 
 			/* @var m_materials		map for holding all foundable materials */
 			map< string, shared_ptr<HWLMaterial> > m_materials;
 
-			//calculate methods for player/material
+			/* @var m_fairyfood		map for holding all foundable fairyfood items */
+			map< string, shared_ptr<HWLFairyFood> > m_fairyfood;
+
+			/* @var m_amItem		map for holding all foundable Adventure-Mode items */
+			map< int, shared_ptr<HWLAdventureModeItems> > m_amItem;
+
+			//calculate methods for player, material and fairyFood
 			int  calc_rubies();
 			void calc_players();
 			void calc_materials();
+			void calc_fairyFood();
+			void calc_amItems();
 
 			//save new ruby-value
 			void save_rubies();
@@ -74,6 +88,8 @@ namespace HWLSaveEdit{
 			static const vector<string> vs_bronzeMaterials;
 			static const vector<string> vs_silverMaterials;
 			static const vector<string> vs_goldMaterials;
+			static const vector<string> vs_fairyFood;
+			static const vector<string> vs_amItems;
 
 			HWLSaveEditor(string s_filepathname = "zmha.bin");
 			~HWLSaveEditor();
@@ -85,6 +101,14 @@ namespace HWLSaveEdit{
 			shared_ptr<HWLPlayer> get_player(string s_name);
 			shared_ptr<HWLMaterial> get_material(int i_id, int i_type);
 			shared_ptr<HWLMaterial> get_material(string s_name);
+			shared_ptr<HWLFairyFood> get_fairyFood(int i_id);
+			shared_ptr<HWLFairyFood> get_fairyFood(string s_name);
+			shared_ptr<HWLAdventureModeItems> get_amItem(int i_id);
+			shared_ptr<HWLAdventureModeItems> get_amItem(int i_id, int i_type);
+
+			//special getter for the size of current adventure-mode-offsets vector
+			//todo: delete if we have all offsets
+			int get_adventureMode_maxItemCount();
 
 			//setter for rubies
 			void set_rubies(int i_rubies);

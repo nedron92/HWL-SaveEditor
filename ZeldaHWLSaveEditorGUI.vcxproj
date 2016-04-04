@@ -43,10 +43,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <TargetName>HWLSaveEditorGUI</TargetName>
     <IntDir>tmp\$(ProjectName)\$(Configuration)\</IntDir>
+    <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <TargetName>HWLSaveEditorGUI</TargetName>
     <IntDir>tmp\$(ProjectName)\$(Configuration)\</IntDir>
+    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -59,9 +61,10 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <OutputFile>bin\$(Configuration)\$(Platform)\$(TargetName)$(TargetExt)</OutputFile>
+      <ProgramDatabaseFile>bin\$(Configuration)\$(Platform)\$(TargetName).pdb</ProgramDatabaseFile>
     </Link>
     <PostBuildEvent>
-      <Command>rd /s /q "$(TargetDir)"</Command>
+      <Command>rd /s /q "$(IntDir)" &amp;&amp; rd /s /q "$(TargetDir)"</Command>
     </PostBuildEvent>
     <BuildLog>
       <Path />
@@ -79,20 +82,22 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <Link>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <OutputFile>bin\$(Configuration)\$(Platform)\$(TargetName)$(TargetExt)</OutputFile>
+      <ProgramDatabaseFile>bin\$(Configuration)\$(Platform)\$(TargetName).pdb</ProgramDatabaseFile>
     </Link>
     <PostBuildEvent>
-      <Command>rd /s /q "$(TargetDir)"</Command>
+      <Command>rd /s /q "$(IntDir)" &amp;&amp; rd /s /q "$(TargetDir)"</Command>
     </PostBuildEvent>
     <BuildLog>
       <Path />
     </BuildLog>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="source\core\HWLAdventureModeItems.h" />
     <ClInclude Include="source\core\HWLException.h" />
+    <ClInclude Include="source\core\HWLFairyFood.h" />
     <ClInclude Include="source\core\HWLMaterial.h" />
     <ClInclude Include="source\core\HWLPlayer.h" />
     <ClInclude Include="source\core\HWLSaveEditor.h" />
@@ -101,20 +106,26 @@
     <ClInclude Include="source\gui\stdafx.h" />
     <ClInclude Include="source\gui\targetver.h" />
     <ClInclude Include="source\gui\ZeldaAboutDlg.h" />
+    <ClInclude Include="source\gui\ZeldaEditAdventureModeItem.h" />
     <ClInclude Include="source\gui\ZeldaEditCharaStatsDlg.h" />
+    <ClInclude Include="source\gui\ZeldaEditFairyFoods.h" />
     <ClInclude Include="source\gui\ZeldaEditGeneralDlg.h" />
     <ClInclude Include="source\gui\ZeldaEditMaterials.h" />
     <ClInclude Include="source\gui\ZeldaHWLSaveEditorGUI.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\core\HWLAdventureModeItems.cpp" />
     <ClCompile Include="source\core\HWLException.cpp" />
+    <ClCompile Include="source\core\HWLFairyFood.cpp" />
     <ClCompile Include="source\core\HWLMaterial.cpp" />
     <ClCompile Include="source\core\HWLPlayer.cpp" />
     <ClCompile Include="source\core\HWLSaveEditor.cpp" />
     <ClCompile Include="source\core\HWLSaveEditorCore.cpp" />
     <ClCompile Include="source\gui\stdafx.cpp" />
     <ClCompile Include="source\gui\ZeldaAboutDlg.cpp" />
+    <ClCompile Include="source\gui\ZeldaEditAdventureModeItem.cpp" />
     <ClCompile Include="source\gui\ZeldaEditCharaStatsDlg.cpp" />
+    <ClCompile Include="source\gui\ZeldaEditFairyFoods.cpp" />
     <ClCompile Include="source\gui\ZeldaEditGeneralDlg.cpp" />
     <ClCompile Include="source\gui\ZeldaEditMaterials.cpp" />
     <ClCompile Include="source\gui\ZeldaHWLSaveEditorGUI.cpp" />
@@ -128,4 +139,9 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="source\gui\ZeldaHWLSaveEditorGUI.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

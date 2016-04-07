@@ -39,6 +39,9 @@
     <ClCompile Include="source\core\HWLAdventureModeItems.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="source\core\HWLFairy.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\core\HWLException.h">
@@ -63,6 +66,9 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="source\core\HWLAdventureModeItems.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\HWLFairy.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

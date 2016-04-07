@@ -66,6 +66,12 @@
     <ClInclude Include="source\gui\ZeldaEditAdventureModeItem.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="source\core\HWLFairy.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gui\ZeldaEditFairyDlg.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\gui\stdafx.cpp">
@@ -111,6 +117,12 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="source\gui\ZeldaEditAdventureModeItem.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\HWLFairy.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gui\ZeldaEditFairyDlg.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>

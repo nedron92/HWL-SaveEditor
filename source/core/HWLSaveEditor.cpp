@@ -5,8 +5,8 @@
 
 
 #include "HWLSaveEditor.h"
-#include <stdio.h>
-#include <iostream>
+//#include <stdio.h>  for testing purpose as comment
+//#include <iostream> for testing purpose as comment
 
 using namespace HWLSaveEdit;
 
@@ -357,7 +357,6 @@ const vector<int> HWLSaveEditor::amItemOffsetBeginSpecial =
 
 };
 
-
 /* @var vs_amItems			vector for holding all names of AdventureMode-Items */
 const vector<string> HWLSaveEditor::vs_amItems =
 {
@@ -427,8 +426,17 @@ const vector<string> HWLSaveEditor::vs_amItems =
 	"Giants"  //Termina-Map Items End
 };
 
+
+/* @var fairyOffsetBegin	offset begin of first myFairy */
+const int HWLSaveEditor::fairyOffsetBegin = 0x1AEA;
+
+/* @var maxFairies			maximal count of fairies*/
+const int HWLSaveEditor::fairiesMax = 10;
+
 HWLSaveEditor::HWLSaveEditor(string s_filepathname)
 {
+	setlocale(LC_ALL, "");
+
 	//set the needed values for the file and program
 	//(path/name of file and open it)
 	this->s_filepathname = s_filepathname;
@@ -457,6 +465,8 @@ HWLSaveEditor::HWLSaveEditor(string s_filepathname)
 			this->calc_materials();
 			this->calc_fairyFood();
 			this->calc_amItems();
+			this->calc_myFairies();
+
 		}
 		else{
 			this->i_error = 400;
@@ -629,6 +639,20 @@ void HWLSaveEditor::calc_amItems()
 
 }
 
+void HWLSaveEditor::calc_myFairies()
+{
+	int i_offset = this->fairyOffsetBegin;
+
+	for (int i = 0; i < this->fairiesMax; i++)
+	{
+		shared_ptr<HWLFairy> hwlf_tmp = make_shared<HWLFairy>(i_offset);
+		this->m_fairy[i] = hwlf_tmp;
+		i_offset = i_offset + this->fairyOffsetLength;
+	}
+}
+
+
+
 void HWLSaveEditor::save_rubies()
 {
 	int i_ruby_tmp = this->i_rubies;
@@ -725,6 +749,13 @@ shared_ptr<HWLAdventureModeItems> HWLSaveEditor::get_amItem(int i_id, int i_type
 	shared_ptr<HWLAdventureModeItems> hwlami_tmp = this->m_amItem[i_id];
 
 	return hwlami_tmp;
+}
+
+shared_ptr<HWLFairy> HWLSaveEditor::get_fairy(int i_id)
+{
+	shared_ptr<HWLFairy> hwlf_tmp = this->m_fairy[i_id];
+
+	return hwlf_tmp;
 }
 
 int HWLSaveEditor::get_adventureMode_maxItemCount()

@@ -1,5 +1,4 @@
 #pragma once
-#include <vector>
 #include <map>
 #include <fstream>
 #include <memory>
@@ -11,6 +10,7 @@
 #include "HWLMaterial.h"
 #include "HWLFairyFood.h"
 #include "HWLAdventureModeItems.h"
+#include "HWLFairy.h"
 
 //add the class to the project-namespace
 namespace HWLSaveEdit{
@@ -58,6 +58,8 @@ namespace HWLSaveEdit{
 			static const vector<int> amItemOffsetBegin;
 			static const vector<int> amItemOffsetBeginSpecial;
 
+			static const int fairyOffsetBegin;
+
 			/* @var m_players		map for holding all playable characters */
 			map< string, shared_ptr<HWLPlayer> > m_players;
 
@@ -70,18 +72,23 @@ namespace HWLSaveEdit{
 			/* @var m_amItem		map for holding all foundable Adventure-Mode items */
 			map< int, shared_ptr<HWLAdventureModeItems> > m_amItem;
 
-			//calculate methods for player, material and fairyFood
+			/* @var m_fairy			map for holding all myFairies */
+			map< int, shared_ptr<HWLFairy> > m_fairy;
+
+			//calculate methods for player, material, fairyFood, am-items and fairies
 			int  calc_rubies();
 			void calc_players();
 			void calc_materials();
 			void calc_fairyFood();
 			void calc_amItems();
+			void calc_myFairies();
 
 			//save new ruby-value
 			void save_rubies();
 
 		public:
 			static const int rubyMax;
+			static const int fairiesMax;
 
 			static const vector<string> vs_players;
 
@@ -105,6 +112,7 @@ namespace HWLSaveEdit{
 			shared_ptr<HWLFairyFood> get_fairyFood(string s_name);
 			shared_ptr<HWLAdventureModeItems> get_amItem(int i_id);
 			shared_ptr<HWLAdventureModeItems> get_amItem(int i_id, int i_type);
+			shared_ptr<HWLFairy> get_fairy(int i_id);
 
 			//special getter for the size of current adventure-mode-offsets vector
 			//todo: delete if we have all offsets

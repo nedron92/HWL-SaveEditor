@@ -21,18 +21,21 @@ void change_fairyFood_values(int i_choose, int i_fairyFood_id);
 void get_amItem_menu();
 void change_amItem_values(int i_choose);
 
+void get_fairy_menu();
+void change_fairy_values(int i_choose, int i_fairy_id);
+
 int main()
 {
+
 	try
 	{
 		save = new HWLSaveEdit::HWLSaveEditor();
-
 		char i_choose;
 
 		while (1)
 		{
-			cout << "Hyrule Warriors Legends - SaveEditor, V1.2" << endl;
-			cout << "__________________________________________" << endl << endl;
+			cout << "  Hyrule Warriors Legends - SaveEditor, V" << HWLSaveEdit::HWLSaveEditorCore::version <<endl;
+			cout << "________________________________________________" << endl << endl;
 
 			cout << "Menue: " << endl;
 			cout << "1 - Rubies (Submenu)" << endl;
@@ -40,6 +43,7 @@ int main()
 			cout << "3 - Materials (Submenu)" << endl;
 			cout << "4 - FairyFood (Submenu)" << endl;
 			cout << "5 - Adventure Mode-Items (Submenu)" << endl;
+			cout << "6 - My Fairies (Submenu)" << endl;
 			cout << "0 - Quit" << endl;
 			cout << "Your choose: ";
 			cin >> i_choose;
@@ -64,8 +68,8 @@ int main()
 	}
 	catch (HWLSaveEdit::HWLException &e)
 	{
-		cout << "Hyrule Warriors Legends - SaveEditor, V1.2" << endl;
-		cout << "__________________________________________" << endl << endl;
+		cout << "  Hyrule Warriors Legends - SaveEditor, V" << HWLSaveEdit::HWLSaveEditorCore::version << endl;
+		cout << "________________________________________________" << endl << endl;
 		save = nullptr;
 		cout << e.what() << endl;
 	}
@@ -109,6 +113,12 @@ void get_submenu(int i_menu_code)
 	case 5:
 	{
 			  get_amItem_menu();
+			  break;
+	}
+
+	case 6:
+	{
+			  get_fairy_menu();
 			  break;
 	}
 
@@ -866,6 +876,7 @@ void get_amItem_menu()
 
 	}
 }
+
 void change_amItem_values(int i_choose)
 {
 	//i_choose is number of menu-entry
@@ -928,3 +939,269 @@ void change_amItem_values(int i_choose)
 	}
 }
 
+
+
+void get_fairy_menu()
+{
+	string s_choose;
+
+
+	while (1)
+	{
+
+		for (int i = 0; i < save->fairiesMax; i++)
+		{
+			cout << "ID: " << i << endl << save->get_fairy(i)->get_fairyForOutput() << endl;
+		}
+
+		cout << "Menue: " << endl;
+		cout << "1,ID - Change Name of this Fairy" << endl;
+		cout << "2    - Maximize Lvl of all Fairies" << endl;
+		cout << "2,ID - Maximize Lvl of this Fairy" << endl;
+		cout << "3    - Maximize Trust of all Fairies" << endl;
+		cout << "3,ID - Maximize Trust of this Fairy" << endl;
+		cout << "4    - Unlock all Fairies" << endl;
+		cout << "4,ID - Unlock this Fairy" << endl;
+		cout << "0    - back" << endl;
+		cout << "Your choose: ";
+		cin >> s_choose;
+
+		int i_current_id = -1;
+		int i_find_pos = s_choose.find(",");
+		if (i_find_pos != string::npos)
+		{
+			string s_substr = s_choose.substr(i_find_pos + 1, string::npos);
+			i_current_id = atoi(&s_substr[0u]);
+		}
+
+		if (iswdigit(s_choose[0]))
+		{
+			if (atoi(&s_choose[0]) == 0)
+			{
+				system("cls");
+				break;
+			}
+			else
+				change_fairy_values(atoi(&s_choose[0]), i_current_id);
+		}
+
+		save->save_file();
+
+		if (atoi(&s_choose[0]) > 2)
+			system("cls");
+
+	}
+}
+
+void change_fairy_values(int i_choose, int i_fairy_id)
+{
+	//i_choose is number of menu-entry
+
+	switch (i_choose)
+	{
+	case 1:
+	{
+			  system("cls");
+
+			  if (i_fairy_id == -1)
+			  {
+				  cout << "No ID given, please try again with an ID (eq: 1,5)" << endl;
+				  cin.clear();
+				  getchar();
+				  cin.get();
+				  system("cls");
+			  }
+			  else{
+				  bool check_id = false;
+
+				  if (i_fairy_id < save->fairiesMax && i_fairy_id >= 0)
+					  check_id = true;
+
+				  if (check_id)
+				  {
+					  string s_fairy_name = "";
+					  cout << "Enter a new Name (Max: "<< HWLSaveEdit::HWLFairy::fairyNameLength <<" chars) : ";
+					  cin >> s_fairy_name;
+
+					  if (s_fairy_name.size() <= HWLSaveEdit::HWLFairy::fairyNameLength)
+					  {
+						  cout << "Changing Name of Fairy with ID:" << i_fairy_id << endl;
+						  cout << " Old name: " << save->get_fairy(i_fairy_id)->get_name() << endl;
+						  save->get_fairy(i_fairy_id)->set_name(s_fairy_name);
+						  cout << " New name: " << save->get_fairy(i_fairy_id)->get_name() << endl;
+
+						  save->get_fairy(i_fairy_id)->save_Fairy();
+						  cout << "Finish. Press a key to go back." << endl;
+
+
+					  }
+					  else
+					  {
+						  cout << "Sorry. The name is too long, back to the last menu." << endl;
+					  }
+				  }
+				  else{
+					  cout << "Sorry, but this Fairy-ID doesn't exist!" << endl;
+				  }
+
+				  cin.clear();
+				  getchar();
+				  cin.get();
+				  system("cls");
+			  }
+
+
+			  break;
+	}
+
+	case 2:
+	{
+			  system("cls");
+
+			  if (i_fairy_id == -1)
+			  {
+				  cout << "Maximize Lvl of all Fairies" << endl;
+
+				  for (int i = 0; i < save->fairiesMax; i++)
+				  {
+					  save->get_fairy(i)->set_lvl(HWLSaveEdit::HWLFairy::fairyLVLMax);
+					  save->get_fairy(i)->save_Fairy();
+				  }
+
+				  cout << "Finish. Press a key to go back." << endl;
+				  cin.clear();
+				  getchar();
+				  cin.get();
+				  system("cls");
+			  }else
+			  {
+				  bool check_id = false;
+
+				  if (i_fairy_id < save->fairiesMax && i_fairy_id >= 0)
+					  check_id = true;
+
+				  if (check_id)
+				  {
+
+					  cout << "Maximize Lvl of Fairy with ID: " << i_fairy_id << endl;
+					  save->get_fairy(i_fairy_id)->set_lvl(HWLSaveEdit::HWLFairy::fairyLVLMax);
+					  save->get_fairy(i_fairy_id)->save_Fairy();
+					  cout << "Finish. Press a key to go back." << endl;
+
+				  }
+				  else{
+					  cout << "Sorry, but this Fairy-ID doesn't exist!" << endl;
+				  }
+
+				  cin.clear();
+				  getchar();
+				  cin.get();
+				  system("cls");
+			  }
+
+			  break;
+	}
+
+	case 3:
+	{
+			  system("cls");
+
+			  if (i_fairy_id == -1)
+			  {
+				  cout << "Maximize Trust of all Fairies" << endl;
+
+				  for (int i = 0; i < save->fairiesMax; i++)
+				  {
+					  save->get_fairy(i)->set_trust(HWLSaveEdit::HWLFairy::fairyTrustMax);
+					  save->get_fairy(i)->save_Fairy();
+				  }
+
+				  cout << "Finish. Press a key to go back." << endl;
+				  cin.clear();
+				  getchar();
+				  cin.get();
+				  system("cls");
+			  }
+			  else
+			  {
+				  bool check_id = false;
+
+				  if (i_fairy_id < save->fairiesMax && i_fairy_id >= 0)
+					  check_id = true;
+
+				  if (check_id)
+				  {
+
+					  cout << "Maximize Trust of Fairy with ID: " << i_fairy_id << endl;
+					  save->get_fairy(i_fairy_id)->set_trust(HWLSaveEdit::HWLFairy::fairyTrustMax);
+					  save->get_fairy(i_fairy_id)->save_Fairy();
+					  cout << "Finish. Press a key to go back." << endl;
+
+				  }
+				  else{
+					  cout << "Sorry, but this Fairy-ID doesn't exist!" << endl;
+				  }
+
+				  cin.clear();
+				  getchar();
+				  cin.get();
+				  system("cls");
+			  }
+
+			  break;
+	}
+
+	case 4:
+	{
+			  system("cls");
+
+			  if (i_fairy_id == -1)
+			  {
+				  cout << "Unlock all Fairies" << endl;
+
+				  for (int i = 0; i < save->fairiesMax; i++)
+				  {
+					  save->get_fairy(i)->set_isUnlock(true);
+					  save->get_fairy(i)->save_Fairy();
+				  }
+
+				  cout << "Finish. Press a key to go back." << endl;
+				  cin.clear();
+				  getchar();
+				  cin.get();
+				  system("cls");
+			  }
+			  else
+			  {
+				  bool check_id = false;
+
+				  if (i_fairy_id < save->fairiesMax && i_fairy_id >= 0)
+					  check_id = true;
+
+				  if (check_id)
+				  {
+
+					  cout << "Unlock Fairy with ID: " << i_fairy_id << endl;
+					  save->get_fairy(i_fairy_id)->set_isUnlock(true);
+					  save->get_fairy(i_fairy_id)->save_Fairy();
+					  cout << "Finish. Press a key to go back." << endl;
+
+				  }
+				  else{
+					  cout << "Sorry, but this Fairy-ID doesn't exist!" << endl;
+				  }
+
+				  cin.clear();
+				  getchar();
+				  cin.get();
+				  system("cls");
+			  }
+
+			  break;
+	}
+
+	default:
+		break;
+
+	}
+}

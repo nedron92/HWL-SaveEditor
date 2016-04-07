@@ -153,6 +153,7 @@ BEGIN_MESSAGE_MAP(CZeldaEditMaterials, CDialogEx)
 	ON_BN_CLICKED(IDC_MATERIAL_MAX_VALUE_ALL, &CZeldaEditMaterials::OnBnClickedMaterialMaxValueAll)
 	ON_COMMAND(ID_MENU_EDIT_AM_TLMAP, &CZeldaEditMaterials::OnMenuEditAmTlmap)
 	ON_COMMAND(ID_MENU_EDIT_AM_TMMAP, &CZeldaEditMaterials::OnMenuEditAmTmmap)
+	ON_COMMAND(ID_MENU_EDIT_FAIRIES, &CZeldaEditMaterials::OnMenuEditFairies)
 END_MESSAGE_MAP()
 
 
@@ -249,7 +250,9 @@ void CZeldaEditMaterials::calc_materials()
 			SetDlgItemText((IDC_EDIT_MATERIAL1 + i), s_material_value);
 
 			CEdit *e_test = (CEdit*)GetDlgItem((IDC_EDIT_MATERIAL1 + i));
-			e_test->SetLimitText(4);
+			CString cs_max_chars;
+			cs_max_chars.Format(L"%d", HWLSaveEdit::HWLMaterial::materialValueMax);
+			e_test->SetLimitText(cs_max_chars.GetLength() + 1);
 		}
 		else{
 			if (GetDlgItem(IDC_STATIC_MATERIAL1 + i)->IsWindowVisible() || this->i_type == 0)
@@ -314,7 +317,9 @@ void CZeldaEditMaterials::OnEnChangeValueEdit(UINT nID)
 		{
 			CString test;
 			CEdit *e_test = (CEdit*)GetDlgItem(nID);
-			e_test->SetLimitText(4);
+			CString cs_max_chars;
+			cs_max_chars.Format(L"%d", HWLSaveEdit::HWLMaterial::materialValueMax);
+			e_test->SetLimitText(cs_max_chars.GetLength() + 1);
 			GetDlgItemText(nID, test);
 			int i_test = _wtoi(test);
 
@@ -322,7 +327,7 @@ void CZeldaEditMaterials::OnEnChangeValueEdit(UINT nID)
 			{
 				test.Format(L"%d", HWLSaveEdit::HWLMaterial::materialValueMax);
 				SetDlgItemText(nID, test);
-				e_test->SetLimitText(3);
+				e_test->SetLimitText(cs_max_chars.GetLength());
 			}
 
 		}
@@ -481,3 +486,12 @@ void CZeldaEditMaterials::OnBnClickedMaterialMaxValueAll()
 
 }
 
+
+
+void CZeldaEditMaterials::OnMenuEditFairies()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditFairyDlg dlg;
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}

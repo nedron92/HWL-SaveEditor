@@ -133,6 +133,7 @@ BEGIN_MESSAGE_MAP(CZeldaEditAdventureModeItem, CDialogEx)
 	ON_BN_CLICKED(IDC_AMITEM_MAX_VALUE_MAP, &CZeldaEditAdventureModeItem::OnBnClickedAmitemMaxValueMap)
 	ON_COMMAND(ID_MENU_EDIT_AM_TLMAP, &CZeldaEditAdventureModeItem::OnMenuEditAmTlmap)
 	ON_COMMAND(ID_MENU_EDIT_AM_TMMAP, &CZeldaEditAdventureModeItem::OnMenuEditAmTmmap)
+	ON_COMMAND(ID_MENU_EDIT_FAIRIES, &CZeldaEditAdventureModeItem::OnMenuEditFairies)
 END_MESSAGE_MAP()
 
 
@@ -312,8 +313,9 @@ void CZeldaEditAdventureModeItem::calc_amItems()
 		SetDlgItemText((IDC_EDIT_AMITEM1 + i), s_amItem_value);
 
 		CEdit *e_test = (CEdit*)GetDlgItem((IDC_EDIT_AMITEM1 + i));
-		e_test->SetLimitText(2);
-
+		CString cs_max_chars;
+		cs_max_chars.Format(L"%d", HWLSaveEdit::HWLAdventureModeItems::amItemValueMax);
+		e_test->SetLimitText(cs_max_chars.GetLength() + 1);
 	}
 }
 
@@ -339,7 +341,9 @@ void CZeldaEditAdventureModeItem::OnEnChangeValueEdit(UINT nID)
 		{
 			CString test;
 			CEdit *e_test = (CEdit*)GetDlgItem(nID);
-			e_test->SetLimitText(2);
+			CString cs_max_chars;
+			cs_max_chars.Format(L"%d", HWLSaveEdit::HWLAdventureModeItems::amItemValueMax);
+			e_test->SetLimitText(cs_max_chars.GetLength()+1);
 			GetDlgItemText(nID, test);
 			int i_test = _wtoi(test);
 
@@ -347,7 +351,7 @@ void CZeldaEditAdventureModeItem::OnEnChangeValueEdit(UINT nID)
 			{
 				test.Format(L"%d", HWLSaveEdit::HWLAdventureModeItems::amItemValueMax);
 				SetDlgItemText(nID, test);
-				e_test->SetLimitText(1);
+				e_test->SetLimitText(cs_max_chars.GetLength());
 			}
 
 		}
@@ -373,3 +377,12 @@ void CZeldaEditAdventureModeItem::OnBnClickedAmitemMaxValueMap()
 
 }
 
+
+
+void CZeldaEditAdventureModeItem::OnMenuEditFairies()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditFairyDlg dlg;
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}

@@ -53,4 +53,5 @@ public:
 	afx_msg void OnBnClickedMaterialMaxValueAll();
 	afx_msg void OnMenuEditAmTlmap();
 	afx_msg void OnMenuEditAmTmmap();
+	afx_msg void OnMenuEditFairies();
 };

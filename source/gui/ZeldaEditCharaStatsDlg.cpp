@@ -127,6 +127,7 @@ BEGIN_MESSAGE_MAP(CZeldaEditCharaStatsDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_CHARA_UNLOCK_ALL, &CZeldaEditCharaStatsDlg::OnBnClickedCharaUnlockAll)
 	ON_COMMAND(ID_MENU_EDIT_AM_TLMAP, &CZeldaEditCharaStatsDlg::OnMenuEditAmTlmap)
 	ON_COMMAND(ID_MENU_EDIT_AM_TMMAP, &CZeldaEditCharaStatsDlg::OnMenuEditAmTmmap)
+	ON_COMMAND(ID_MENU_EDIT_FAIRIES, &CZeldaEditCharaStatsDlg::OnMenuEditFairies)
 END_MESSAGE_MAP()
 
 
@@ -197,13 +198,17 @@ void CZeldaEditCharaStatsDlg::calc_players()
 		cb_check->SetCheck(b_player_is_unlock);
 
 		CEdit *e_test = (CEdit*)GetDlgItem((IDC_EDIT_CHARA_LVL1 + i - unused_charas));
-		e_test->SetLimitText(3);
+		CString cs_max_chars;
+		cs_max_chars.Format(L"%d", HWLSaveEdit::HWLPlayer::playerLVLMax);
+		e_test->SetLimitText(cs_max_chars.GetLength() + 1);
 
 		e_test = (CEdit*)GetDlgItem((IDC_EDIT_CHARA_EXP1 + i - unused_charas));
-		e_test->SetLimitText(8);
+		cs_max_chars.Format(L"%d", HWLSaveEdit::HWLPlayer::playerEXPMax);
+		e_test->SetLimitText(cs_max_chars.GetLength() + 1);
 
 		e_test = (CEdit*)GetDlgItem((IDC_EDIT_CHARA_ATK1 + i - unused_charas));
-		e_test->SetLimitText(4);
+		cs_max_chars.Format(L"%d", HWLSaveEdit::HWLPlayer::playerATKMax);
+		e_test->SetLimitText(cs_max_chars.GetLength() + 1);
 	}
 
 }
@@ -217,7 +222,9 @@ void CZeldaEditCharaStatsDlg::OnEnChangeLVLEdit(UINT nID)
 		{
 			CString test;
 			CEdit *e_test = (CEdit*)GetDlgItem(nID);
-			e_test->SetLimitText(3);
+			CString cs_max_chars;
+			cs_max_chars.Format(L"%d", HWLSaveEdit::HWLPlayer::playerLVLMax);
+			e_test->SetLimitText(cs_max_chars.GetLength() + 1);
 			GetDlgItemText(nID, test);
 			int i_test = _wtoi(test);
 
@@ -225,7 +232,7 @@ void CZeldaEditCharaStatsDlg::OnEnChangeLVLEdit(UINT nID)
 			{
 				test.Format(L"%d", HWLSaveEdit::HWLPlayer::playerLVLMax);
 				SetDlgItemText(nID, test);
-				e_test->SetLimitText(2);
+				e_test->SetLimitText(cs_max_chars.GetLength());
 			}
 
 		}
@@ -242,7 +249,9 @@ void CZeldaEditCharaStatsDlg::OnEnChangeEXPEdit(UINT nID)
 		{
 			CString test;
 			CEdit *e_test = (CEdit*)GetDlgItem(nID);
-			e_test->SetLimitText(8);
+			CString cs_max_chars;
+			cs_max_chars.Format(L"%d", HWLSaveEdit::HWLPlayer::playerEXPMax);
+			e_test->SetLimitText(cs_max_chars.GetLength() + 1);
 			GetDlgItemText(nID, test);
 			int i_test = _wtoi(test);
 
@@ -250,7 +259,7 @@ void CZeldaEditCharaStatsDlg::OnEnChangeEXPEdit(UINT nID)
 			{
 				test.Format(L"%d", HWLSaveEdit::HWLPlayer::playerEXPMax);
 				SetDlgItemText(nID, test);
-				e_test->SetLimitText(7);
+				e_test->SetLimitText(cs_max_chars.GetLength());
 			}
 
 		}
@@ -267,7 +276,9 @@ void CZeldaEditCharaStatsDlg::OnEnChangeATKEdit(UINT nID)
 		{
 			CString test;
 			CEdit *e_test = (CEdit*)GetDlgItem(nID);
-			e_test->SetLimitText(4);
+			CString cs_max_chars;
+			cs_max_chars.Format(L"%d", HWLSaveEdit::HWLPlayer::playerATKMax);
+			e_test->SetLimitText(cs_max_chars.GetLength() + 1);
 			GetDlgItemText(nID, test);
 			int i_test = _wtoi(test);
 
@@ -275,7 +286,7 @@ void CZeldaEditCharaStatsDlg::OnEnChangeATKEdit(UINT nID)
 			{
 				test.Format(L"%d", HWLSaveEdit::HWLPlayer::playerATKMax);
 				SetDlgItemText(nID, test);
-				e_test->SetLimitText(3);
+				e_test->SetLimitText(cs_max_chars.GetLength());
 			}
 
 		}
@@ -527,4 +538,13 @@ void CZeldaEditCharaStatsDlg::OnBnClickedCharaUnlockAll()
 		MessageBox(str, L"Information", MB_OK | MB_ICONINFORMATION);
 
 	}
+}
+
+
+void CZeldaEditCharaStatsDlg::OnMenuEditFairies()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditFairyDlg dlg;
+	EndDialog(this->IDD);
+	dlg.DoModal();
 }

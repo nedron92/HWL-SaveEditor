@@ -120,6 +120,7 @@ BEGIN_MESSAGE_MAP(CZeldaEditFairyFoods, CDialogEx)
 	ON_BN_CLICKED(IDC_FAIRYFOOD_MAX_VALUE_GRATITUDE, &CZeldaEditFairyFoods::OnBnClickedFairyfoodMaxValueGratitude)
 	ON_COMMAND(ID_MENU_EDIT_AM_TLMAP, &CZeldaEditFairyFoods::OnMenuEditAmTlmap)
 	ON_COMMAND(ID_MENU_EDIT_AM_TMMAP, &CZeldaEditFairyFoods::OnMenuEditAmTmmap)
+	ON_COMMAND(ID_MENU_EDIT_FAIRIES, &CZeldaEditFairyFoods::OnMenuEditFairies)
 END_MESSAGE_MAP()
 
 
@@ -239,7 +240,9 @@ void CZeldaEditFairyFoods::calc_fairyFood()
 			SetDlgItemText((IDC_EDIT_FAIRYFOOD1 + i), s_fairyFood_value);
 
 			CEdit *e_test = (CEdit*)GetDlgItem((IDC_EDIT_FAIRYFOOD1 + i));
-			e_test->SetLimitText(4);
+			CString cs_max_chars;
+			cs_max_chars.Format(L"%d", HWLSaveEdit::HWLFairyFood::fairyFoodlValueMax);
+			e_test->SetLimitText(cs_max_chars.GetLength() + 1);
 		}
 		else{
 			if (GetDlgItem(IDC_STATIC_FAIRYFOOD1 + i)->IsWindowVisible())
@@ -284,7 +287,9 @@ void CZeldaEditFairyFoods::OnEnChangeValueEdit(UINT nID)
 		{
 			CString test;
 			CEdit *e_test = (CEdit*)GetDlgItem(nID);
-			e_test->SetLimitText(4);
+			CString cs_max_chars;
+			cs_max_chars.Format(L"%d", HWLSaveEdit::HWLFairyFood::fairyFoodlValueMax);
+			e_test->SetLimitText(cs_max_chars.GetLength() + 1);
 			GetDlgItemText(nID, test);
 			int i_test = _wtoi(test);
 
@@ -292,7 +297,7 @@ void CZeldaEditFairyFoods::OnEnChangeValueEdit(UINT nID)
 			{
 				test.Format(L"%d", HWLSaveEdit::HWLFairyFood::fairyFoodlValueMax);
 				SetDlgItemText(nID, test);
-				e_test->SetLimitText(3);
+				e_test->SetLimitText(cs_max_chars.GetLength());
 			}
 
 		}
@@ -422,4 +427,13 @@ void CZeldaEditFairyFoods::OnBnClickedFairyfoodMaxValueGratitude()
 		CString str("Finish! All needed Values are updated.");
 		MessageBox(str, L"Information", MB_OK | MB_ICONINFORMATION);
 	}
+}
+
+
+void CZeldaEditFairyFoods::OnMenuEditFairies()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditFairyDlg dlg;
+	EndDialog(this->IDD);
+	dlg.DoModal();
 }

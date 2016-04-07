@@ -7,7 +7,7 @@
 
 #include "afxdialogex.h"
 #include "ZeldaEditGeneralDlg.h"
-
+#include <atlconv.h>
 
 // CZeldaEditGeneralDlg-Dialogfeld
 
@@ -50,6 +50,8 @@ void CZeldaEditGeneralDlg::DoDataExchange(CDataExchange* pDX)
 	CMenu* cm_submenu = cm_menu->GetSubMenu(1);
 	cm_submenu->CheckMenuItem(0, MF_CHECKED | MF_BYPOSITION);
 
+
+	
 	CDialogEx::DoDataExchange(pDX);
 }
 
@@ -74,6 +76,8 @@ BEGIN_MESSAGE_MAP(CZeldaEditGeneralDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_RUBY_MAX, &CZeldaEditGeneralDlg::OnBnClickedRubyMax)
 	ON_COMMAND(ID_MENU_EDIT_AM_TLMAP, &CZeldaEditGeneralDlg::OnMenuEditAmTlmap)
 	ON_COMMAND(ID_MENU_EDIT_AM_TMMAP, &CZeldaEditGeneralDlg::OnMenuEditAmTmmap)
+	ON_COMMAND(ID_MENU_EDIT_FAIRIES, &CZeldaEditGeneralDlg::OnMenuEditFairies)
+//	ON_WM_ACTIVATE()
 END_MESSAGE_MAP()
 
 
@@ -122,7 +126,9 @@ void CZeldaEditGeneralDlg::OnEnChangeRubyEdit()
 	{
 		CString test;
 		CEdit *e_test = (CEdit*)GetDlgItem(IDC_RUBY_EDIT);
-		e_test->SetLimitText(8);
+		CString cs_max_chars;
+		cs_max_chars.Format(L"%d", save->rubyMax);
+		e_test->SetLimitText(cs_max_chars.GetLength() + 1);
 		GetDlgItemText(IDC_RUBY_EDIT, test);
 		int i_test = _wtoi(test);
 
@@ -130,7 +136,7 @@ void CZeldaEditGeneralDlg::OnEnChangeRubyEdit()
 		{
 			test.Format(L"%d", save->rubyMax);
 			SetDlgItemText(IDC_RUBY_EDIT, test);
-			e_test->SetLimitText(7);
+			e_test->SetLimitText(cs_max_chars.GetLength());
 		}
 
 		i_test = _wtoi(test);
@@ -147,7 +153,7 @@ void CZeldaEditGeneralDlg::OnMenuMainFileOpen()
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
 	TCHAR szFilters[] = _T("Hyrule Warriors Legends SaveGame (zmha.bin)|*.bin||");
 	CFileDialog fileDlg(TRUE, _T(""), _T(""),
-		OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, szFilters);
+		OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, szFilters, GetActiveWindow());
 
 	if (fileDlg.DoModal() == IDOK)
 	{
@@ -157,13 +163,15 @@ void CZeldaEditGeneralDlg::OnMenuMainFileOpen()
 
 		if (cs_filepath != L"")
 		{
+			GetActiveWindow()->ShowWindow(SW_MAXIMIZE);
+			GetActiveWindow()->ShowWindow(SW_SHOWNORMAL);
+
 			delete CZeldaHWLSaveEditorGUIApp::save;
 			try
 			{
 				CZeldaHWLSaveEditorGUIApp::save = new HWLSaveEdit::HWLSaveEditor(s_filepath);
 				save = CZeldaHWLSaveEditorGUIApp::save;
 				GetActiveWindow()->UpdateData();
-
 
 				int i_active_window_id = this->get_active_window_id();
 
@@ -199,11 +207,12 @@ void CZeldaEditGeneralDlg::OnMenuMainFileOpen()
 
 				CStringA str(e.what());
 				MessageBoxA(GetActiveWindow()->m_hWnd, str, "Error", MB_OK | MB_ICONWARNING);
+				
+				GetActiveWindow()->ShowWindow(SW_MAXIMIZE);
+				GetActiveWindow()->ShowWindow(SW_SHOWNORMAL);
 			}
 		}
 	}
-	GetActiveWindow()->ShowWindow(SW_MAXIMIZE);
-	GetActiveWindow()->ShowWindow(SW_SHOWNORMAL);
 }
 
 int CZeldaEditGeneralDlg::get_active_window_id()
@@ -335,6 +344,14 @@ void CZeldaEditGeneralDlg::OnMenuEditAmTmmap()
 	dlg.DoModal();
 }
 
+void CZeldaEditGeneralDlg::OnMenuEditFairies()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditFairyDlg dlg;
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
 
 void CZeldaEditGeneralDlg::OnMenuEditGeneral()
 {
@@ -357,3 +374,15 @@ void CZeldaEditGeneralDlg::OnBnClickedRubyMax()
 		MessageBox(str, L"Information", MB_OK | MB_ICONINFORMATION);
 	}
 }
+
+
+
+
+//void CZeldaEditGeneralDlg::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
+//{
+//	CDialogEx::OnActivate(nState, pWndOther, bMinimized);
+//
+//	// TODO: Fügen Sie hier Ihren Meldungsbehandlungscode ein.
+//	//if (bMinimized)
+//		//this->ShowWindow(SW_SHOWNORMAL);
+//}

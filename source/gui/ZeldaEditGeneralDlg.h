@@ -43,4 +43,6 @@ public:
 	afx_msg void OnBnClickedRubyMax();
 	afx_msg void OnMenuEditAmTlmap();
 	afx_msg void OnMenuEditAmTmmap();
+	afx_msg void OnMenuEditFairies();
+//	afx_msg void OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized);
 };

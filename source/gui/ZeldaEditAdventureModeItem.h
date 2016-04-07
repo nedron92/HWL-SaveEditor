@@ -52,4 +52,5 @@ public:
 	afx_msg void OnBnClickedAmitemMaxValueMap();
 	afx_msg void OnMenuEditAmTlmap();
 	afx_msg void OnMenuEditAmTmmap();
+	afx_msg void OnMenuEditFairies();
 };

@@ -28,6 +28,12 @@ const int HWLSaveEditorCore::amItemOffsetLength = 0x1;
 /* @var fairyOffsetLength		length for all myFairies Offsets */
 const int HWLSaveEditorCore::fairyOffsetLength = 0x98;
 
+/* @var weaponOffsetLength		length for all weapon offsets (weapon stats only) */
+const int HWLSaveEditorCore::weaponOffsetLength = 0x1F;
+
+/* @var weaponOffsetLengthComplete		length for all weapon Offsets (with fill-data) */
+const int HWLSaveEditorCore::weaponOffsetLengthComplete = 0x28;
+
 /** 
 * Only the initialization of the normal-constructor
 */
@@ -210,6 +216,19 @@ void HWLSaveEditorCore::addZeroToHexString(string &s_hexString, int i_max_length
 			else { s_hexString = s_hexString + "0"; }
 		}
 	}
+}
+
+void HWLSaveEditorCore::convertByteOrder(string &s_hexString)
+{
+	string s_hexString_convert = "";
+	for (int i = 0 + (s_hexString.size() - 1); i >= 0; i -= 2)
+	{
+		s_hexString_convert.push_back(s_hexString[i - 1]);
+		s_hexString_convert.push_back(s_hexString[i]);
+	}
+
+	s_hexString = s_hexString_convert;
+
 }
 
 /**

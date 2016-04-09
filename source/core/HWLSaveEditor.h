@@ -1,7 +1,5 @@
 #pragma once
-#include <map>
 #include <fstream>
-#include <memory>
 
 //include the other needed classes
 #include "HWLSaveEditorCore.h"
@@ -11,6 +9,7 @@
 #include "HWLFairyFood.h"
 #include "HWLAdventureModeItems.h"
 #include "HWLFairy.h"
+#include "HWLWeapon.h"
 
 //add the class to the project-namespace
 namespace HWLSaveEdit{
@@ -60,6 +59,8 @@ namespace HWLSaveEdit{
 
 			static const int fairyOffsetBegin;
 
+			static const int weaponOffsetBegin;
+
 			/* @var m_players		map for holding all playable characters */
 			map< string, shared_ptr<HWLPlayer> > m_players;
 
@@ -75,8 +76,16 @@ namespace HWLSaveEdit{
 			/* @var m_fairy			map for holding all myFairies */
 			map< int, shared_ptr<HWLFairy> > m_fairy;
 
+			/* @var v_weapon		map for holding all used weapons */
+			vector< shared_ptr<HWLWeapon> > v_weapon;
+
+			//other members
+			/* @var vi_blank_weapons	vectro, which hold all free weapon offsets */
+			vector<int> vi_blank_weapons;
+
 			//calculate methods for player, material, fairyFood, am-items and fairies
 			int  calc_rubies();
+			void calc_weapons();
 			void calc_players();
 			void calc_materials();
 			void calc_fairyFood();
@@ -97,6 +106,11 @@ namespace HWLSaveEdit{
 			static const vector<string> vs_goldMaterials;
 			static const vector<string> vs_fairyFood;
 			static const vector<string> vs_amItems;
+
+			static const vector<int> vi_playerWeaponTypeCount;
+			static const vector<string> vs_playerWeaponTypeNames;
+			static const vector<int> vi_playerWeaponTypeHexValues;
+			static const vector<int> vi_playerWeaponTypeHexValuesLVL4;
 
 			HWLSaveEditor(string s_filepathname = "zmha.bin");
 			~HWLSaveEditor();

@@ -5,8 +5,8 @@
 
 
 #include "HWLSaveEditor.h"
-//#include <stdio.h>  for testing purpose as comment
-//#include <iostream> for testing purpose as comment
+//#include <stdio.h>  //for testing purpose as comment
+//#include <iostream> //for testing purpose as comment
 
 using namespace HWLSaveEdit;
 
@@ -427,11 +427,298 @@ const vector<string> HWLSaveEditor::vs_amItems =
 };
 
 
+
 /* @var fairyOffsetBegin	offset begin of first myFairy */
 const int HWLSaveEditor::fairyOffsetBegin = 0x1AEA;
 
 /* @var maxFairies			maximal count of fairies*/
 const int HWLSaveEditor::fairiesMax = 10;
+
+
+
+/* @var weaponOffsetBegin	offset begin of first weapon */
+const int HWLSaveEditor::weaponOffsetBegin = 0x2F372;
+
+/* @var vi_playerWeaponTypeCount	vector for holding information about how many weapon types a chara have */
+const vector<int> HWLSaveEditor::vi_playerWeaponTypeCount =
+{
+	7, 3, 1, 2,	2, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 
+	// 0.Link, 1.Zelda, 2.Shiek, 3.Impa, 4.Ganondorf, 5.Darunia, 6.Ruto, 7.Agitha, 8.Imp Midna, 
+	// 9.Fi, 10.Ghirahim, 11.Zant, 12.Lana, 13.Cia, 14.Volga, 15.Wizzro, 16.Twili Midna, 17.Young Link, 
+	// 18.Tingle, 19.??? 20.???, 21.Linkle, 22.Skull Kid, 23.Toon Link, 24.Tetra, 25.King Daphnes
+};
+
+/* @var vs_playerWeaponTypeNames	vector for holding all weapon-type names */
+const vector<string> HWLSaveEditor::vs_playerWeaponTypeNames =
+{
+	//Link - Weapon Types
+	"Hylian Sword",
+	"Magic Rod",
+	"Great Fairy",
+	"Gauntlets",
+	"Master Sword",
+	"Horse (Epona)",
+	"Spinner",
+
+	//Zelda - Weapon Types
+	"Rapier",
+	"Baton",
+	"Dominion Rod",
+
+	//Shiek - Weapon Types
+	"Harp",
+
+	//Impa - Weapon Types
+	"Giant Blade",
+	"Naginata",
+
+	//Ganondorf - Weapon Types
+	"Great Swords",
+	"Trident",
+
+	//Darunia - Weapon Types
+	"Hammer",
+
+	//Ruto - Weapon Types
+	"Zora Scale",
+
+	//Agitha - Weapon Types
+	"Parasol",
+
+	//Imp Midna - Weapon Types
+	"Shackle",
+
+	//Fi - Weapon Types
+	"Goddess Blade",
+
+	//Ghirahim - Weapon Types
+	"Demon Blade",
+
+	//Zant - Weapon Types
+	"Scimitars",
+
+	//Lana - Weapon Types
+	"Book of Sorcery",
+	"Spear",
+	"Summoning Gate",
+
+	//Cia - Weapon Types
+	"Scepter",
+
+	//Volga - Weapon Types
+	"Dragon Spear",
+
+	//Wizzro - Weapon Types
+	"Ring",
+
+	//Twili Midna - Weapon Types
+	"Mirror",
+
+	//Young Link - Weapon Types
+	"Mask",
+
+	//Tingle - Weapon Types
+	"Balloon",
+
+	//??? - Weapon Types, 2 times, without any weapon-type name
+
+	//Linkle - Weapon Types
+	"Crossbows",
+
+	//Skull Kid - Weapon Types
+	"Ocarina",
+
+	//Toon Link - Weapon Types
+	"Light Sword",
+
+	//tetra - Weapon Types
+	"Cutlass",
+
+	//King Daphnes - Weapon Types
+	"Sail",
+};
+
+/* @var vi_playerWeaponTypeHexValues	vector for holding information about all weapon-type offsets-begin */
+const vector<int> HWLSaveEditor::vi_playerWeaponTypeHexValues =
+{
+	//Link - Weapon Types Hex
+	0x00,
+	0x03,
+	0x06,
+	0x09,
+	0x3C,
+	0x5A,
+	0x60,
+
+	//Zelda - Weapon Types Hex
+	0x15,
+	0x18,
+	0x63,
+
+	//Shiek - Weapon Types Hex
+	0x24,
+
+	//Impa - Weapon Types Hex
+	0x1B,
+	0x1E,
+
+	//Ganondorf - Weapon Types Hex
+	0x21,
+	0x6E,
+
+	//Darunia - Weapon Types Hex
+	0x27,
+
+	//Ruto - Weapon Types Hex
+	0x2A,
+
+	//Agitha - Weapon Types Hex
+	0x2D,
+
+	//Imp Midna - Weapon Types Hex
+	0x30,
+
+	//Fi - Weapon Types Hex
+	0x33,
+
+	//Ghirahim - Weapon Types Hex
+	0x36,
+
+	//Zant - Weapon Types Hex
+	0x39,
+
+	//Lana - Weapon Types Hex
+	0x0C,
+	0x0F,
+	0x12,
+
+	//Cia - Weapon Types Hex
+	0x51,
+
+	//Volga - Weapon Types Hex
+	0x54,
+
+	//Wizzro - Weapon Types Hex
+	0x57,
+
+	//Twili Midna - Weapon Types Hex
+	0x5D,
+
+	//Young Link - Weapon Types Hex
+	0x66,
+
+	//Tingle - Weapon Types Hex
+	0x69,
+
+	//??? - Weapon Types Hex, 2 times, without any weapon-type hex
+
+	//Linkle - Weapon Types Hex
+	0x71,
+
+	//Skull Kid - Weapon Types Hex
+	0x74,
+
+	//Toon Link - Weapon Types Hex
+	0x77,
+
+	//Tetra - Weapon Types Hex
+	0x7A,
+
+	//King Daphnes - Weapon Types Hex
+	0x7D,
+};
+
+/* @var vi_playerWeaponTypeHexValuesLVL4	vector for holding information about all weapon-type offsets, LVL 4*/
+const vector<int> HWLSaveEditor::vi_playerWeaponTypeHexValuesLVL4 =
+{
+	//Link - Weapon Types Hex LVL 4
+	0x3D,
+	0x3E,
+	0x3F, 
+	0x40, 
+	0x3C, 
+	0x83,
+	0x85,
+
+	//Zelda - Weapon Types Hex LVL 4
+	0x44, 
+	0x45, 
+	0x86,
+
+	//Shiek - Weapon Types Hex LVL 4
+	0x49,
+
+	//Impa - Weapon Types Hex LVL 4
+	0x46,
+	0x47,
+
+	//Ganondorf - Weapon Types Hex LVL 4
+	0x48,
+	0x89,
+
+	//Darunia - Weapon Types Hex LVL 4
+	0x4A,
+
+	//Ruto - Weapon Types Hex LVL 4
+	0x4B,
+
+	//Agitha - Weapon Types Hex LVL 4
+	0x4C,
+
+	//Imp Midna - Weapon Types Hex LVL 4
+	0x4D,
+
+	//Fi - Weapon Types Hex LVL 4
+	0x4E,
+
+	//Ghirahim - Weapon Types Hex LVL 4
+	0x4F,
+
+	//Zant - Weapon Types Hex LVL 4
+	0x50,
+
+	//Lana - Weapon Types Hex LVL 4
+	0x41,
+	0x42,
+	0x43,
+
+	//Cia - Weapon Types Hex LVL 4
+	0x80,
+
+	//Volga - Weapon Types Hex LVL 4
+	0x81,
+
+	//Wizzro - Weapon Types Hex LVL 4
+	0x82,
+
+	//Twili Midna - Weapon Types Hex LVL 4
+	0x84,
+
+	//Young Link - Weapon Types Hex LVL 4
+	0x87,
+
+	//Tingle - Weapon Types Hex LVL 4
+	0x88,
+
+	//??? - Weapon Types Hex  LVL 4, 2 times, without any weapon-type hex for  LVL 4
+
+	//Linkle - Weapon Types Hex  LVL 4
+	0x8A,
+
+	//Skull Kid - Weapon Types Hex  LVL 4
+	0x8B,
+
+	//Toon Link - Weapon Types Hex LVL 4
+	0x8C,
+
+	//Tetra - Weapon Types Hex LVL 4
+	0x8D,
+
+	//King Daphnes - Weapon Types Hex LVL 4
+	0x8E,
+};
+
+
 
 HWLSaveEditor::HWLSaveEditor(string s_filepathname)
 {
@@ -461,11 +748,13 @@ HWLSaveEditor::HWLSaveEditor(string s_filepathname)
 		if (this->check_savefile())
 		{
 			this->i_rubies = this->calc_rubies();
+			this->calc_weapons();
 			this->calc_players();
 			this->calc_materials();
 			this->calc_fairyFood();
 			this->calc_amItems();
 			this->calc_myFairies();
+
 
 		}
 		else{
@@ -508,6 +797,26 @@ int HWLSaveEditor::calc_rubies()
 	s_rubies = this->getHexStringFromFileContent(i_ruby_offset, this->rubyOffsetLength);
 
 	return this->HexStringToInt(s_rubies);
+}
+
+void HWLSaveEditor::calc_weapons()
+{
+	int i_offset = this->weaponOffsetBegin;
+
+	int count = 0;
+	for (int i = i_offset; i < (this->i_filelength - 1); i += this->weaponOffsetLengthComplete)
+	{
+		string shex = this->getHexStringFromFileContent(i, this->weaponOffsetLength, true);
+
+		if (shex != HWLWeapon::weaponBlankWeaponHex)
+		{
+			shared_ptr<HWLWeapon> hwlw_tmp = make_shared<HWLWeapon>(i_offset);
+			this->v_weapon.push_back(hwlw_tmp);
+		}
+		else{
+			vi_blank_weapons.push_back(i_offset);
+		}
+	}
 }
 
 void HWLSaveEditor::calc_players()

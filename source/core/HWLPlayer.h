@@ -1,5 +1,6 @@
 #pragma once
 #include "HWLSaveEditorCore.h"
+#include "HWLWeapon.h"
 
 //add the class to the project-namespace
 namespace HWLSaveEdit{
@@ -12,6 +13,7 @@ namespace HWLSaveEdit{
 			int i_exp;
 			int i_atk;
 			bool b_isUnlock;
+			map<int, shared_ptr<HWLWeapon> > m_player_weapon;
 
 			static const int playerLVLOffsetLength;
 			static const int playerEXPOffsetLength;

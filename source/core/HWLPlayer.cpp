@@ -21,6 +21,7 @@ const int HWLPlayer::playerIsUnlockOffsetDiff = 0x10;
 const int HWLPlayer::playerLVLMax = 99;
 const int HWLPlayer::playerEXPMax = 3178257;
 const int HWLPlayer::playerATKMax = 999;
+const int HWLPlayer::playerWeaponSlotsMax = 15;
 
 HWLPlayer::HWLPlayer(string s_name, int i_offset)
 {
@@ -174,6 +175,17 @@ void HWLPlayer::set_isUnlock(bool b_isUnlock)
 	this->b_isUnlock = b_isUnlock;
 }
 
+void HWLPlayer::set_weapon_slot(int i_weapon_type, shared_ptr<HWLWeapon> hwlw_weapon)
+{
+	this->m_player_weapon[i_weapon_type].push_back(hwlw_weapon);
+}
+
+void HWLPlayer::set_weapon_slot(int i_weapon_type, int i_weapon_slot, shared_ptr<HWLWeapon> hwlw_weapon)
+{
+	this->m_player_weapon[i_weapon_type][i_weapon_slot] = hwlw_weapon;
+}
+
+
 
 string HWLPlayer::get_name()
 {
@@ -205,6 +217,13 @@ bool HWLPlayer::get_isUnlock()
 	return this->b_isUnlock;
 }
 
+shared_ptr<HWLWeapon> HWLPlayer::get_weapon_slot(int i_weapon_type, int i_weapon_slot)
+{
+	return this->m_player_weapon[i_weapon_type][i_weapon_slot];
+}
+
+
+
 string HWLPlayer::get_playersStatiForOutput()
 {
 	string s_output = "Name: " + this->s_name + "\n"
@@ -223,3 +242,22 @@ void HWLPlayer::save_Player()
 	this->save_players_atk();
 	this->save_players_isUnlockState();
 }
+
+/*
+//for testing purpose, the sizes of weapon-map and their weapons
+
+string HWLPlayer::get_sizes()
+{
+	string s_map_size = "Map Size: " + to_string(this->m_player_weapon.size()) + "\n";
+	string s_vector_size = "";
+
+	for (int i = 0; i < this->m_player_weapon.size(); i++)
+	{
+		s_vector_size = s_vector_size + "  Vector Size [" + to_string(i) + "]: "
+			+ to_string(this->m_player_weapon[i].size()) + "\n";
+	}
+
+	return s_map_size + s_vector_size;
+	
+}
+*/

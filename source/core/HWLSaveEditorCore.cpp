@@ -9,7 +9,7 @@
 using namespace HWLSaveEdit;
 
 //initialize the static-member
-const string HWLSaveEditorCore::version = "1.3";
+const string HWLSaveEditorCore::version = "1.4 alpha";
 
 unsigned char* HWLSaveEditorCore::cp_filecontent = 0;
 
@@ -139,7 +139,6 @@ string HWLSaveEditorCore::HexStringToByteString(string s_hexString)
 	
 	for (int i = 0; i < s_hex_tmp.length(); i += 2)
 	{
-
 		string s_tmp = s_hex_tmp.substr(i, 2);
 		unsigned char c_tmp = this->HexStringToInt(s_tmp);
 		s_byte_string.push_back(c_tmp);

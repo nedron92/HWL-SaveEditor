@@ -80,13 +80,15 @@ namespace HWLSaveEdit{
 			vector< shared_ptr<HWLWeapon> > v_weapon;
 
 			//other members
-			/* @var vi_blank_weapons	vectro, which hold all free weapon offsets */
+			/* @var vi_blank_weapons	vector, which hold all free weapon offsets */
 			vector<int> vi_blank_weapons;
 
-			//calculate methods for player, material, fairyFood, am-items and fairies
+			//calculate methods for rubies, weapons, player, material, fairyFood, 
+			//am-items and fairies, also for setting an weapon to its player
 			int  calc_rubies();
 			void calc_weapons();
 			void calc_players();
+			bool calc_players_weapons(int i_player_id, int i_weapon_id, string &s_weapon_name, int &i_weapon_type, int &i_weapon_lvl, vector<int> &vi_lvl_hexValues);
 			void calc_materials();
 			void calc_fairyFood();
 			void calc_amItems();
@@ -127,6 +129,10 @@ namespace HWLSaveEdit{
 			shared_ptr<HWLAdventureModeItems> get_amItem(int i_id);
 			shared_ptr<HWLAdventureModeItems> get_amItem(int i_id, int i_type);
 			shared_ptr<HWLFairy> get_fairy(int i_id);
+
+			//method to generate a new default weapon at a default character with
+			//its weapon type and slot
+			void generate_default_weapon(int i_player_id, int i_weapon_type, int i_weapon_slot);
 
 			//special getter for the size of current adventure-mode-offsets vector
 			//todo: delete if we have all offsets

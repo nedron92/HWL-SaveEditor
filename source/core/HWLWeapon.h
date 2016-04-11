@@ -14,8 +14,11 @@ namespace HWLSaveEdit{
 		int i_stars;
 		vector<int> vi_skill_slots;
 		int i_state;
+		int i_character_id;
 		int i_type;
 		int i_lvl;
+		bool b_is_unsued_weapon;
+		vector<int> vi_lvl_hex;
 
 		static const int weaponSkillSlotKillsLength;
 		static const int weaponSkillSlotsLength;
@@ -54,13 +57,55 @@ namespace HWLSaveEdit{
 		static const int weaponSkillSlotKillMax;
 		static const int weaponDamageBaseMax;
 		static const int weaponStarsMax;
+		static const int weaponLVLMax;
+		static const int weaponSkillValueNoSkill;
 
 		static const string weaponBlankWeaponHex;
+		static const vector<string> weaponSkillNames;
+		static const vector<int>  vi_damage_base_defaults;
+		static const vector<int> weaponStateValuesHex;
+		static const vector<string> weaponStateValuesNames;
 
-		HWLWeapon(int i_offset);
+		HWLWeapon(int i_offset, int i_character_id = -1, bool b_is_unsued_weapon = false);
 		~HWLWeapon();
 
+		//stats-setter/getter
+		void set_name(string s_name);
+		void set_skill_slot_kill(int i_slot_id, int i_kill_value);
+		void set_id(int i_id);
+		void set_damage_base(int i_damage_base);
+		void set_stars(int i_stars);
+		void set_skill_slot(int i_slot_id, int i_skill_id);
+		void set_state(int i_state);
+		void set_character_id(int i_character_id);
+		void set_type(int i_type);
+		void set_lvl(int i_lvl);
+		void set_IsUnused(bool b_is_unsued_weapon);
+		void set_lvl_hex(vector<int> vi_lvl_hex);
+
+		string get_name();
+		int get_skill_slot_kill(int i_slot_id);
+		int get_id();
+		int get_damage_base();
+		int get_stars();
+		int get_skill_slot(int i_slot_id);
+		string get_skill_slot(int i_slot_id, bool b_get_string);
+		int get_state();
+		string get_state(bool b_return_as_string);
+		int get_character_id();
+		int get_type();
+		int get_lvl();
+		bool get_IsUnused();
+		vector<int> get_lvl_hex();
+		
+		//method to change current level and set coresspondding damage-base
+		void change_lvl(int i_lvl);
+
+		//method to delete a weapon
+		void delete_weapon();
+
 		string get_WeaponsForOutput();
+		string get_WeaponsSkillsForOutput();
 		void save_weapon();
 	};
 

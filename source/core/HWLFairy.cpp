@@ -263,7 +263,7 @@ string HWLFairy::get_fairyForOutput()
 		+ "  Unlock?: " + to_string(this->b_isUnlock) + "\n"
 		+ "  Level: " + to_string(this->i_lvl) + "\n"
 		+ "  Trust: " + to_string(this->i_trust) + "\n"
-		+ "  Iterator: " + to_string(this->i_iterator) + "\n";
+		+ "  Refreshes: " + to_string(this->i_iterator) + "\n";
 
 	return s_output;
 }

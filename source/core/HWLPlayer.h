@@ -13,7 +13,9 @@ namespace HWLSaveEdit{
 			int i_exp;
 			int i_atk;
 			bool b_isUnlock;
-			map<int, shared_ptr<HWLWeapon> > m_player_weapon;
+			map<int, vector<shared_ptr<HWLWeapon>> > m_player_weapon;
+			//int-key = weapon-type, and via a weapon_slot_id access to a 
+			//single weapon
 
 			static const int playerLVLOffsetLength;
 			static const int playerEXPOffsetLength;
@@ -41,6 +43,8 @@ namespace HWLSaveEdit{
 			static const int playerLVLMax;
 			static const int playerEXPMax;
 			static const int playerATKMax;
+			static const int playerWeaponSlotsMax;
+
 
 			HWLPlayer(string s_name, int i_offset);
 			~HWLPlayer();
@@ -50,6 +54,8 @@ namespace HWLSaveEdit{
 			  void set_exp(int i_exp);
 			  void set_atk(int i_atk);
 			  void set_isUnlock(bool b_isUnlock);
+			  void HWLPlayer::set_weapon_slot(int i_weapon_type, shared_ptr<HWLWeapon> hwlw_weapon);
+			  void HWLPlayer::set_weapon_slot(int i_weapon_type, int i_weapon_slot, shared_ptr<HWLWeapon> hwlw_weapon);
 
 			string get_name();
 			   int get_offset();
@@ -57,7 +63,9 @@ namespace HWLSaveEdit{
 			   int get_exp();
 			   int get_atk();
 			  bool get_isUnlock();
+			  shared_ptr<HWLWeapon> get_weapon_slot(int i_weapon_type, int i_weapon_slot);
 
+			//string get_sizes();
 			string get_playersStatiForOutput();
 			void save_Player();
 		};

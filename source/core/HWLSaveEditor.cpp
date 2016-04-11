@@ -442,7 +442,7 @@ const int HWLSaveEditor::weaponOffsetBegin = 0x2F372;
 /* @var vi_playerWeaponTypeCount	vector for holding information about how many weapon types a chara have */
 const vector<int> HWLSaveEditor::vi_playerWeaponTypeCount =
 {
-	7, 3, 1, 2,	2, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 
+	7, 3, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 
 	// 0.Link, 1.Zelda, 2.Shiek, 3.Impa, 4.Ganondorf, 5.Darunia, 6.Ruto, 7.Agitha, 8.Imp Midna, 
 	// 9.Fi, 10.Ghirahim, 11.Zant, 12.Lana, 13.Cia, 14.Volga, 15.Wizzro, 16.Twili Midna, 17.Young Link, 
 	// 18.Tingle, 19.??? 20.???, 21.Linkle, 22.Skull Kid, 23.Toon Link, 24.Tetra, 25.King Daphnes
@@ -531,7 +531,7 @@ const vector<string> HWLSaveEditor::vs_playerWeaponTypeNames =
 	//Toon Link - Weapon Types
 	"Light Sword",
 
-	//tetra - Weapon Types
+	//Tetra - Weapon Types
 	"Cutlass",
 
 	//King Daphnes - Weapon Types
@@ -754,8 +754,6 @@ HWLSaveEditor::HWLSaveEditor(string s_filepathname)
 			this->calc_fairyFood();
 			this->calc_amItems();
 			this->calc_myFairies();
-
-
 		}
 		else{
 			this->i_error = 400;
@@ -806,15 +804,15 @@ void HWLSaveEditor::calc_weapons()
 	int count = 0;
 	for (int i = i_offset; i < (this->i_filelength - 1); i += this->weaponOffsetLengthComplete)
 	{
-		string shex = this->getHexStringFromFileContent(i, this->weaponOffsetLength, true);
+		string s_weapon = this->getHexStringFromFileContent(i, this->weaponOffsetLength, true);
 
-		if (shex != HWLWeapon::weaponBlankWeaponHex)
+		if (s_weapon != HWLWeapon::weaponBlankWeaponHex)
 		{
-			shared_ptr<HWLWeapon> hwlw_tmp = make_shared<HWLWeapon>(i_offset);
+			shared_ptr<HWLWeapon> hwlw_tmp = make_shared<HWLWeapon>(i);
 			this->v_weapon.push_back(hwlw_tmp);
 		}
 		else{
-			vi_blank_weapons.push_back(i_offset);
+			vi_blank_weapons.push_back(i);
 		}
 	}
 }
@@ -826,10 +824,129 @@ void HWLSaveEditor::calc_players()
 	for (int i = 0; i < this->vs_players.size(); i++)
 	{
 		shared_ptr<HWLPlayer> hwlp_tmp = make_shared<HWLPlayer>(vs_players[i], i_offset);
+
+		vector<int> i_count_weapon_slots;
+		i_count_weapon_slots.resize(this->vi_playerWeaponTypeCount[i]);
+
+		for (int j = 0; j < i_count_weapon_slots.size(); j++)
+			i_count_weapon_slots[j] = 0;
+
+		for (int j = 0; j < this->v_weapon.size(); j++)
+		{
+			int i_weapon_id = this->v_weapon[j]->get_id();
+			string s_weapon_name;
+			int i_weapon_type, i_weapon_lvl;
+			vector<int> vi_lvl_hexValues(HWLWeapon::weaponLVLMax);
+			for (int i = 0; i < vi_lvl_hexValues.size(); i++)
+				vi_lvl_hexValues[i] = 0;
+
+			if (this->calc_players_weapons(i, i_weapon_id, s_weapon_name, i_weapon_type, i_weapon_lvl, vi_lvl_hexValues))
+			{
+				this->v_weapon[j]->set_name(s_weapon_name);
+				this->v_weapon[j]->set_type(i_weapon_type);
+				this->v_weapon[j]->set_lvl(i_weapon_lvl);
+				this->v_weapon[j]->set_character_id(i);
+				this->v_weapon[j]->set_lvl_hex(vi_lvl_hexValues);
+
+				hwlp_tmp->set_weapon_slot(i_weapon_type, this->v_weapon[j]);
+
+				i_count_weapon_slots[i_weapon_type]++;
+			}
+		}
+
+		int i_weapon_types = this->vi_playerWeaponTypeCount[i];
+
+		//Check for Link's Master Sword, cause we have only one
+		if (i == 0 && i_count_weapon_slots[4] > 0)
+			i_count_weapon_slots[4] = HWLPlayer::playerWeaponSlotsMax;
+		else if (i == 0 && i_count_weapon_slots[4] == 0)
+			i_count_weapon_slots[4] = (HWLPlayer::playerWeaponSlotsMax - 1);
+
+		int i_weapon_count = 0;
+		for (int j = 0; j < i; j++)
+		{
+			i_weapon_count = i_weapon_count + this->vi_playerWeaponTypeCount[j];
+		}
+
+		for (int j = 0; j < i_weapon_types; j++)
+		{
+			for (int k = i_count_weapon_slots[j]; k < HWLPlayer::playerWeaponSlotsMax; k++)
+			{
+				int i_offset_new = this->vi_blank_weapons[0];
+				shared_ptr<HWLWeapon> hwlpw_tmp = make_shared<HWLWeapon>(i_offset_new, i, true);
+				hwlpw_tmp->set_type(j);
+				hwlp_tmp->set_weapon_slot(j, hwlpw_tmp);
+				hwlpw_tmp->set_name(this->vs_playerWeaponTypeNames[i_weapon_count + j]);
+				this->vi_blank_weapons.erase(this->vi_blank_weapons.begin(), this->vi_blank_weapons.begin() + 1);
+			}
+		}
+
 		this->m_players[this->vs_players[i]] = hwlp_tmp;
 		i_offset = i_offset + this->playerOffsetLength;
 	}
 
+}
+
+bool HWLSaveEditor::calc_players_weapons(int i_player_id, int i_weapon_id, string &s_weapon_name, int &i_weapon_type, int &i_weapon_lvl, vector<int> &vi_lvl_hexValues)
+{
+	int i_weapon_count = 0;
+	for (int j = 0; j < i_player_id; j++)
+	{
+		i_weapon_count = i_weapon_count + this->vi_playerWeaponTypeCount[j];
+	}
+
+	for (int j = 0; j < this->vi_playerWeaponTypeCount[i_player_id]; j++)
+	{
+		int i_current_lvl_2, i_current_lvl_3, i_current_lvl_4;
+
+		if (this->vi_playerWeaponTypeHexValues[i_weapon_count + j] != this->vi_playerWeaponTypeHexValues[4])
+		{
+			i_current_lvl_2 = this->vi_playerWeaponTypeHexValues[i_weapon_count + j] + 1;
+			i_current_lvl_3 = this->vi_playerWeaponTypeHexValues[i_weapon_count + j] + 2;
+			i_current_lvl_4 = this->vi_playerWeaponTypeHexValuesLVL4[i_weapon_count + j];
+
+		}
+		else{
+			i_current_lvl_2 = i_current_lvl_3 = i_current_lvl_4 = 0;
+	
+		}
+
+		vi_lvl_hexValues[0] = this->vi_playerWeaponTypeHexValues[i_weapon_count + j];
+		vi_lvl_hexValues[1] = i_current_lvl_2;
+		vi_lvl_hexValues[2] = i_current_lvl_3;
+		vi_lvl_hexValues[3] = i_current_lvl_4;
+
+		if (i_weapon_id == this->vi_playerWeaponTypeHexValues[i_weapon_count + j])
+		{
+			s_weapon_name = this->vs_playerWeaponTypeNames[i_weapon_count + j];
+			i_weapon_type = j;
+			i_weapon_lvl = 1;
+			return true;
+		}
+		else if (i_weapon_id == i_current_lvl_2)
+		{
+			s_weapon_name = this->vs_playerWeaponTypeNames[i_weapon_count + j];
+			i_weapon_type = j;
+			i_weapon_lvl = 2;
+			return true;
+		}
+		else if (i_weapon_id == i_current_lvl_3)
+		{
+			s_weapon_name = this->vs_playerWeaponTypeNames[i_weapon_count + j];
+			i_weapon_type = j;
+			i_weapon_lvl = 3;
+			return true;
+		}
+		else if (i_weapon_id == i_current_lvl_4)
+		{
+			s_weapon_name = this->vs_playerWeaponTypeNames[i_weapon_count + j];
+			i_weapon_type = j;
+			i_weapon_lvl = 4;
+			return true;
+		}
+	}
+
+	return false;
 }
 
 void HWLSaveEditor::calc_materials()
@@ -1066,6 +1183,47 @@ shared_ptr<HWLFairy> HWLSaveEditor::get_fairy(int i_id)
 
 	return hwlf_tmp;
 }
+
+void HWLSaveEditor::generate_default_weapon(int i_player_id, int i_weapon_type, int i_weapon_slot)
+{
+	int i_weapon_count = 0;
+	for (int j = 0; j < i_player_id; j++)
+	{
+		i_weapon_count = i_weapon_count + this->vi_playerWeaponTypeCount[j];
+	}
+
+	int i_default_weapon_id = this->vi_playerWeaponTypeHexValues[i_weapon_count + i_weapon_type];
+
+	shared_ptr<HWLWeapon> hwlpw_tmp = this->get_player(i_player_id)->get_weapon_slot(i_weapon_type, i_weapon_slot);
+	hwlpw_tmp->set_id(i_default_weapon_id);
+	hwlpw_tmp->set_lvl(1);
+	hwlpw_tmp->set_IsUnused(false);
+	hwlpw_tmp->set_damage_base(HWLWeapon::vi_damage_base_defaults[0]);
+	hwlpw_tmp->set_stars(0);
+	
+	for (int i = 0; i < 8; i++)
+	{
+		hwlpw_tmp->set_skill_slot_kill(i, 0);
+		
+		if (i == 0)
+			hwlpw_tmp->set_skill_slot(i, 0);
+		else
+			hwlpw_tmp->set_skill_slot(i, HWLWeapon::weaponSkillValueNoSkill);
+	}
+	vector<int> vi_lvl_hexValues(HWLWeapon::weaponLVLMax);
+	for (int i = 0; i < vi_lvl_hexValues.size(); i++)
+		vi_lvl_hexValues[i] = 0;
+
+	vi_lvl_hexValues[0] = (i_default_weapon_id);
+	vi_lvl_hexValues[1] = (i_default_weapon_id + 1);
+	vi_lvl_hexValues[2] = (i_default_weapon_id + 2);
+	vi_lvl_hexValues[3] = (this->vi_playerWeaponTypeHexValuesLVL4[i_weapon_count + i_weapon_type]);
+
+	hwlpw_tmp->set_lvl_hex(vi_lvl_hexValues);
+	this->get_player(i_player_id)->set_weapon_slot(i_weapon_type, i_weapon_slot, hwlpw_tmp);
+
+}
+
 
 int HWLSaveEditor::get_adventureMode_maxItemCount()
 {

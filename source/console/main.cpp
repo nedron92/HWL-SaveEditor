@@ -24,12 +24,20 @@ void change_amItem_values(int i_choose);
 void get_fairy_menu();
 void change_fairy_values(int i_choose, int i_fairy_id);
 
+void get_weapons_type(int i_chara_id);
+void get_weapons(int i_chara_id, int i_type_id, int i_choose);
+void change_weapon_values(int i_chara_id, int i_type_id, int i_current_id, int i_choose);
+
+void get_skills(int i_chara_id, int i_weapon_type_id, int i_weapon_slot_id);
+void change_skill_values(int i_chara_id, int i_weapon_type_id, int i_weapon_slot_id, int i_skill_slot_id, int i_skill_id, int i_choose);
+
 int main()
 {
 
 	try
 	{
 		save = new HWLSaveEdit::HWLSaveEditor();
+
 		char i_choose;
 
 		while (1)
@@ -226,6 +234,7 @@ void get_chara_menu()
 		cout << "2,ID - Maximize ATK of this Chara" << endl;
 		cout << "3    - Unlock all Charas " << endl;
 		cout << "3,ID - Unlock this Chara" << endl;
+		cout << "4,ID - Edit Weapons of this Chara (Submenu)" << endl;
 		cout << "0    - back" << endl;
 		cout << "Your choose: ";
 		cin >> s_choose;
@@ -367,6 +376,7 @@ void change_chara_values(int i_type, int i_chara_id)
 	{
 			  if (i_chara_id == -1)
 			  {
+				  bool b_no_weapon = false;
 				  cout << "Unlock all Charas." << endl;
 				  for (int i = 0; i < save->vs_players.size(); i++)
 				  {
@@ -374,9 +384,23 @@ void change_chara_values(int i_type, int i_chara_id)
 						  continue;
 
 					  save->get_player(i)->set_isUnlock(true);
+
+					  //Check if the character hasn't a default weapon
+					  if (save->get_player(i)->get_weapon_count(0) == 0)
+					  {
+						  b_no_weapon = true;
+						  save->generate_default_weapon(i, 0, 0);
+						  save->get_player(i)->get_weapon_slot(0, 0)->save_weapon();
+					  }
+
 					  save->get_player(i)->save_Player();
 				  }
+
+				  if (b_no_weapon)
+					  cout << "Information: One or more characters haven't a default weapon yet.\nDue to security " <<
+					  "reasons, they were set automatically." << endl << endl;
 				  cout << "Finish. You can choose every character now!" << endl;
+
 				  cin.clear();
 				  getchar();
 				  cin.get();
@@ -395,15 +419,26 @@ void change_chara_values(int i_type, int i_chara_id)
 
 				  if (check_id)
 				  {
+					  bool b_no_weapon = false;
+
 					  cout << "Unlock Chara with ID " << i_chara_id << endl;
 					  save->get_player(i_chara_id)->set_isUnlock(true);
-					  save->get_player(i_chara_id)->save_Player();
-					  cout << "Finish. You can choose this character now!" << endl;
 
+					  //Check if the character hasn't a default weapon
+					  if (save->get_player(i_chara_id)->get_weapon_count(0) == 0)
+					  {
+						  b_no_weapon = true;
+						  save->generate_default_weapon(i_chara_id, 0, 0);
+						  save->get_player(i_chara_id)->get_weapon_slot(0, 0)->save_weapon();
+					  }
+
+					  save->get_player(i_chara_id)->save_Player();
+					  if (b_no_weapon)
+						  cout << "Information: Due to security reasons, this character has \nbecome a default weapon automatically." << endl << endl;
+					  cout << "Finish. You can choose this character now!" << endl;
 				  }
 				  else{
 					  cout << "Sorry, but this Chara-ID doesn't exist!" << endl;
-
 				  }
 
 				  cin.clear();
@@ -414,12 +449,664 @@ void change_chara_values(int i_type, int i_chara_id)
 			  break;
 	}
 
+	case 4:
+	{
+			  bool check_id = false;
+			  for (int i = 0; i < vi_ids.size(); i++)
+			  {
+				  if (vi_ids[i] == i_chara_id)
+				  {
+					  check_id = true;
+					  break;
+				  }
+			  }
+
+			  if (check_id)
+			  {
+				  get_weapons_type(i_chara_id);
+			  }
+			  else{
+				  cout << "Sorry, but this Chara-ID doesn't exist!" << endl;
+				  cin.clear();
+				  getchar();
+				  cin.get();
+				  system("cls");
+			  }
+
+
+			  break;
+	}
 
 	default:
 		break;
 	}
 }
 
+void get_weapons_type(int i_chara_id)
+{
+	string s_choose;
+	system("cls");
+
+	while (1)
+	{
+		int i_weapon_count = 0;
+		for (int j = 0; j < i_chara_id; j++)
+		{
+			i_weapon_count = i_weapon_count + save->vi_playerWeaponTypeCount[j];
+		}
+
+		for (int i = 0; i < save->vi_playerWeaponTypeCount[i_chara_id]; i++)
+		{
+			cout << "Weapon-Type-ID: " << i << endl;
+			cout << save->vs_playerWeaponTypeNames[i_weapon_count + i] << endl << endl;
+		}
+
+		cout << "Weapon Editing of Chara: " << save->vs_players[i_chara_id] << endl << endl;
+		cout << "Menue: " << endl;
+		cout << "1,ID - Edit Weapons of this type (Submenu) " << endl;
+		cout << "0    - back" << endl;
+		cout << "Your choose: ";
+		cin >> s_choose;
+
+		int i_current_id = -1;
+		int i_find_pos = s_choose.find(",");
+		if (i_find_pos != string::npos)
+		{
+			string s_substr = s_choose.substr(i_find_pos + 1, string::npos);
+			i_current_id = atoi(&s_substr[0u]);
+		}
+
+		if (iswdigit(s_choose[0]))
+		{
+			if (atoi(&s_choose[0]) == 0)
+			{
+				system("cls");
+				break;
+			}
+			else if (i_current_id == -1)
+			{
+				cout << "You forget to give an Weapon-Type ID- Try again. " << endl;
+				cin.clear();
+				getchar();
+				cin.get();
+			}
+			else{
+				if (i_current_id >= save->vi_playerWeaponTypeCount[i_chara_id])
+				{
+					cout << "This Weapon-ID doesn't exist. Sorry. " << endl;
+					cin.clear();
+					getchar();
+					cin.get();
+				}
+				else{
+					get_weapons(i_chara_id, i_current_id, atoi(&s_choose[0]));
+
+				}
+			}
+		}
+
+		save->save_file();
+		system("cls");
+
+	}
+
+}
+
+void get_weapons(int i_chara_id, int i_type_id, int i_choose)
+{
+	switch (i_choose)
+	{
+
+	case 1:
+	{
+			  string s_choose;
+			  system("cls");
+
+			  while (1)
+			  {
+				  int i_weapon_count = 0;
+				  for (int j = 0; j < i_chara_id; j++)
+				  {
+					  i_weapon_count = i_weapon_count + save->vi_playerWeaponTypeCount[j];
+				  }
+				 
+				  cout << "Weapon Editing of Chara: " << save->vs_players[i_chara_id] << " and Weapon-Type: " << save->vs_playerWeaponTypeNames[i_weapon_count + i_type_id] << endl << endl;
+				  cout << "Menue: " << endl;
+				  cout << "1    - List all Weapons of this type (only used Slots)" << endl;
+				  cout << "2    - Max LVL of all Weapons (Info: Damage-Base set auto to LVL-Default)" << endl;
+				  cout << "2,ID - Max LVL of that Weapon (Info: Damage-Base set auto to LVL-Default)" << endl;
+				  cout << "3    - Max Damage-Base of all Weapons (useless for legendary-ones)" << endl;
+				  cout << "3,ID - Max Damage-Base of that Weapon (useless for legendary-ones)" << endl;
+				  cout << "4    - Max Stars of all Weapons" << endl;
+				  cout << "4,ID - Max Stars of that Weapon" << endl;
+				  cout << "5    - Make all Weapons to a Legendary One" << endl;
+				  cout << "5,ID - Make that Weapon to a Legendary One" << endl;
+				  cout << "6,ID - Edit Skills of that Weapon (Submenu)" << endl;
+				  cout << "7    - Unlock Skills for all Weapons(Set needed Kills of all to 0)" << endl;
+				  cout << "7,ID - Unlock Skills for this Weapon(Set needed Kills of all to 0)" << endl;
+				  cout << "8    - Generate and add a new Default Weapon of that type" << endl;
+				  cout << "9    - Delete the last weapon (get a free slot)" << endl;
+				  cout << "0    - back" << endl;
+				  cout << "Your choose: ";
+				  cin >> s_choose;
+
+				  int i_current_id = -1;
+				  int i_find_pos = s_choose.find(",");
+				  if (i_find_pos != string::npos)
+				  {
+					  string s_substr = s_choose.substr(i_find_pos + 1, string::npos);
+					  i_current_id = atoi(&s_substr[0u]);
+				  }
+
+				  if (iswdigit(s_choose[0]))
+				  {
+					  if (atoi(&s_choose[0]) == 0)
+					  {
+						  system("cls");
+						  break;
+					  }
+					  else{
+						  if (i_current_id >= save->get_player(i_chara_id)->get_weapon_count(i_type_id) || i_current_id < -1)
+						  {
+							  cout << "This Weapon-ID doesn't exist. Sorry. " << endl;
+							  cin.clear();
+							  getchar();
+							  cin.get();
+						  }
+						  else{
+							  change_weapon_values(i_chara_id, i_type_id, i_current_id, atoi(&s_choose[0]));
+
+						  }
+					  }
+				  }
+
+				  save->save_file();
+				  system("cls");
+
+			  }
+	}
+
+	default:
+		break;
+	}
+
+}
+void change_weapon_values(int i_chara_id, int i_type_id, int i_current_id, int i_choose)
+{
+	switch (i_choose)
+	{
+
+	case 1:
+	{
+			  system("cls");
+
+			  int i_used_slot_count = save->get_player(i_chara_id)->get_weapon_count(i_type_id);
+			  if (i_used_slot_count != 0)
+			  {
+				  for (int i = 0; i < i_used_slot_count; i++)
+				  {
+					  cout << "ID: " << i << endl << save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i)->get_WeaponsForOutput() << endl;
+				  }
+			  }else
+			  {
+				  cout << "There is no weapon of this type" << endl;
+			  }
+
+			  cin.clear();
+			  getchar();
+			  cin.get();
+			  break;
+	}
+
+	case 2:
+	{
+			  if (i_type_id == 4 && i_chara_id == 0)
+			  {
+				  system("cls");
+				  cout << "Sorry, you can't max the Lvl of the Master Sword, \ndue to there is only this ONE Sword." << endl;
+				  cin.clear();
+				  getchar();
+				  cin.get();
+			  }else
+			  {
+				  if (i_current_id == -1)
+				  {
+					  cout << "Maximize LVL of all Weapons" << endl;
+					  int i_used_slot_count = save->get_player(i_chara_id)->get_weapon_count(i_type_id);
+					  if (i_used_slot_count != 0)
+					  {
+						  for (int i = 0; i < i_used_slot_count; i++)
+						  {
+							  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i)->change_lvl(HWLSaveEdit::HWLWeapon::weaponLVLMax);
+							  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i)->save_weapon();
+						  }
+						  cout << "Finish. You now have the strongest weapons." << endl;
+					  }
+					  else
+					  {
+						  cout << "There is no weapon of this type" << endl;
+					  }
+
+				  }else
+				  {
+					  cout << "Maximize LVL of Weapon with ID: " << i_current_id << endl;
+					  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_id)->change_lvl(HWLSaveEdit::HWLWeapon::weaponLVLMax);
+					  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_id)->save_weapon();
+					  cout << "Finish. You now have a very strong weapons." << endl;
+				  }
+
+				  cin.clear();
+				  getchar();
+				  cin.get();
+			  }
+
+			  break;
+	}
+
+	case 3:
+	{
+			  if (i_type_id == 4 && i_chara_id == 0)
+			  {
+				  system("cls");
+				  cout << "Sorry, you can't max the Damage-Base of the Master Sword, \ndue to it's a unique legendary Weapon." << endl;
+				  cin.clear();
+				  getchar();
+				  cin.get();
+			  }
+			  else
+			  {
+				  if (i_current_id == -1)
+				  {
+					  cout << "Maximize Damage-Base of all Weapons" << endl;
+					  int i_used_slot_count = save->get_player(i_chara_id)->get_weapon_count(i_type_id);
+					  if (i_used_slot_count != 0)
+					  {
+						  for (int i = 0; i < i_used_slot_count; i++)
+						  {
+							  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i)->change_damage_base(HWLSaveEdit::HWLWeapon::weaponDamageBaseMax);
+							  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i)->save_weapon();
+						  }
+						  cout << "Finish. You now enough Base-Damage of all your Wapons of this type." << endl;
+					  }
+					  else
+					  {
+						  cout << "There is no weapon of this type" << endl;
+					  }
+
+				  }
+				  else
+				  {
+					  cout << "Maximize Damage-Base of Weapon with ID: " << i_current_id << endl;
+					  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_id)->change_damage_base(HWLSaveEdit::HWLWeapon::weaponDamageBaseMax);
+					  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_id)->save_weapon();
+					  cout << "Finish. You now enough Base-Damage" << endl;
+				  }
+
+				  cin.clear();
+				  getchar();
+				  cin.get();
+			  }
+
+			  break;
+	}
+
+	case 4:
+	{
+			  if (i_current_id == -1)
+			  {
+				  cout << "Maximize Stars of all Weapons" << endl;
+				  int i_used_slot_count = save->get_player(i_chara_id)->get_weapon_count(i_type_id);
+				  if (i_used_slot_count != 0)
+				  {
+					  for (int i = 0; i < i_used_slot_count; i++)
+					  {
+						  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i)->change_stars(HWLSaveEdit::HWLWeapon::weaponStarsMax);
+						  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i)->save_weapon();
+					  }
+					  cout << "Finish. You now all 5 Stars Weapons." << endl;
+				  }
+				  else
+				  {
+					  cout << "There is no weapon of this type" << endl;
+				  }
+
+			  }
+			  else
+			  {
+				  cout << "Maximize Stars of Weapon with ID: " << i_current_id << endl;
+				  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_id)->change_stars(HWLSaveEdit::HWLWeapon::weaponStarsMax);
+				  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_id)->save_weapon();
+				  cout << "Finish. You now a 5 Stars Weapon." << endl;
+			  }
+
+			  cin.clear();
+			  getchar();
+			  cin.get();
+
+			  break;
+	}
+
+	case 5:
+	{
+			  if (i_type_id == 4 && i_chara_id == 0)
+			  {
+				  system("cls");
+				  cout << "Sorry, you can't change the legendary-state of the Master Sword, \ndue to it's a unique legendary Weapon." << endl;
+				  cin.clear();
+				  getchar();
+				  cin.get();
+			  }
+			  else
+			  {
+				  if (i_current_id == -1)
+				  {
+					  cout << "Make all Weapons to Legendary ones." << endl;
+					  int i_used_slot_count = save->get_player(i_chara_id)->get_weapon_count(i_type_id);
+					  if (i_used_slot_count != 0)
+					  {
+						  for (int i = 0; i < i_used_slot_count; i++)
+						  {
+							  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i)->set_state(HWLSaveEdit::HWLWeapon::weaponStateValuesHex[1]);
+							  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i)->set_skill_slot(0, 0x2A);
+							  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i)->save_weapon();
+						  }
+						  cout << "Finish. You now have legendary-weapons \n(and the legendary Skill at Skill-Slot 1)" << endl;
+					  }
+					  else
+					  {
+						  cout << "There is no weapon of this type" << endl;
+					  }
+
+				  }
+				  else
+				  {
+					  cout << "Make weapon with ID: " << i_current_id << " to a legendary one" <<  endl;
+					  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_id)->set_state(HWLSaveEdit::HWLWeapon::weaponStateValuesHex[1]);
+					  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_id)->set_skill_slot(0, 0x2A);
+					  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_id)->save_weapon();
+					  cout << "Finish. You now have a legendary-weapon \n(and the legendary Skill at Skill-Slot 1)" << endl;
+				  }
+
+				  cin.clear();
+				  getchar();
+				  cin.get();
+			  }
+
+			  break;
+	}
+
+	case 6:
+	{
+			  if (i_current_id == -1)
+			  {
+				  cout << "You forgot the Weapon-ID, please try again." << endl;
+				  cin.clear();
+				  getchar();
+				  cin.get();
+			  }
+			  else
+			  {
+				  get_skills(i_chara_id, i_type_id, i_current_id);
+			  }
+
+			  break;
+	}
+
+	case 7:
+	{
+			  if (i_current_id == -1)
+			  {
+				  cout << "Unlocking Skills for all Weapons" << endl;
+				  int i_used_slot_count = save->get_player(i_chara_id)->get_weapon_count(i_type_id);
+				  if (i_used_slot_count != 0)
+				  {
+					  for (int i = 0; i < i_used_slot_count; i++)
+					  {
+						  for (int j = 0; j < 8; j++)
+						  {
+							  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i)->set_skill_slot_kill(j, 0);
+						  }
+
+						  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i)->save_weapon();
+					  }
+					  cout << "Finish. You now have unlocked all Skills of all Weapons." << endl;
+				  }
+				  else
+				  {
+					  cout << "There is no weapon of this type" << endl;
+				  }
+
+			  }
+			  else
+			  {
+				  cout << "Maximize Stars of Weapon with ID: " << i_current_id << endl;
+
+				  for (int i = 0; i < 8; i++)
+				  {
+					  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_id)->set_skill_slot_kill(i, 0);
+				  }
+				  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_id)->save_weapon();
+
+				  cout << "Finish. You now have unlocked all Skills of this Weapon." << endl;
+			  }
+
+			  cin.clear();
+			  getchar();
+			  cin.get();
+
+			  break;
+	}
+
+	case 8:
+	{
+			  system("cls");
+
+			  cout << "Generate a new Weapon " << endl;
+
+			  int i_used_slot_count = save->get_player(i_chara_id)->get_weapon_count(i_type_id);
+			  int i_max_used_slots = 0;
+
+			  if (i_type_id == 4 && i_chara_id == 0)
+				  i_max_used_slots = 1;
+			  else
+				  i_max_used_slots = HWLSaveEdit::HWLPlayer::playerWeaponSlotsMax;
+
+			  if (i_used_slot_count < i_max_used_slots)
+			  {
+				  save->generate_default_weapon(i_chara_id, i_type_id, i_used_slot_count);
+				  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_used_slot_count)->save_weapon();
+				  cout << "Finish. You now have a new Default Weapon." << endl;
+			  }
+			  else
+			  {
+				  cout << "You can't take anymore weapons of this type" << endl;
+			  }
+
+			  cin.clear();
+			  getchar();
+			  cin.get();
+			  break;
+	}
+
+	case 9:
+	{
+			  cout << "Delete last weapon of that type. " << endl;
+
+			  int i_used_slot_count = save->get_player(i_chara_id)->get_weapon_count(i_type_id);
+			  int i_max_used_slots = 0;
+
+			  if (i_used_slot_count > 0)
+			  {
+				  if (i_type_id == 4 && i_chara_id == 0)
+					  i_max_used_slots = 1;
+				  else
+					  i_max_used_slots = HWLSaveEdit::HWLPlayer::playerWeaponSlotsMax;
+
+				  int i_current_last_weapon_id = (i_max_used_slots - 1) - (i_max_used_slots - i_used_slot_count);
+
+				  if (i_type_id == 0)
+				  {
+					  if (save->get_player(i_chara_id)->get_weapon_count(i_type_id) != 1)
+					  {
+						  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_last_weapon_id)->delete_weapon();
+						  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_last_weapon_id)->save_weapon();
+						  cout << "Finish. You deleted it." << endl;
+					  }
+					  else{
+						  cout << "You are going to delete the last weapon of the first weapon-type \nof this character.\n"
+							  << "This can be a dangerous operation for your save and can result in a \nunstable state"
+							  << "of your savegame. \nDue to security reasons you can't delete it per console-variant\n"
+							  << "of that programm. Sorry! \nPlease use the GUI-Version for that." << endl;
+						  //<< "Make sure, that you lock this character after that to avoid such problems. \n"
+						  //<< "Do you really want to delete this last weapon?" << endl;
+						  //save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_id)->delete_weapon();
+						  //save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_id)->save_weapon();
+						  //cout << "Finish. You deleted it." << endl;
+					  }
+				  }
+				  else{
+					  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_last_weapon_id)->delete_weapon();
+					  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_last_weapon_id)->save_weapon();
+					  cout << "Finish. You deleted it." << endl;
+				  }
+			  }
+			  else{
+				  cout << "Sorry. You don't have any weapons." << endl;
+
+			  }
+
+
+			  cin.clear();
+			  getchar();
+			  cin.get();
+
+			  break;
+	}
+
+	default:
+		break;
+	}
+}
+
+void get_skills(int i_chara_id, int i_weapon_type_id, int i_weapon_slot_id)
+{
+	string s_choose;
+	system("cls");
+
+	while (1)
+	{
+		int i_weapon_count = 0;
+		for (int j = 0; j < i_chara_id; j++)
+		{
+			i_weapon_count = i_weapon_count + save->vi_playerWeaponTypeCount[j];
+		}
+
+		cout << "Skill Editing of Weapon: " << i_weapon_slot_id << " from Chara '" << save->vs_players[i_chara_id] << "'\nwith Weapon-Type: "
+			<< save->vs_playerWeaponTypeNames[i_weapon_count + i_weapon_type_id] << endl << endl;
+
+		cout << save->get_player(i_chara_id)->get_weapon_slot(i_weapon_type_id, i_weapon_slot_id)->get_WeaponsSkillsForOutput() << endl;
+
+		cout << "Menue: " << endl;
+		cout << "1          - List available Skills" << endl;
+		cout << "2,ID,ID    - Change Skill (first ID = Slot, second ID = Skill-ID)" << endl;
+		cout << "0          - back" << endl;
+		cout << "Your choose: ";
+		cin >> s_choose;
+
+		int i_slot_id = 0;
+		int i_skill_id = -1;
+		int i_find_pos = s_choose.find(",");
+		if (i_find_pos != string::npos)
+		{
+			string s_substr = s_choose.substr(i_find_pos + 1, string::npos);
+			i_slot_id = atoi(&s_substr[0u]);
+
+			int i_find_pos2 = s_substr.find(",");
+			if (i_find_pos2 != string::npos)
+			{
+				string s_substr2 = s_substr.substr(i_find_pos2 + 1, string::npos);
+				i_skill_id = atoi(&s_substr2[0u]);
+			}
+		
+
+		}
+
+		if (iswdigit(s_choose[0]))
+		{
+			if (atoi(&s_choose[0]) == 0)
+			{
+				system("cls");
+				break;
+			}
+			else{
+				if (i_slot_id > 8 || i_slot_id < 0 || i_skill_id >= (int)HWLSaveEdit::HWLWeapon::weaponSkillNames.size() || i_skill_id < -1)
+				{
+					cout << "This Slot-ID or Skill-ID doesn't exist. Try again." << endl;
+					cin.clear();
+					getchar();
+					cin.get();
+				}
+				else{
+					change_skill_values(i_chara_id, i_weapon_type_id, i_weapon_slot_id, i_slot_id, i_skill_id, atoi(&s_choose[0]));
+
+				}
+			}
+		}
+
+		save->save_file();
+		system("cls");
+
+	}
+}
+
+void change_skill_values(int i_chara_id, int i_weapon_type_id, int i_weapon_slot_id, int i_skill_slot_id, int i_skill_id, int i_choose)
+{
+	switch (i_choose)
+	{
+	case 1:
+	{
+			  system("cls");
+			  for (int i = 0; i < HWLSaveEdit::HWLWeapon::weaponSkillNames.size(); i++)
+			  {
+				  cout << "ID: " << i << "  -  " << HWLSaveEdit::HWLWeapon::weaponSkillNames[i] << endl;
+			  }
+			  cin.clear();
+			  getchar();
+			  cin.get();
+			  break;
+	}
+
+	case 2:
+	{
+			  if (i_skill_slot_id == 0 || i_skill_id == -1)
+			  {
+				  cout << endl;
+				  cout << "Edit Skills " << endl;
+				  cout << "This Slot-ID or Skill-ID doesn't exist. Try again." << endl;
+			  }else
+			  {
+				  cout << endl;
+				  cout << "Edit Skill for Slot " << i_skill_slot_id << endl;
+				  int i_orignal_skill_id = i_skill_id;
+
+				  if (i_skill_id >= (HWLSaveEdit::HWLWeapon::weaponSkillNames.size() - 1))
+					  i_skill_id = HWLSaveEdit::HWLWeapon::weaponSkillValueNoSkill;
+				
+				  save->get_player(i_chara_id)->get_weapon_slot(i_weapon_type_id, i_weapon_slot_id)->set_skill_slot(i_skill_slot_id - 1, i_skill_id);
+				  save->get_player(i_chara_id)->get_weapon_slot(i_weapon_type_id, i_weapon_slot_id)->save_weapon();
+				  cout << "Finish. You set to Slot " << i_skill_slot_id << " following Skill: '" << HWLSaveEdit::HWLWeapon::weaponSkillNames[i_orignal_skill_id] << "'" << endl;
+			  }
+
+			  cin.clear();
+			  getchar();
+			  cin.get();
+	}
+
+	default:
+		break;
+
+	}
+}
 
 void get_materials_menu()
 {

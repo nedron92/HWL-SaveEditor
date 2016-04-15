@@ -112,7 +112,8 @@ BEGIN_MESSAGE_MAP(CZeldaEditFairyDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_FAIRY_MAX_STATS, &CZeldaEditFairyDlg::OnBnClickedFairyMaxStats)
 	ON_EN_CHANGE(IDC_EDIT_FAIRY_LVL, &CZeldaEditFairyDlg::OnEnChangeEditFairyLvl)
 	ON_EN_CHANGE(IDC_EDIT_FAIRY_TRUST, &CZeldaEditFairyDlg::OnEnChangeEditFairyTrust)
-	ON_EN_CHANGE(IDC_EDIT_FAIRY_UNKNOWN, &CZeldaEditFairyDlg::OnEnChangeEditFairyUnknown)
+	ON_EN_CHANGE(IDC_EDIT_FAIRY_ITERATOR, &CZeldaEditFairyDlg::OnEnChangeEditFairyIterator)
+	ON_COMMAND(ID_MENU_EDIT_CHARACTERS_WEAPONS, &CZeldaEditFairyDlg::OnMenuEditCharactersWeapons)
 END_MESSAGE_MAP()
 
 
@@ -237,12 +238,12 @@ void CZeldaEditFairyDlg::OnBnClickedSave()
 		catch (std::exception &e)
 		{
 			CString str(e.what());
-			MessageBox(str, L"Error");
+			MessageBox(str, L"Error", MB_ICONERROR);
 		}
 	}
 	else{
 		CString str("There is no SaveFile opened!");
-		MessageBox(str, L"Error");
+		MessageBox(str, L"Error", MB_ICONERROR);
 	}
 }
 
@@ -304,7 +305,7 @@ void CZeldaEditFairyDlg::OnBnClickedFairyMaxStats()
 
 void CZeldaEditFairyDlg::calc_fairy()
 {
-	CString s_name, s_lvl, s_trust, s_unknown;
+	CString s_name, s_lvl, s_trust, s_iterator;
 
 	s_name = (save->get_fairy(this->i_fairy - 1)->get_name()).c_str();
 	SetDlgItemText(IDC_FAIRY_FAIRYNAME, s_name);
@@ -315,8 +316,8 @@ void CZeldaEditFairyDlg::calc_fairy()
 	s_trust.Format(L"%d", save->get_fairy(this->i_fairy - 1)->get_trust());
 	SetDlgItemText(IDC_EDIT_FAIRY_TRUST, s_trust);
 
-	s_unknown.Format(L"%d", save->get_fairy(this->i_fairy - 1)->get_iterator());
-	SetDlgItemText(IDC_EDIT_FAIRY_UNKNOWN, s_unknown);
+	s_iterator.Format(L"%d", save->get_fairy(this->i_fairy - 1)->get_iterator());
+	SetDlgItemText(IDC_EDIT_FAIRY_ITERATOR, s_iterator);
 
 	CButton *cb_check;
 	cb_check = (CButton*)GetDlgItem(IDC_CHECK_FAIRY_UNLOCK);
@@ -403,24 +404,33 @@ void CZeldaEditFairyDlg::OnEnChangeEditFairyTrust()
 }
 
 
-void CZeldaEditFairyDlg::OnEnChangeEditFairyUnknown()
+void CZeldaEditFairyDlg::OnEnChangeEditFairyIterator()
 {
 	if (save != nullptr)
 	{
 		CString test;
-		CEdit *e_test = (CEdit*)GetDlgItem(IDC_EDIT_FAIRY_UNKNOWN);
+		CEdit *e_test = (CEdit*)GetDlgItem(IDC_EDIT_FAIRY_ITERATOR);
 		CString cs_max_chars;
 		cs_max_chars.Format(L"%d", HWLSaveEdit::HWLFairy::fairyIteratorMax);
 		e_test->SetLimitText(cs_max_chars.GetLength() + 1);
-		GetDlgItemText(IDC_EDIT_FAIRY_UNKNOWN, test);
+		GetDlgItemText(IDC_EDIT_FAIRY_ITERATOR, test);
 		int i_test = _wtoi(test);
 
 		if (i_test > HWLSaveEdit::HWLFairy::fairyIteratorMax)
 		{
 			test.Format(L"%d", HWLSaveEdit::HWLFairy::fairyIteratorMax);
-			SetDlgItemText(IDC_EDIT_FAIRY_UNKNOWN, test);
+			SetDlgItemText(IDC_EDIT_FAIRY_ITERATOR, test);
 			e_test->SetLimitText(cs_max_chars.GetLength());
 		}
 
 	}
+}
+
+
+void CZeldaEditFairyDlg::OnMenuEditCharactersWeapons()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditCharaWeaponsDlg dlg;
+	EndDialog(this->IDD);
+	dlg.DoModal();
 }

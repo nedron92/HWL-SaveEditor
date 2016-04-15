@@ -134,6 +134,7 @@ BEGIN_MESSAGE_MAP(CZeldaEditAdventureModeItem, CDialogEx)
 	ON_COMMAND(ID_MENU_EDIT_AM_TLMAP, &CZeldaEditAdventureModeItem::OnMenuEditAmTlmap)
 	ON_COMMAND(ID_MENU_EDIT_AM_TMMAP, &CZeldaEditAdventureModeItem::OnMenuEditAmTmmap)
 	ON_COMMAND(ID_MENU_EDIT_FAIRIES, &CZeldaEditAdventureModeItem::OnMenuEditFairies)
+	ON_COMMAND(ID_MENU_EDIT_CHARACTERS_WEAPONS, &CZeldaEditAdventureModeItem::OnMenuEditCharactersWeapons)
 END_MESSAGE_MAP()
 
 
@@ -205,12 +206,12 @@ void CZeldaEditAdventureModeItem::OnBnClickedSave()
 		catch (std::exception &e)
 		{
 			CString str(e.what());
-			MessageBox(str, L"Error");
+			MessageBox(str, L"Error", MB_ICONERROR);
 		}
 	}
 	else{
 		CString str("There is no SaveFile opened!");
-		MessageBox(str, L"Error");
+		MessageBox(str, L"Error", MB_ICONERROR);
 	}
 }
 
@@ -383,6 +384,15 @@ void CZeldaEditAdventureModeItem::OnMenuEditFairies()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditFairyDlg dlg;
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+
+void CZeldaEditAdventureModeItem::OnMenuEditCharactersWeapons()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditCharaWeaponsDlg dlg;
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }

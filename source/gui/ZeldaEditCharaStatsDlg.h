@@ -29,6 +29,7 @@ public:
 	afx_msg void OnEnChangeLVLEdit(UINT nID);
 	afx_msg void OnEnChangeEXPEdit(UINT nID);
 	afx_msg void OnEnChangeATKEdit(UINT nID);
+	afx_msg void OnBnClickedUnlockCheck(UINT nID);
 
 	//own methods
 	void calc_players();
@@ -50,5 +51,6 @@ public:
 	afx_msg void OnMenuEditAmTlmap();
 	afx_msg void OnMenuEditAmTmmap();
 	afx_msg void OnMenuEditFairies();
+	afx_msg void OnMenuEditCharactersWeapons();
 };
 

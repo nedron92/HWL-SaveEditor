@@ -15,7 +15,6 @@ CZeldaEditCharaStatsDlg::CZeldaEditCharaStatsDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CZeldaEditCharaStatsDlg::IDD, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
-
 }
 
 CZeldaEditCharaStatsDlg::~CZeldaEditCharaStatsDlg()
@@ -128,6 +127,8 @@ BEGIN_MESSAGE_MAP(CZeldaEditCharaStatsDlg, CDialogEx)
 	ON_COMMAND(ID_MENU_EDIT_AM_TLMAP, &CZeldaEditCharaStatsDlg::OnMenuEditAmTlmap)
 	ON_COMMAND(ID_MENU_EDIT_AM_TMMAP, &CZeldaEditCharaStatsDlg::OnMenuEditAmTmmap)
 	ON_COMMAND(ID_MENU_EDIT_FAIRIES, &CZeldaEditCharaStatsDlg::OnMenuEditFairies)
+	ON_COMMAND(ID_MENU_EDIT_CHARACTERS_WEAPONS, &CZeldaEditCharaStatsDlg::OnMenuEditCharactersWeapons)
+	ON_CONTROL_RANGE(BN_CLICKED, IDC_CHECK_CHARA_UNLOCK1, IDC_CHECK_CHARA_UNLOCK24, &OnBnClickedUnlockCheck)
 END_MESSAGE_MAP()
 
 
@@ -152,12 +153,12 @@ void CZeldaEditCharaStatsDlg::OnBnClickedSave()
 		catch (std::exception &e)
 		{
 			CString str(e.what());
-			MessageBox(str, L"Error");
+			MessageBox(str, L"Error", MB_ICONERROR);
 		}
 	}
 	else{
 		CString str("There is no SaveFile opened!");
-		MessageBox(str, L"Error");
+		MessageBox(str, L"Error", MB_ICONERROR);
 	}
 
 }
@@ -292,6 +293,52 @@ void CZeldaEditCharaStatsDlg::OnEnChangeATKEdit(UINT nID)
 		}
 	}
 
+}
+
+void CZeldaEditCharaStatsDlg::OnBnClickedUnlockCheck(UINT nID)
+{
+	if (save != nullptr)
+	{
+		CButton *cb_check = (CButton*)GetDlgItem(nID);
+		bool b_player_is_unlock = cb_check->GetCheck();
+
+		if (b_player_is_unlock)
+		{
+			int unused_charas = 0;
+			int i_unused_last_id = 0;
+			for (int i = 0; i < save->vs_players.size(); i++)
+			{
+				CString s_player_name(save->get_player(i)->get_name().c_str());
+
+				if (s_player_name == L"???")
+				{
+					i_unused_last_id = i;
+					unused_charas++;
+					continue;
+				}
+			}
+
+			int i_unused_first_id = i_unused_last_id - (unused_charas - 1);
+			int i_diff_to_first_chara = nID - IDC_CHECK_CHARA_UNLOCK1;
+			int i_current_chara_id = 0;
+
+			if (i_diff_to_first_chara >= i_unused_first_id)
+				i_current_chara_id = i_diff_to_first_chara + unused_charas;
+			else
+				i_current_chara_id = i_diff_to_first_chara;
+
+			if (save->get_player(i_current_chara_id)->get_weapon_count(0) == 0)
+			{
+				save->generate_default_weapon(i_current_chara_id, 0, 0);
+				save->get_player(i_current_chara_id)->get_weapon_slot(0, 0)->save_weapon();
+
+				CString cs_info("This character hasn't a default weapon, so maybe he wasn't "
+					"unlocked within the story yet. \n"
+					"To really unlock this character, a default weapon was added automatically.");
+				MessageBox(cs_info, L"Information", MB_OK | MB_ICONINFORMATION);
+			}
+		}
+	}
 }
 
 void CZeldaEditCharaStatsDlg::save_players()
@@ -516,7 +563,7 @@ void CZeldaEditCharaStatsDlg::OnBnClickedCharaUnlockAll()
 	if (save != nullptr)
 	{
 		int unused_charas = 0;
-
+		bool b_no_weapon = false;
 		for (int i = 0; i < save->vs_players.size(); i++)
 		{
 			CString s_player_name(save->get_player(i)->get_name().c_str());
@@ -529,7 +576,25 @@ void CZeldaEditCharaStatsDlg::OnBnClickedCharaUnlockAll()
 			}
 
 			save->get_player(i)->set_isUnlock(true);
+
+			//Check if the character hasn't a default weapon
+			if (save->get_player(i)->get_weapon_count(0) == 0)
+			{
+				b_no_weapon = true;
+				save->generate_default_weapon(i, 0, 0);
+				save->get_player(i)->get_weapon_slot(0, 0)->save_weapon();
+			}
+
 			save->get_player(i)->save_Player();
+		}
+
+		if (b_no_weapon)
+		{
+
+			CString cs_info("One or more characters haven't a default weapon, so maybe they wasn't "
+				"unlocked within the story yet. \n"
+				"To really unlock those characters, a default weapon was added automatically.");
+			MessageBox(cs_info, L"Information", MB_OK | MB_ICONINFORMATION);
 		}
 
 		this->UpdateData();
@@ -545,6 +610,15 @@ void CZeldaEditCharaStatsDlg::OnMenuEditFairies()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditFairyDlg dlg;
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+
+void CZeldaEditCharaStatsDlg::OnMenuEditCharactersWeapons()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditCharaWeaponsDlg dlg;
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }

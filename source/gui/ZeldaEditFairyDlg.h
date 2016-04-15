@@ -48,5 +48,6 @@ public:
 	afx_msg void OnBnClickedFairyMaxStats();
 	afx_msg void OnEnChangeEditFairyLvl();
 	afx_msg void OnEnChangeEditFairyTrust();
-	afx_msg void OnEnChangeEditFairyUnknown();
+	afx_msg void OnEnChangeEditFairyIterator();
+	afx_msg void OnMenuEditCharactersWeapons();
 };

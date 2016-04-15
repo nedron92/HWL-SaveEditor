@@ -77,7 +77,7 @@ BOOL CZeldaHWLSaveEditorGUIApp::InitInstance()
 	try
 	{
 		this->save = new HWLSaveEdit::HWLSaveEditor();
-		if (MessageBox(dlg, L"Found a 'zmha.bin' within this dir. Open it?", L"Information", MB_YESNO | MB_ICONQUESTION) == IDNO)
+		if (MessageBox(dlg, L"Found a 'zmha.bin' within this dir. Open it?", L"Information", MB_YESNO | MB_ICONASTERISK) == IDNO)
 			this->save = nullptr;
 	}
 	catch (HWLSaveEdit::HWLException &e)
@@ -92,7 +92,7 @@ BOOL CZeldaHWLSaveEditorGUIApp::InitInstance()
 
 		}
 
-		if (MessageBox(dlg, str, L"Information", MB_YESNO | MB_ICONQUESTION) == IDNO)
+		if (MessageBox(dlg, str, L"Information", MB_YESNO | MB_ICONASTERISK) == IDNO)
 			return FALSE;
 	}
 

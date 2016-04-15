@@ -23,8 +23,9 @@ const int HWLPlayer::playerEXPMax = 3178257;
 const int HWLPlayer::playerATKMax = 999;
 const int HWLPlayer::playerWeaponSlotsMax = 15;
 
-HWLPlayer::HWLPlayer(string s_name, int i_offset)
+HWLPlayer::HWLPlayer(int i_id, string s_name, int i_offset)
 {
+	this->i_id = i_id;
 	this->s_name = s_name;
 	this->i_offset = i_offset;
 	this->i_lvl = this->calc_players_lvl();
@@ -186,6 +187,10 @@ void HWLPlayer::set_weapon_slot(int i_weapon_type, int i_weapon_slot, shared_ptr
 }
 
 
+int HWLPlayer::get_id()
+{
+	return this->i_id;
+}
 
 string HWLPlayer::get_name()
 {
@@ -241,6 +246,25 @@ void HWLPlayer::save_Player()
 	this->save_players_exp();
 	this->save_players_atk();
 	this->save_players_isUnlockState();
+}
+
+int HWLPlayer::get_weapon_count(int i_weapon_type)
+{
+	int i_weapon_count = 0;
+	int i_max_iterations = 0;
+
+	if (this->i_id == 0 && i_weapon_type == 4)
+		i_max_iterations = 1;
+	else
+		i_max_iterations = this->playerWeaponSlotsMax;
+
+	for (int i = 0; i < i_max_iterations; i++)
+	{
+		if (!this->m_player_weapon[i_weapon_type][i]->get_IsUnused())
+			i_weapon_count++;
+	}
+
+	return i_weapon_count;
 }
 
 /*

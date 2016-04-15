@@ -7,6 +7,7 @@ namespace HWLSaveEdit{
 	class HWLPlayer : public HWLSaveEditorCore
 	{
 		private:
+			int i_id;
 			string s_name;
 			int i_offset;
 			int i_lvl;
@@ -46,7 +47,7 @@ namespace HWLSaveEdit{
 			static const int playerWeaponSlotsMax;
 
 
-			HWLPlayer(string s_name, int i_offset);
+			HWLPlayer(int i_id, string s_name, int i_offset);
 			~HWLPlayer();
 
 			//stati-setter/getter
@@ -57,6 +58,7 @@ namespace HWLSaveEdit{
 			  void HWLPlayer::set_weapon_slot(int i_weapon_type, shared_ptr<HWLWeapon> hwlw_weapon);
 			  void HWLPlayer::set_weapon_slot(int i_weapon_type, int i_weapon_slot, shared_ptr<HWLWeapon> hwlw_weapon);
 
+			  int get_id();
 			string get_name();
 			   int get_offset();
 			   int get_lvl();
@@ -66,6 +68,7 @@ namespace HWLSaveEdit{
 			  shared_ptr<HWLWeapon> get_weapon_slot(int i_weapon_type, int i_weapon_slot);
 
 			//string get_sizes();
+			  int get_weapon_count(int i_weapon_type);
 			string get_playersStatiForOutput();
 			void save_Player();
 		};

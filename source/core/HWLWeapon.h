@@ -10,6 +10,7 @@ namespace HWLSaveEdit{
 		int i_offset;
 		vector<int> vi_skill_slot_kills;
 		int i_id;
+		int i_damage;
 		int i_damage_base;
 		int i_stars;
 		vector<int> vi_skill_slots;
@@ -40,6 +41,7 @@ namespace HWLSaveEdit{
 		//methods calc/save
 		vector<int> calc_skill_slot_kills();
 		int calc_weapon_id();
+		int calc_damage();
 		int calc_damage_base();
 		int calc_stars();
 		vector<int> calc_skill_slots();
@@ -86,11 +88,12 @@ namespace HWLSaveEdit{
 		string get_name();
 		int get_skill_slot_kill(int i_slot_id);
 		int get_id();
+		int get_damage();
 		int get_damage_base();
 		int get_stars();
 		int get_skill_slot(int i_slot_id);
 		string get_skill_slot(int i_slot_id, bool b_get_string);
-		int get_state();
+		bool get_state();
 		string get_state(bool b_return_as_string);
 		int get_character_id();
 		int get_type();
@@ -98,8 +101,15 @@ namespace HWLSaveEdit{
 		bool get_IsUnused();
 		vector<int> get_lvl_hex();
 		
-		//method to change current level and set coresspondding damage-base
+		//method to change the damage-base and re-calculate the damage
+		void change_damage_base(int i_damage_base);
+
+		//method to change current level and set coresspondding damage-base 
+		//re-calculate the damage
 		void change_lvl(int i_lvl);
+
+		//method to change stars and re-calculate the damage
+		void change_stars(int i_stars);
 
 		//method to delete a weapon
 		void delete_weapon();

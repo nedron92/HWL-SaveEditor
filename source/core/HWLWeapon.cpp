@@ -27,7 +27,7 @@ const int HWLWeapon::weaponSkillSlotsOffsetDiff = 0x16;
 const int HWLWeapon::weaponStateOffsetDiff = 0x1E;
 
 const int HWLWeapon::weaponSkillSlotKillMax = 65000;
-const int HWLWeapon::weaponDamageBaseMax = 999;
+const int HWLWeapon::weaponDamageBaseMax = 650;
 const int HWLWeapon::weaponStarsMax = 5;
 const int HWLWeapon::weaponLVLMax = 4;
 const int HWLWeapon::weaponSkillValueNoSkill = 0xFF;
@@ -77,8 +77,8 @@ const vector<string> HWLWeapon::weaponSkillNames =
 	"No Healing",
 	"Adversity",
 	"Compatriot",
-	"Master Sword Skill I",
-	"Master Sword Skill II",
+	"MS: Evil's Ban",
+	"Legendary",
 	"Sp.Attack +",
 	"Fin.Blow +",
 	"Reg.Attack +",
@@ -89,6 +89,7 @@ const vector<string> HWLWeapon::weaponSkillNames =
 	"Hammer +",
 	"VS Sea",
 	"VS Termina",
+	"MS: Exorcism",
 	"No Slot",
 };
 
@@ -98,6 +99,8 @@ const vector<int> HWLWeapon::vi_damage_base_defaults =
 	150,
 	280,
 	500,
+	300,
+	560,
 };
 
 const vector<int> HWLWeapon::weaponStateValuesHex =
@@ -127,6 +130,7 @@ HWLWeapon::HWLWeapon(int i_offset, int i_character_id, bool b_is_unsued_weapon)
 	this->i_state = this->calc_state();
 	this->b_is_unsued_weapon = b_is_unsued_weapon;
 
+	this->i_damage = this->calc_damage();
 	this->i_character_id = i_character_id;
 	this->i_type = 0;
 	this->i_lvl = 1;
@@ -164,6 +168,13 @@ int HWLWeapon::calc_weapon_id()
 	int i_weapon_id = this->HexStringToInt(s_weapon_id);
 
 	return i_weapon_id;
+}
+
+int HWLWeapon::calc_damage()
+{
+	int i_damage = this->i_damage_base + (this->i_damage_base * (this->i_stars / 10.0) );
+
+	return i_damage;
 }
 
 int HWLWeapon::calc_damage_base()
@@ -233,7 +244,7 @@ void HWLWeapon::save_skill_slot_kills()
 		s_skill_slot_kills.append(s_skill_slot_kill);
 	}
 
-	this->setHexStringToFileContent(s_skill_slot_kills, i_skill_slot_kills_offset);
+	this->setHexStringToFileContent(s_skill_slot_kills, i_skill_slot_kills_offset,true);
 
 }
 
@@ -275,7 +286,7 @@ void HWLWeapon::save_stars()
 
 void HWLWeapon::save_skill_slots()
 {
-	string s_skill_slots;
+	string s_skill_slots = "";
 	int i_skill_slots_offset = this->i_offset + this->weaponSkillSlotsOffsetDiff;
 
 	for (int i = 0; i < this->vi_skill_slots.size(); i++)
@@ -286,7 +297,7 @@ void HWLWeapon::save_skill_slots()
 		s_skill_slots.append(s_skill_slot);
 	}
 
-	this->setHexStringToFileContent(s_skill_slots, i_skill_slots_offset);
+	this->setHexStringToFileContent(s_skill_slots, i_skill_slots_offset,true);
 
 }
 
@@ -299,7 +310,7 @@ void HWLWeapon::save_state()
 	s_state = this->intToHexString(i_state_tmp, false);
 	this->addZeroToHexString(s_state, this->weaponStateOffsetLength * 2);
 
-	this->setHexStringToFileContent(s_state, i_state_tmp);
+	this->setHexStringToFileContent(s_state, i_state_offset);
 }
 
 void HWLWeapon::save_weapon()
@@ -315,9 +326,10 @@ void HWLWeapon::save_weapon()
 string HWLWeapon::get_WeaponsForOutput()
 {
 	string s_output = "Name: " + this->s_name + "\n"
-		//	+ "  Offset: " + this->intToHexString(this->i_offset,false) + "\n"
-		// + "  i_id: " + this->intToHexString(this->i_id,false) + "\n"
+		//+ "  Offset: " + this->intToHexString(this->i_offset,false) + "\n"
+		//+ "  i_id: " + this->intToHexString(this->i_id,false) + "\n"
 		//+ "  i_character_id: " + to_string(this->i_character_id) + "\n"
+		+"   Damage: " + to_string(this->i_damage) + "\n"
 		+ "  Damage Base: " + to_string(this->i_damage_base) + "\n"
 		+ "  Stars: " + to_string(this->i_stars) + "\n"
 		+ "  Lvl: " + to_string(this->i_lvl) + "\n"
@@ -454,6 +466,11 @@ int HWLWeapon::get_id()
 	return this->i_id;
 }
 
+int HWLWeapon::get_damage()
+{
+	return this->i_damage;
+}
+
 int HWLWeapon::get_damage_base()
 {
 	return this->i_damage_base;
@@ -471,7 +488,7 @@ int HWLWeapon::get_skill_slot(int i_slot_id)
 		return this->vi_skill_slots[i_slot_id];
 	}
 	else{
-		return -1;
+		return 0;
 	}
 }
 string HWLWeapon::get_skill_slot(int i_slot_id, bool b_get_string)
@@ -493,9 +510,28 @@ string HWLWeapon::get_skill_slot(int i_slot_id, bool b_get_string)
 	}
 }
 
-int HWLWeapon::get_state()
+bool HWLWeapon::get_state()
 {
-	return this->i_state;
+	switch (this->i_state)
+	{
+
+	case 0x00:
+	case 0x03:
+		return false;
+		break;
+
+	case 0x13:
+		return true;
+		break;
+
+	case 0x0B:
+		return true;
+		break;
+
+	default:
+		return false;
+		break;
+	}
 }
 
 string HWLWeapon::get_state(bool b_return_as_string)
@@ -504,6 +540,7 @@ string HWLWeapon::get_state(bool b_return_as_string)
 	switch (this->i_state)
 	{
 
+	case 0x00:
 	case 0x03:
 		s_state = this->weaponStateValuesNames[0];
 		break;
@@ -517,7 +554,7 @@ string HWLWeapon::get_state(bool b_return_as_string)
 		break;
 
 	default:
-		s_state = "Unkown";
+		s_state = "Unknown";
 		break;
 	}
 
@@ -550,6 +587,16 @@ vector<int> HWLWeapon::get_lvl_hex()
 	return this->vi_lvl_hex;
 }
 
+void HWLWeapon::change_damage_base(int i_damage_base)
+{
+	if (this->i_damage_base != i_damage_base)
+	{
+		this->set_damage_base(i_damage_base);
+		this->i_damage = this->calc_damage();
+	}
+}
+
+
 void HWLWeapon::change_lvl(int i_lvl)
 {
 	if (this->i_lvl != i_lvl)
@@ -557,6 +604,16 @@ void HWLWeapon::change_lvl(int i_lvl)
 		this->set_lvl(i_lvl);
 		this->set_damage_base(this->vi_damage_base_defaults[i_lvl - 1]);
 		this->set_id(this->vi_lvl_hex[i_lvl - 1]);
+		this->i_damage = this->calc_damage();
+	}
+}
+
+void HWLWeapon::change_stars(int i_stars)
+{
+	if (this->i_stars != i_stars)
+	{
+		this->set_stars(i_stars);
+		this->i_damage = this->calc_damage();
 	}
 }
 

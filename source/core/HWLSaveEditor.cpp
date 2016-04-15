@@ -823,7 +823,7 @@ void HWLSaveEditor::calc_players()
 
 	for (int i = 0; i < this->vs_players.size(); i++)
 	{
-		shared_ptr<HWLPlayer> hwlp_tmp = make_shared<HWLPlayer>(vs_players[i], i_offset);
+		shared_ptr<HWLPlayer> hwlp_tmp = make_shared<HWLPlayer>(i,vs_players[i], i_offset);
 
 		vector<int> i_count_weapon_slots;
 		i_count_weapon_slots.resize(this->vi_playerWeaponTypeCount[i]);
@@ -1198,9 +1198,22 @@ void HWLSaveEditor::generate_default_weapon(int i_player_id, int i_weapon_type, 
 	hwlpw_tmp->set_id(i_default_weapon_id);
 	hwlpw_tmp->set_lvl(1);
 	hwlpw_tmp->set_IsUnused(false);
-	hwlpw_tmp->set_damage_base(HWLWeapon::vi_damage_base_defaults[0]);
-	hwlpw_tmp->set_stars(0);
-	
+
+	//Check if we have the Master Sword and set the Damage base to the defaults
+	if (i_default_weapon_id == this->vi_playerWeaponTypeHexValues[4])
+		hwlpw_tmp->set_damage_base(HWLWeapon::vi_damage_base_defaults[4]);
+	else
+		hwlpw_tmp->set_damage_base(HWLWeapon::vi_damage_base_defaults[0]);
+
+	hwlpw_tmp->set_stars(1);
+	hwlpw_tmp->change_stars(0);
+
+	//Set legendary state and check if we have the Master sword
+	if (i_default_weapon_id == this->vi_playerWeaponTypeHexValues[4])
+		hwlpw_tmp->set_state(HWLWeapon::weaponStateValuesHex[2]);
+	else
+		hwlpw_tmp->set_state(HWLWeapon::weaponStateValuesHex[0]);
+
 	for (int i = 0; i < 8; i++)
 	{
 		hwlpw_tmp->set_skill_slot_kill(i, 0);

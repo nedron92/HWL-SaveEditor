@@ -9,7 +9,7 @@
 using namespace HWLSaveEdit;
 
 //initialize the static-member
-const string HWLSaveEditorCore::version = "1.4 alpha";
+const string HWLSaveEditorCore::version = "2.0";
 
 unsigned char* HWLSaveEditorCore::cp_filecontent = 0;
 

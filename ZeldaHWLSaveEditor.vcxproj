@@ -103,6 +103,7 @@
     <ClCompile Include="source\core\HWLPlayer.cpp" />
     <ClCompile Include="source\core\HWLSaveEditor.cpp" />
     <ClCompile Include="source\core\HWLSaveEditorCore.cpp" />
+    <ClCompile Include="source\core\HWLWeapon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\console\resource.h" />
@@ -114,6 +115,7 @@
     <ClInclude Include="source\core\HWLPlayer.h" />
     <ClInclude Include="source\core\HWLSaveEditor.h" />
     <ClInclude Include="source\core\HWLSaveEditorCore.h" />
+    <ClInclude Include="source\core\HWLWeapon.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="source\core\res\ZeldaHWLSaveEditorGUI.ico" />

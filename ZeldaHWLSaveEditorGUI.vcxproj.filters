@@ -72,6 +72,12 @@
     <ClInclude Include="source\gui\ZeldaEditFairyDlg.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="source\core\HWLWeapon.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gui\ZeldaEditCharaWeaponsDlg.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\gui\stdafx.cpp">
@@ -123,6 +129,12 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="source\gui\ZeldaEditFairyDlg.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\HWLWeapon.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gui\ZeldaEditCharaWeaponsDlg.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>

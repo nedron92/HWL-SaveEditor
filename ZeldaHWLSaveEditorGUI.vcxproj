@@ -103,12 +103,14 @@
     <ClInclude Include="source\core\HWLPlayer.h" />
     <ClInclude Include="source\core\HWLSaveEditor.h" />
     <ClInclude Include="source\core\HWLSaveEditorCore.h" />
+    <ClInclude Include="source\core\HWLWeapon.h" />
     <ClInclude Include="source\gui\resource.h" />
     <ClInclude Include="source\gui\stdafx.h" />
     <ClInclude Include="source\gui\targetver.h" />
     <ClInclude Include="source\gui\ZeldaAboutDlg.h" />
     <ClInclude Include="source\gui\ZeldaEditAdventureModeItem.h" />
     <ClInclude Include="source\gui\ZeldaEditCharaStatsDlg.h" />
+    <ClInclude Include="source\gui\ZeldaEditCharaWeaponsDlg.h" />
     <ClInclude Include="source\gui\ZeldaEditFairyDlg.h" />
     <ClInclude Include="source\gui\ZeldaEditFairyFoods.h" />
     <ClInclude Include="source\gui\ZeldaEditGeneralDlg.h" />
@@ -124,10 +126,12 @@
     <ClCompile Include="source\core\HWLPlayer.cpp" />
     <ClCompile Include="source\core\HWLSaveEditor.cpp" />
     <ClCompile Include="source\core\HWLSaveEditorCore.cpp" />
+    <ClCompile Include="source\core\HWLWeapon.cpp" />
     <ClCompile Include="source\gui\stdafx.cpp" />
     <ClCompile Include="source\gui\ZeldaAboutDlg.cpp" />
     <ClCompile Include="source\gui\ZeldaEditAdventureModeItem.cpp" />
     <ClCompile Include="source\gui\ZeldaEditCharaStatsDlg.cpp" />
+    <ClCompile Include="source\gui\ZeldaEditCharaWeaponsDlg.cpp" />
     <ClCompile Include="source\gui\ZeldaEditFairyDlg.cpp" />
     <ClCompile Include="source\gui\ZeldaEditFairyFoods.cpp" />
     <ClCompile Include="source\gui\ZeldaEditGeneralDlg.cpp" />

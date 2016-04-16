@@ -11,7 +11,7 @@ You should have a Version of SaveFiler (or able to use .cia files on your 3DS) o
 Possible Homebrew for exporting a savefile: svdt, 3DS Save Manager and/or JK3DSTool (as a .3dsx file), search for it with your favourite search-engine ;) 
 If you not able to run homebrew yet, then visit http://smealum.github.io/3ds/ for more information. 
 
-## HowTo use it? 
+## How to use it? 
 First, download the latest stable release!
 Once you have your savefile (normally called "zmha.bin"), copy to your PC, made a backup of that savefile before you edit anything, run the editor, open the savefile and change what you want, save the file, copy it back to your 3DS SD-Card and import it back with the programm, you used before to get the savefile. 
 

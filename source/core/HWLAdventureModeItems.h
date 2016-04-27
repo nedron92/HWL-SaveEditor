@@ -1,37 +1,55 @@
 #pragma once
+
+//include the parent-class 
 #include "HWLSaveEditorCore.h"
 
+//add the class to the project-namespace
 namespace HWLSaveEdit
 {
 	class HWLAdventureModeItems : public HWLSaveEditorCore
 	{
-	private:
-		string s_name;
-		int i_offset;
-		int i_type;
-		int i_value;
-
-		int  calc_value();
-		void save_value();
+		private:
+			/* @var s_name		name of the AM-Item */
+			string s_name;
 		
-	public:
-		static const int amItemValueMax;
-		static const int amItemPerMapMax;
+			/* @var i_offset	offset of the AM-Item */
+			int i_offset;
+			
+			/* @var i_type		type of the AM-Item */
+			int i_type;
+			
+			/* @var i_value		value of the AM-Item */
+			int i_value;
 
-		HWLAdventureModeItems(string s_name, int i_offset, int i_type);
-		~HWLAdventureModeItems();
+			//methods for calculation and saving the AM-Item
+			int  calc_value();
+			void save_value();
+		
+		public:
+			//needed public members/constans
+			static const vector<string> vs_amItems;
+			static const int amItemValueMax;
+			static const int amItemPerMapMax;
 
-		void set_value(int i_value);
+			//constructor and destructor
+			HWLAdventureModeItems(string s_name, int i_offset, int i_type);
+			~HWLAdventureModeItems();
 
-		string get_name();
-		int get_offset();
-		int get_type();
-		string get_type(bool b_get_string);
-		int get_value();
+			//method(s) for setting
+			void set_value(int i_value);
 
+			//methods for getting the members
+			string get_name();
+			int get_offset();
+			int get_type();
+			string get_type(bool b_get_string);
+			int get_value();
 
-		string get_AMItemForOutput();
-		void save_AMItem();
+			//method to get a formatted output (for console)
+			string get_AMItemForOutput();
+
+			//saving method
+			void save_AMItem();
 
 	};
 

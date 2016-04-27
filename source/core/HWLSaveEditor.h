@@ -12,8 +12,8 @@
 #include "HWLWeapon.h"
 
 //add the class to the project-namespace
-namespace HWLSaveEdit{
-	
+namespace HWLSaveEdit
+{
 	//extend our Core-Class
 	class HWLSaveEditor : public HWLSaveEditorCore
 	{
@@ -44,11 +44,8 @@ namespace HWLSaveEdit{
 
 			static const int bronzeMaterialsOffsetBegin;
 			static const int bronzeMaterialsOffsetBeginNew;
-			
-
 			static const int silverMaterialsOffsetBegin;
 			static const int silverMaterialsOffsetBeginNew;
-
 			static const int goldMaterialsOffsetBegin;
 			static const int goldMaterialsOffsetBeginNew;
 
@@ -61,6 +58,7 @@ namespace HWLSaveEdit{
 
 			static const int weaponOffsetBegin;
 
+			// member declarations
 			/* @var m_players		map for holding all playable characters */
 			map< string, shared_ptr<HWLPlayer> > m_players;
 
@@ -76,15 +74,14 @@ namespace HWLSaveEdit{
 			/* @var m_fairy			map for holding all myFairies */
 			map< int, shared_ptr<HWLFairy> > m_fairy;
 
-			/* @var v_weapon		map for holding all used weapons */
+			/* @var v_weapon		vector for holding all used weapons */
 			vector< shared_ptr<HWLWeapon> > v_weapon;
 
-			//other members
 			/* @var vi_blank_weapons	vector, which hold all free weapon offsets */
 			vector<int> vi_blank_weapons;
 
 			//calculate methods for rubies, weapons, player, material, fairyFood, 
-			//am-items and fairies, also for setting an weapon to its player
+			//am-items and fairies, also for setting an weapon to the correct player
 			int  calc_rubies();
 			void calc_weapons();
 			void calc_players();
@@ -101,18 +98,6 @@ namespace HWLSaveEdit{
 			static const int rubyMax;
 			static const int fairiesMax;
 
-			static const vector<string> vs_players;
-
-			static const vector<string> vs_bronzeMaterials;
-			static const vector<string> vs_silverMaterials;
-			static const vector<string> vs_goldMaterials;
-			static const vector<string> vs_fairyFood;
-			static const vector<string> vs_amItems;
-
-			static const vector<int> vi_playerWeaponTypeCount;
-			static const vector<string> vs_playerWeaponTypeNames;
-			static const vector<int> vi_playerWeaponTypeHexValues;
-			static const vector<int> vi_playerWeaponTypeHexValuesLVL4;
 
 			HWLSaveEditor(string s_filepathname = "zmha.bin");
 			~HWLSaveEditor();
@@ -130,22 +115,18 @@ namespace HWLSaveEdit{
 			shared_ptr<HWLAdventureModeItems> get_amItem(int i_id, int i_type);
 			shared_ptr<HWLFairy> get_fairy(int i_id);
 
-			//method to generate a new default weapon at a default character with
-			//its weapon type and slot
-			void generate_default_weapon(int i_player_id, int i_weapon_type, int i_weapon_slot);
-
-			//special getter for the size of current adventure-mode-offsets vector
-			//todo: delete if we have all offsets
+			//special getter for the size of current adventure-mode-offsets vector,
+			//better how many maps we have
 			int get_adventureMode_maxItemCount();
 
 			//setter for rubies
 			void set_rubies(int i_rubies);
 
-			//saving file method
-			void save_file();
-
 			//method for checking file-header
 			bool check_savefile();
+
+			//saving file method
+			void save_file();
 	};
 
 }

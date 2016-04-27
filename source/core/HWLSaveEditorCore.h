@@ -16,11 +16,10 @@ namespace HWLSaveEdit
 	class HWLSaveEditorCore
 	{
 		protected:
-			/* @var *cp_filecontent  this static member hold the 
-									content of the save-file
-			*/						
-			static unsigned char* cp_filecontent;
+			//needed member in all subclasses
+			static unsigned char *cp_filecontent;
 
+			//const declaration, needed for subclasses
 			static const int playerOffsetLength;
 			static const int materialOffsetLength;
 			static const int fairyFoodOffsetLength;
@@ -30,6 +29,7 @@ namespace HWLSaveEdit
 			static const int weaponOffsetLengthComplete;
 
 		public:
+			//needed public static-constants
 			static const string version;
 
 			/* Constructor and pure-virtual Destructor 
@@ -39,7 +39,8 @@ namespace HWLSaveEdit
 			virtual ~HWLSaveEditorCore() = 0;
 
 			/* Convertion for int to a HexString and the other
-			   way around with zero-adding. Also Convertions between MultiByte and WideStrings
+			   way around with zero-adding. 
+			   Also Convertions between MultiByte- and WideStrings
 			   */
 			string intToHexString(int i_value, bool is_file_content = true);
 			int HexStringToInt(string s_hexString);

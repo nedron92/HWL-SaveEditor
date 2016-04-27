@@ -3,14 +3,14 @@
 #include "../gui/stdafx.h" 
 #endif // __MFC__
 
+//include the correct header-file
 #include "HWLSaveEditorCore.h"
 
 //use the project-namespace
 using namespace HWLSaveEdit;
 
 //initialize the static-member
-const string HWLSaveEditorCore::version = "2.0";
-
+/* @var *cp_filecontent			holding the content of the save-file */
 unsigned char* HWLSaveEditorCore::cp_filecontent = 0;
 
 /* @var playerOffsetLength		length of one player/character */
@@ -34,6 +34,12 @@ const int HWLSaveEditorCore::weaponOffsetLength = 0x1F;
 /* @var weaponOffsetLengthComplete		length for all weapon Offsets (with fill-data) */
 const int HWLSaveEditorCore::weaponOffsetLengthComplete = 0x28;
 
+//public members
+/* @var version  hold the current version-number as string */
+const string HWLSaveEditorCore::version = "2.0.5";
+
+
+
 /** 
 * Only the initialization of the normal-constructor
 */
@@ -54,7 +60,7 @@ HWLSaveEditorCore::~HWLSaveEditorCore()
 * Also get the Hex-representation of a specific point
 *	from the file-content
 *
-*	@var int  i_value			the value to convert/offset from file
+*	@var int  i_value			the value to convert/ the offset from file
 *	@var bool is_file_content	TRUE, if we want a file-content convert to int
 *								FALSE otherwise. Default TRUE
 *
@@ -80,7 +86,7 @@ string HWLSaveEditorCore::intToHexString(int i_value, bool is_file_content)
 			<< (int)cp_filecontent[i_value];
 	}
 	else{
-		//convert the i_value to an Hex-Content
+		//convert the integer value to an Hex-Content
 		sstream_hexStream << std::setfill('0')
 			<< std::setw(2)
 			<< std::hex
@@ -90,6 +96,7 @@ string HWLSaveEditorCore::intToHexString(int i_value, bool is_file_content)
 	//get the new hexString from the stringstream
 	s_hexString = sstream_hexStream.str();
 
+	//delete the too much FF if we have an negative integer
 	if (i_value < 0)
 	{
 		s_hexString.erase(s_hexString.begin(), s_hexString.end() - 2);
@@ -127,37 +134,78 @@ int HWLSaveEditorCore::HexStringToInt(string s_hexString)
 	return i_value;
 }
 
+/**
+* This method will convert an HexString to an MultiByte-String (char)
+*
+*	@var string  s_hexString		the string to convert
+*
+*	@return string					converted Byte-String
+*
+*/
 string HWLSaveEditorCore::HexStringToByteString(string s_hexString)
 {
+	//declare two strings for holding content
 	string s_hex_tmp, s_byte_string;
 
+	//find the zeros and delete the rest from that positions
+	//because we don't need them (an character with XX00XX is 
+	//not an character, that will be something other)
 	int i_pos = s_hexString.find("00");
 	if (i_pos != string::npos)
 		s_hexString.erase(s_hexString.begin()+i_pos, s_hexString.end());
 
+	//make a temporary copy of the input-hex-string
 	s_hex_tmp = s_hexString;
 	
-	for (int i = 0; i < s_hex_tmp.length(); i += 2)
+	// iterate over the hex-string and make sub-strings of the form
+	// XX. Convert each sub-string to its Integer-Value and used
+	// it for an unsgined char. Pusch it to the new string
+	for (int i = 0; i < (signed)s_hex_tmp.length(); i += 2)
 	{
 		string s_tmp = s_hex_tmp.substr(i, 2);
 		unsigned char c_tmp = this->HexStringToInt(s_tmp);
 		s_byte_string.push_back(c_tmp);
 	}
 
+	//return the new MultiByte-String
 	return s_byte_string;
 }
 
+/**
+* This method will convert an Byte-String to an HexString 
+*
+*	@var string  s_byteString		the string to convert
+*
+*	@return string					converted HexString
+*
+*/
 string HWLSaveEditorCore::ByteStringToHexString(string s_byteString)
 {
+	//declare a needed string
 	string s_hexString;
-	for (int i = 0; i < s_byteString.length(); i++)
+
+	//iterate over the byte-string and convert each unsigned-char
+	//of it to its Hex-Value and add them to to the new
+	//hex-string itself
+	for (int i = 0; i < (signed)s_byteString.length(); i++)
 	{
 		unsigned char uc_byte = s_byteString[i];
 		s_hexString = s_hexString + this->intToHexString(uc_byte, false);
 	}
+
+	//return the new hex-string
 	return s_hexString;
 }
 
+/**
+* This method will convert an Byte-String as CharPointer 
+* to an WideString
+*
+*	@var char*  cp_multibyte_str	the string to convert as char-pointer
+*
+*	@return wstring					converted WideString
+*
+*/
 wstring HWLSaveEditorCore::ByteStringAsCharToWideString(const char* cp_multibyte_str)
 {
 
@@ -167,7 +215,7 @@ wstring HWLSaveEditorCore::ByteStringAsCharToWideString(const char* cp_multibyte
 	mbsrtowcs(&vw_wide_str[0], &cp_multibyte_str, vw_wide_str.size(), &multibyte_state);
 	wstring ws_wide_str;
 
-	for (int i = 0; i < vw_wide_str.size()-1; i++)
+	for (int i = 0; i < (signed)vw_wide_str.size() - 1; i++)
 	{
 		ws_wide_str.push_back(vw_wide_str[i]);
 	}
@@ -175,6 +223,15 @@ wstring HWLSaveEditorCore::ByteStringAsCharToWideString(const char* cp_multibyte
 	return ws_wide_str;
 }
 
+/**
+* This method will convert an WideString to an Byte-String
+* as CharPointer
+*
+*	@var wchar_t*  wcp_wide_str		the WideString to convert as wide-char-pointer
+*
+*	@return string					converted Byte-String
+*
+*/
 string HWLSaveEditorCore::WideStringAsCharToByteString(const wchar_t* wcp_wide_str)
 {
 	std::mbstate_t multibyte_state = std::mbstate_t();
@@ -183,7 +240,7 @@ string HWLSaveEditorCore::WideStringAsCharToByteString(const wchar_t* wcp_wide_s
 	std::wcsrtombs(&vc_multibyte_str[0], &wcp_wide_str, vc_multibyte_str.size(), &multibyte_state);
 	string s_byte_str;
 
-	for (int i = 0; i < vc_multibyte_str.size()-1; i++)
+	for (int i = 0; i < (signed)vc_multibyte_str.size() - 1; i++)
 	{
 		s_byte_str.push_back(vc_multibyte_str[i]);
 	}
@@ -193,18 +250,21 @@ string HWLSaveEditorCore::WideStringAsCharToByteString(const wchar_t* wcp_wide_s
 
 
 /**
-* This method added zeros to an uncomplete HexString
+* This method will add zeros to an uncomplete HexString
 *	@var string  s_hexString	the string (as reference)
 *								which will be zero-added
 *
 *	@var    int	 i_max_length	the max length for the string
 *
+*	@var    bool b_to_end		if TRUE, the zeros will be added
+*								to the end of the string. If FALSE
+*								then to the beginning. Default: FALSE
 */
 void HWLSaveEditorCore::addZeroToHexString(string &s_hexString, int i_max_length, bool b_to_end)
 {
 	//if we current string-length as lower then the 
 	//max length for it, add the zeros
-	if (s_hexString.length() < i_max_length)
+	if ((signed)s_hexString.length() < i_max_length)
 	{
 		//calc the difference for iteration-length
 		int i_diff = i_max_length - s_hexString.length();
@@ -217,15 +277,30 @@ void HWLSaveEditorCore::addZeroToHexString(string &s_hexString, int i_max_length
 	}
 }
 
+/**
+* This method convert the ByteOrder of an HexString (Little-Endian
+* to Big-Endian and the other way around).
+*
+*	@var string  s_hexString		the HexString to convert
+*									 (as reference)
+*
+*/
 void HWLSaveEditorCore::convertByteOrder(string &s_hexString)
 {
+	//declare the needed temp-string
 	string s_hexString_convert = "";
+
+	//iterate over the hex-string, start from end to begin
 	for (int i = 0 + (s_hexString.size() - 1); i >= 0; i -= 2)
 	{
+		//because we don't need to reverse the string and only
+		//want to switch the order, we need the i-1 position
+		//first and then the i-position
 		s_hexString_convert.push_back(s_hexString[i - 1]);
 		s_hexString_convert.push_back(s_hexString[i]);
 	}
 
+	//set the input-hex-string to the new content of the temp-string
 	s_hexString = s_hexString_convert;
 
 }
@@ -237,6 +312,10 @@ void HWLSaveEditorCore::convertByteOrder(string &s_hexString)
 *	@var int	i_offset			the file-offset-begin
 *
 *	@var int	i_offset_length		length of the offset
+*
+*	@var bool	b_is_char			if TRUE, we have directly
+*									single characters and need
+*									Big-Endian-Order. Default: FALSE
 *
 *	@return string					the HexString 
 *
@@ -289,6 +368,10 @@ string HWLSaveEditorCore::getHexStringFromFileContent(int i_offset, int i_offset
 *
 *	@var int	i_offset		the file-offset-begin
 *
+*	@var bool	b_is_char		if TRUE, we have directly
+*								single characters and need
+*								Big-Endian-Order. Default: FALSE
+*
 */
 void HWLSaveEditorCore::setHexStringToFileContent(string s_hexString, int i_offset, bool b_is_char)
 {
@@ -303,7 +386,7 @@ void HWLSaveEditorCore::setHexStringToFileContent(string s_hexString, int i_offs
 
 
 	//Iterate over the string
-	for (int i = 0; i < s_hexString.length(); i += 2)
+	for (int i = 0; i < (signed)s_hexString.length(); i += 2)
 	{
 		//we need everytime a Hexdecial Value in this 
 		//Format: XX 

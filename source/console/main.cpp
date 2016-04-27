@@ -218,7 +218,7 @@ void get_chara_menu()
 	while (1)
 	{
 		
-		for (int i = 0; i < save->vs_players.size(); i++)
+		for (int i = 0; i < (signed)HWLSaveEdit::HWLPlayer::vs_players.size(); i++)
 		{
 			if (save->get_player(i)->get_name() == "???")
 				continue;
@@ -275,7 +275,7 @@ void change_chara_values(int i_type, int i_chara_id)
 			  if (i_chara_id == -1)
 			  {
 				  cout << "Maximize EXP of all Charas." << endl;
-				  for (int i = 0; i < save->vs_players.size(); i++)
+				  for (int i = 0; i < (signed)HWLSaveEdit::HWLPlayer::vs_players.size(); i++)
 				  {
 					  if (save->get_player(i)->get_name() == "???")
 						  continue;
@@ -291,7 +291,7 @@ void change_chara_values(int i_type, int i_chara_id)
 			  }
 			  else{
 				  bool check_id = false;
-				  for (int i = 0; i < vi_ids.size(); i++)
+				  for (int i = 0; i < (signed)vi_ids.size(); i++)
 				  {
 					  if (vi_ids[i] == i_chara_id)
 					  {
@@ -326,7 +326,7 @@ void change_chara_values(int i_type, int i_chara_id)
 			  if (i_chara_id == -1)
 			  {
 				  cout << "Maximize ATK of all Charas." << endl;
-				  for (int i = 0; i < save->vs_players.size(); i++)
+				  for (int i = 0; i < (signed)HWLSaveEdit::HWLPlayer::vs_players.size(); i++)
 				  {
 					  if (save->get_player(i)->get_name() == "???")
 						  continue;
@@ -342,7 +342,7 @@ void change_chara_values(int i_type, int i_chara_id)
 			  }
 			  else{
 				  bool check_id = false;
-				  for (int i = 0; i < vi_ids.size(); i++)
+				  for (int i = 0; i < (signed)vi_ids.size(); i++)
 				  {
 					  if (vi_ids[i] == i_chara_id)
 					  {
@@ -378,7 +378,7 @@ void change_chara_values(int i_type, int i_chara_id)
 			  {
 				  bool b_no_weapon = false;
 				  cout << "Unlock all Charas." << endl;
-				  for (int i = 0; i < save->vs_players.size(); i++)
+				  for (int i = 0; i < (signed)HWLSaveEdit::HWLPlayer::vs_players.size(); i++)
 				  {
 					  if (save->get_player(i)->get_name() == "???")
 						  continue;
@@ -389,7 +389,7 @@ void change_chara_values(int i_type, int i_chara_id)
 					  if (save->get_player(i)->get_weapon_count(0) == 0)
 					  {
 						  b_no_weapon = true;
-						  save->generate_default_weapon(i, 0, 0);
+						  save->get_player(i)->get_weapon_slot(0, 0)->generate_default_weapon();
 						  save->get_player(i)->get_weapon_slot(0, 0)->save_weapon();
 					  }
 
@@ -408,7 +408,7 @@ void change_chara_values(int i_type, int i_chara_id)
 			  }
 			  else{
 				  bool check_id = false;
-				  for (int i = 0; i < vi_ids.size(); i++)
+				  for (int i = 0; i < (signed)vi_ids.size(); i++)
 				  {
 					  if (vi_ids[i] == i_chara_id)
 					  {
@@ -428,7 +428,7 @@ void change_chara_values(int i_type, int i_chara_id)
 					  if (save->get_player(i_chara_id)->get_weapon_count(0) == 0)
 					  {
 						  b_no_weapon = true;
-						  save->generate_default_weapon(i_chara_id, 0, 0);
+						  save->get_player(i_chara_id)->get_weapon_slot(0, 0)->generate_default_weapon();
 						  save->get_player(i_chara_id)->get_weapon_slot(0, 0)->save_weapon();
 					  }
 
@@ -452,7 +452,7 @@ void change_chara_values(int i_type, int i_chara_id)
 	case 4:
 	{
 			  bool check_id = false;
-			  for (int i = 0; i < vi_ids.size(); i++)
+			  for (int i = 0; i < (signed)vi_ids.size(); i++)
 			  {
 				  if (vi_ids[i] == i_chara_id)
 				  {
@@ -492,16 +492,16 @@ void get_weapons_type(int i_chara_id)
 		int i_weapon_count = 0;
 		for (int j = 0; j < i_chara_id; j++)
 		{
-			i_weapon_count = i_weapon_count + save->vi_playerWeaponTypeCount[j];
+			i_weapon_count = i_weapon_count + HWLSaveEdit::HWLWeapon::vi_playerWeaponTypeCount[j];
 		}
 
-		for (int i = 0; i < save->vi_playerWeaponTypeCount[i_chara_id]; i++)
+		for (int i = 0; i < HWLSaveEdit::HWLWeapon::vi_playerWeaponTypeCount[i_chara_id]; i++)
 		{
 			cout << "Weapon-Type-ID: " << i << endl;
-			cout << save->vs_playerWeaponTypeNames[i_weapon_count + i] << endl << endl;
+			cout << HWLSaveEdit::HWLWeapon::vs_playerWeaponTypeNames[i_weapon_count + i] << endl << endl;
 		}
 
-		cout << "Weapon Editing of Chara: " << save->vs_players[i_chara_id] << endl << endl;
+		cout << "Weapon Editing of Chara: " << HWLSaveEdit::HWLPlayer::vs_players[i_chara_id] << endl << endl;
 		cout << "Menue: " << endl;
 		cout << "1,ID - Edit Weapons of this type (Submenu) " << endl;
 		cout << "0    - back" << endl;
@@ -531,7 +531,7 @@ void get_weapons_type(int i_chara_id)
 				cin.get();
 			}
 			else{
-				if (i_current_id >= save->vi_playerWeaponTypeCount[i_chara_id])
+				if (i_current_id >= HWLSaveEdit::HWLWeapon::vi_playerWeaponTypeCount[i_chara_id])
 				{
 					cout << "This Weapon-ID doesn't exist. Sorry. " << endl;
 					cin.clear();
@@ -567,10 +567,10 @@ void get_weapons(int i_chara_id, int i_type_id, int i_choose)
 				  int i_weapon_count = 0;
 				  for (int j = 0; j < i_chara_id; j++)
 				  {
-					  i_weapon_count = i_weapon_count + save->vi_playerWeaponTypeCount[j];
+					  i_weapon_count = i_weapon_count + HWLSaveEdit::HWLWeapon::vi_playerWeaponTypeCount[j];
 				  }
 				 
-				  cout << "Weapon Editing of Chara: " << save->vs_players[i_chara_id] << " and Weapon-Type: " << save->vs_playerWeaponTypeNames[i_weapon_count + i_type_id] << endl << endl;
+				  cout << "Weapon Editing of Chara: " << HWLSaveEdit::HWLPlayer::vs_players[i_chara_id] << " and Weapon-Type: " << HWLSaveEdit::HWLWeapon::vs_playerWeaponTypeNames[i_weapon_count + i_type_id] << endl << endl;
 				  cout << "Menue: " << endl;
 				  cout << "1    - List all Weapons of this type (only used Slots)" << endl;
 				  cout << "2    - Max LVL of all Weapons (Info: Damage-Base set auto to LVL-Default)" << endl;
@@ -620,6 +620,7 @@ void get_weapons(int i_chara_id, int i_type_id, int i_choose)
 					  }
 				  }
 
+				  //save->get_player(i_chara_id)->save_Player();
 				  save->save_file();
 				  system("cls");
 
@@ -913,7 +914,7 @@ void change_weapon_values(int i_chara_id, int i_type_id, int i_current_id, int i
 
 			  if (i_used_slot_count < i_max_used_slots)
 			  {
-				  save->generate_default_weapon(i_chara_id, i_type_id, i_used_slot_count);
+				  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_used_slot_count)->generate_default_weapon();
 				  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_used_slot_count)->save_weapon();
 				  cout << "Finish. You now have a new Default Weapon." << endl;
 			  }
@@ -998,11 +999,11 @@ void get_skills(int i_chara_id, int i_weapon_type_id, int i_weapon_slot_id)
 		int i_weapon_count = 0;
 		for (int j = 0; j < i_chara_id; j++)
 		{
-			i_weapon_count = i_weapon_count + save->vi_playerWeaponTypeCount[j];
+			i_weapon_count = i_weapon_count + HWLSaveEdit::HWLWeapon::vi_playerWeaponTypeCount[j];
 		}
 
-		cout << "Skill Editing of Weapon: " << i_weapon_slot_id << " from Chara '" << save->vs_players[i_chara_id] << "'\nwith Weapon-Type: "
-			<< save->vs_playerWeaponTypeNames[i_weapon_count + i_weapon_type_id] << endl << endl;
+		cout << "Skill Editing of Weapon: " << i_weapon_slot_id << " from Chara '" << HWLSaveEdit::HWLPlayer::vs_players[i_chara_id] << "'\nwith Weapon-Type: "
+			<< HWLSaveEdit::HWLWeapon::vs_playerWeaponTypeNames[i_weapon_count + i_weapon_type_id] << endl << endl;
 
 		cout << save->get_player(i_chara_id)->get_weapon_slot(i_weapon_type_id, i_weapon_slot_id)->get_WeaponsSkillsForOutput() << endl;
 
@@ -1066,7 +1067,7 @@ void change_skill_values(int i_chara_id, int i_weapon_type_id, int i_weapon_slot
 	case 1:
 	{
 			  system("cls");
-			  for (int i = 0; i < HWLSaveEdit::HWLWeapon::weaponSkillNames.size(); i++)
+			  for (int i = 0; i < (signed)HWLSaveEdit::HWLWeapon::weaponSkillNames.size(); i++)
 			  {
 				  cout << "ID: " << i << "  -  " << HWLSaveEdit::HWLWeapon::weaponSkillNames[i] << endl;
 			  }
@@ -1089,7 +1090,7 @@ void change_skill_values(int i_chara_id, int i_weapon_type_id, int i_weapon_slot
 				  cout << "Edit Skill for Slot " << i_skill_slot_id << endl;
 				  int i_orignal_skill_id = i_skill_id;
 
-				  if (i_skill_id >= (HWLSaveEdit::HWLWeapon::weaponSkillNames.size() - 1))
+				  if (i_skill_id >= (signed)(HWLSaveEdit::HWLWeapon::weaponSkillNames.size() - 1))
 					  i_skill_id = HWLSaveEdit::HWLWeapon::weaponSkillValueNoSkill;
 				
 				  save->get_player(i_chara_id)->get_weapon_slot(i_weapon_type_id, i_weapon_slot_id)->set_skill_slot(i_skill_slot_id - 1, i_skill_id);
@@ -1149,15 +1150,15 @@ void get_materials_submenu(int i_type)
 	switch (i_type)
 	{
 	case 1:
-		i_size = save->vs_bronzeMaterials.size();
+		i_size = HWLSaveEdit::HWLMaterial::vs_bronzeMaterials.size();
 		break;
 
 	case 2:
-		i_size = save->vs_silverMaterials.size();
+		i_size = HWLSaveEdit::HWLMaterial::vs_silverMaterials.size();
 		break;
 
 	case 3:
-		i_size = save->vs_goldMaterials.size();
+		i_size = HWLSaveEdit::HWLMaterial::vs_goldMaterials.size();
 		break;
 
 	default:
@@ -1334,7 +1335,7 @@ void get_fairyFood_menu()
 	{
 		cout << "Menue: " << endl;
 		cout << "1    - List Fairy-Foods (0-65) " << endl;
-		cout << "2    - List Fairy-Foods (66-" << save->vs_fairyFood.size()-1 << ") " << endl;
+		cout << "2    - List Fairy-Foods (66-" << HWLSaveEdit::HWLFairyFood::vs_fairyFood.size() - 1 << ") " << endl;
 		cout << "3,ID - Change Value of this Fairy-Food" << endl;
 		cout << "4    - Maximize Value of all Fairy-Foods " << endl;
 		cout << "4,ID - Maximize Value of this Fairy-Food " << endl;
@@ -1392,7 +1393,7 @@ void change_fairyFood_values(int i_choose, int i_fairyFood_id)
 	{
 			  system("cls");
 
-			  for (int i = 66; i < save->vs_fairyFood.size(); i++)
+			  for (int i = 66; i < (signed)HWLSaveEdit::HWLFairyFood::vs_fairyFood.size(); i++)
 			  {
 				  cout << "ID: " << i << endl << save->get_fairyFood(i)->get_FairyFoodForOutput() << endl;
 			  }
@@ -1412,7 +1413,7 @@ void change_fairyFood_values(int i_choose, int i_fairyFood_id)
 			  else{
 				  bool check_id = false;
 
-				  if (i_fairyFood_id < save->vs_fairyFood.size() && i_fairyFood_id > 0)
+				  if (i_fairyFood_id < (signed)HWLSaveEdit::HWLFairyFood::vs_fairyFood.size() && i_fairyFood_id > 0)
 					  check_id = true;
 
 
@@ -1461,7 +1462,7 @@ void change_fairyFood_values(int i_choose, int i_fairyFood_id)
 			  if (i_fairyFood_id == -1)
 			  {
 				  cout << "Maximize Value of all FairyFoods" << endl;
-				  for (int i = 0; i < save->vs_fairyFood.size(); i++)
+				  for (int i = 0; i < (signed)HWLSaveEdit::HWLFairyFood::vs_fairyFood.size(); i++)
 				  {
 					  save->get_fairyFood(i)->set_value(HWLSaveEdit::HWLFairyFood::fairyFoodlValueMax);
 					  save->get_fairyFood(i)->save_FairyFood();
@@ -1477,7 +1478,7 @@ void change_fairyFood_values(int i_choose, int i_fairyFood_id)
 			  else{
 				  bool check_id = false;
 
-				  if (i_fairyFood_id < save->vs_fairyFood.size() && i_fairyFood_id > 0)
+				  if (i_fairyFood_id < (signed)HWLSaveEdit::HWLFairyFood::vs_fairyFood.size() && i_fairyFood_id > 0)
 					  check_id = true;
 
 				  if (check_id)
@@ -1710,7 +1711,7 @@ void change_fairy_values(int i_choose, int i_fairy_id)
 					  cout << "Enter a new Name (Max: "<< HWLSaveEdit::HWLFairy::fairyNameLength <<" chars) : ";
 					  cin >> s_fairy_name;
 
-					  if (s_fairy_name.size() <= HWLSaveEdit::HWLFairy::fairyNameLength)
+					  if ((signed)s_fairy_name.size() <= HWLSaveEdit::HWLFairy::fairyNameLength)
 					  {
 						  cout << "Changing Name of Fairy with ID:" << i_fairy_id << endl;
 						  cout << " Old name: " << save->get_fairy(i_fairy_id)->get_name() << endl;

@@ -80,8 +80,7 @@ void CZeldaEditCharaWeaponsDlg::DoDataExchange(CDataExchange* pDX)
 	if (save != nullptr)
 	{
 		int i_unused_charas = 0;
-
-		for (int i = 0; i < save->vs_players.size(); i++)
+		for (int i = 0; i < HWLSaveEdit::HWLPlayer::vs_players.size(); i++)
 		{
 			CString s_name(save->get_player(i)->get_name().c_str());
 			if (s_name == L"???")
@@ -105,7 +104,7 @@ void CZeldaEditCharaWeaponsDlg::DoDataExchange(CDataExchange* pDX)
 			}
 		}
 
-		s_chara_count.Format(L"%d / %d", this->i_chara_id + 1 - i_unused_charas_now, save->vs_players.size() - i_unused_charas);
+		s_chara_count.Format(L"%d / %d", this->i_chara_id + 1 - i_unused_charas_now, HWLSaveEdit::HWLPlayer::vs_players.size() - i_unused_charas);
 		SetDlgItemText(IDC_STATIC_CWEAPON_CHARA_COUNT, s_chara_count);
 		GetDlgItem(IDC_CWEAPON_CHAR_PAGE_PREVIOUS)->EnableWindow(true);
 		GetDlgItem(IDC_CWEAPON_CHAR_PAGE_NEXT)->EnableWindow(true);
@@ -115,14 +114,14 @@ void CZeldaEditCharaWeaponsDlg::DoDataExchange(CDataExchange* pDX)
 		else
 			GetDlgItem(IDC_CWEAPON_CHAR_PAGE_PREVIOUS)->EnableWindow(true);
 
-		if (this->i_chara_id + 1 >= save->vs_players.size())
+		if (this->i_chara_id + 1 >= HWLSaveEdit::HWLPlayer::vs_players.size())
 			GetDlgItem(IDC_CWEAPON_CHAR_PAGE_NEXT)->EnableWindow(false);
 		else
 			GetDlgItem(IDC_CWEAPON_CHAR_PAGE_NEXT)->EnableWindow(true);
 
 		//Weapon-Type activate
 		CString s_type_count;
-		s_type_count.Format(L"%d / %d", this->i_weapon_type + 1, save->vi_playerWeaponTypeCount[this->i_chara_id]);
+		s_type_count.Format(L"%d / %d", this->i_weapon_type + 1, HWLSaveEdit::HWLWeapon::vi_playerWeaponTypeCount[this->i_chara_id]);
 		SetDlgItemText(IDC_STATIC_CWEAPON_TYPE_COUNT, s_type_count);
 		GetDlgItem(IDC_CWEAPON_TYPE_PAGE_PREVIOUS)->EnableWindow(true);
 		GetDlgItem(IDC_CWEAPON_TYPE_PAGE_NEXT)->EnableWindow(true);
@@ -132,14 +131,14 @@ void CZeldaEditCharaWeaponsDlg::DoDataExchange(CDataExchange* pDX)
 		else
 			GetDlgItem(IDC_CWEAPON_TYPE_PAGE_PREVIOUS)->EnableWindow(true);
 
-		if (this->i_weapon_type + 1 >= save->vi_playerWeaponTypeCount[this->i_chara_id])
+		if (this->i_weapon_type + 1 >= HWLSaveEdit::HWLWeapon::vi_playerWeaponTypeCount[this->i_chara_id])
 			GetDlgItem(IDC_CWEAPON_TYPE_PAGE_NEXT)->EnableWindow(false);
 		else
 			GetDlgItem(IDC_CWEAPON_TYPE_PAGE_NEXT)->EnableWindow(true);
 
 		//Weapon-Slot activate
 		CString s_weapon_slot_count;
-		if (hwlpw->get_id() == save->vi_playerWeaponTypeHexValues[4] || (this->i_weapon_type == 4 && this->i_chara_id == 0))
+		if (hwlpw->get_id() == HWLSaveEdit::HWLWeapon::vi_playerWeaponTypeHexValues[4] || (this->i_weapon_type == 4 && this->i_chara_id == 0))
 			s_weapon_slot_count.Format(L"%d / %d", this->i_weapon_slot + 1, this->i_weapon_slot + 1);
 		else
 			s_weapon_slot_count.Format(L"%d / %d", this->i_weapon_slot + 1, HWLSaveEdit::HWLPlayer::playerWeaponSlotsMax);
@@ -153,7 +152,7 @@ void CZeldaEditCharaWeaponsDlg::DoDataExchange(CDataExchange* pDX)
 		else
 			GetDlgItem(IDC_CWEAPON_SLOT_PAGE_PREVIOUS)->EnableWindow(true);
 
-		if (hwlpw->get_id() == save->vi_playerWeaponTypeHexValues[4] || (this->i_weapon_type == 4 && this->i_chara_id == 0) )
+		if (hwlpw->get_id() == HWLSaveEdit::HWLWeapon::vi_playerWeaponTypeHexValues[4] || (this->i_weapon_type == 4 && this->i_chara_id == 0))
 		{
 			GetDlgItem(IDC_CWEAPON_SLOT_PAGE_NEXT)->EnableWindow(false);
 		}
@@ -224,7 +223,7 @@ void CZeldaEditCharaWeaponsDlg::DoDataExchange(CDataExchange* pDX)
 				GetDlgItem(IDC_EDIT_CWEAPON_DAMAGE_BASE)->EnableWindow(true);
 
 			//Check if we have The Master Sword, and if yes, deactivate some Stats
-			if (hwlpw->get_id() == save->vi_playerWeaponTypeHexValues[4])
+			if (hwlpw->get_id() == HWLSaveEdit::HWLWeapon::vi_playerWeaponTypeHexValues[4])
 			{
 				GetDlgItem(IDC_COMBO_CWEAPON_STARS)->EnableWindow(true);
 
@@ -593,7 +592,7 @@ void CZeldaEditCharaWeaponsDlg::OnBnClickedCweaponSlotPageNext()
 void CZeldaEditCharaWeaponsDlg::OnBnClickedCweaponDefaultWeapon()
 {
 	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
-	save->generate_default_weapon(this->i_chara_id, this->i_weapon_type, this->i_weapon_slot);
+	save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot)->generate_default_weapon();
 	this->UpdateData();
 }
 
@@ -638,16 +637,16 @@ void CZeldaEditCharaWeaponsDlg::calc_weapon()
 	int i_weapon_count = 0;
 	for (int i = 0; i < this->i_chara_id; i++)
 	{
-		i_weapon_count = i_weapon_count + save->vi_playerWeaponTypeCount[i];
+		i_weapon_count = i_weapon_count + HWLSaveEdit::HWLWeapon::vi_playerWeaponTypeCount[i];
 	}
-
-	CString s_weapon_type_name(save->vs_playerWeaponTypeNames[i_weapon_count + this->i_weapon_type].c_str());
+	
+	CString s_weapon_type_name(HWLSaveEdit::HWLWeapon::vs_playerWeaponTypeNames[i_weapon_count + this->i_weapon_type].c_str());
 	SetDlgItemText(IDC_EDIT_CWEAPON_WEAPON_TYPE, s_weapon_type_name);
 
 	//Get current Weapon-Name of chosen chara and type and print it out (with LVL-added, but no, if we have the Master Sword)
 	std::shared_ptr<HWLSaveEdit::HWLWeapon> hwlpw = save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot);
 	CString s_weapon_name, s_weapon_name_tmp(hwlpw->get_name().c_str());
-	if (hwlpw->get_id() == save->vi_playerWeaponTypeHexValues[4])
+	if (hwlpw->get_id() == HWLSaveEdit::HWLWeapon::vi_playerWeaponTypeHexValues[4])
 		s_weapon_name.Format(L"%s", s_weapon_name_tmp);
 	else
 		s_weapon_name.Format(L"%s LVL-%d", s_weapon_name_tmp, hwlpw->get_lvl());
@@ -739,7 +738,7 @@ void CZeldaEditCharaWeaponsDlg::save_weapon()
 		hwlpw->set_stars(i_stars);
 	
 		//Get current legendary-sate and check if we have the unique master sword or not
-		if (hwlpw->get_id() != save->vi_playerWeaponTypeHexValues[4])
+		if (hwlpw->get_id() != HWLSaveEdit::HWLWeapon::vi_playerWeaponTypeHexValues[4])
 		{
 			CButton *cb_check_legendary_state = (CButton*)GetDlgItem(IDC_CHECK_CWEAPON_LEGENDARY);
 			bool b_is_legendary = cb_check_legendary_state->GetCheck();

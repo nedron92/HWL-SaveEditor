@@ -52,21 +52,21 @@ void CZeldaEditMaterials::DoDataExchange(CDataExchange* pDX)
 			switch (this->i_type)
 			{
 			case 0: {
-						this->i_page_max = (save->vs_bronzeMaterials.size() / this->maxMaterialsShown) + 1;
+						this->i_page_max = (HWLSaveEdit::HWLMaterial::vs_bronzeMaterials.size() / this->maxMaterialsShown) + 1;
 						CString cs_material_type(save->get_material(0, 0)->get_type(true).c_str());
 						SetDlgItemText(IDC_MATERIAL_TYPE, cs_material_type );
 						break;
 			}
 
 			case 1: {
-						this->i_page_max = (save->vs_silverMaterials.size() / this->maxMaterialsShown) + 1;
+						this->i_page_max = (HWLSaveEdit::HWLMaterial::vs_silverMaterials.size() / this->maxMaterialsShown) + 1;
 						CString cs_material_type(save->get_material(0, 1)->get_type(true).c_str());
 						SetDlgItemText(IDC_MATERIAL_TYPE, cs_material_type);
 						break;
 			}
 
 			case 2: {
-						this->i_page_max = (save->vs_goldMaterials.size() / this->maxMaterialsShown) + 1;
+						this->i_page_max = (HWLSaveEdit::HWLMaterial::vs_goldMaterials.size() / this->maxMaterialsShown) + 1;
 						CString cs_material_type(save->get_material(0, 2)->get_type(true).c_str());
 						SetDlgItemText(IDC_MATERIAL_TYPE, cs_material_type);
 						break;
@@ -220,17 +220,17 @@ void CZeldaEditMaterials::calc_materials()
 	switch (this->i_type)
 	{
 	case 0: {
-				i_size = save->vs_bronzeMaterials.size();
+				i_size = HWLSaveEdit::HWLMaterial::vs_bronzeMaterials.size();
 				break;
 	}
 
 	case 1: {
-				i_size = save->vs_silverMaterials.size();
+				i_size = HWLSaveEdit::HWLMaterial::vs_silverMaterials.size();
 				break;
 	}
 
 	case 2: {
-				i_size = save->vs_goldMaterials.size();
+				i_size = HWLSaveEdit::HWLMaterial::vs_goldMaterials.size();
 				break;
 	}
 
@@ -275,17 +275,17 @@ void CZeldaEditMaterials::save_materials()
 	switch (this->i_type)
 	{
 	case 0: {
-				i_size = save->vs_bronzeMaterials.size();
+				i_size = HWLSaveEdit::HWLMaterial::vs_bronzeMaterials.size();
 				break;
 	}
 
 	case 1: {
-				i_size = save->vs_silverMaterials.size();
+				i_size = HWLSaveEdit::HWLMaterial::vs_silverMaterials.size();
 				break;
 	}
 
 	case 2: {
-				i_size = save->vs_goldMaterials.size();
+				i_size = HWLSaveEdit::HWLMaterial::vs_goldMaterials.size();
 				break;
 	}
 
@@ -457,17 +457,17 @@ void CZeldaEditMaterials::OnBnClickedMaterialMaxValueAll()
 		switch (this->i_type)
 		{
 		case 0: {
-					i_size = save->vs_bronzeMaterials.size();
+					i_size = HWLSaveEdit::HWLMaterial::vs_bronzeMaterials.size();
 					break;
 		}
 
 		case 1: {
-					i_size = save->vs_silverMaterials.size();
+					i_size = HWLSaveEdit::HWLMaterial::vs_silverMaterials.size();
 					break;
 		}
 
 		case 2: {
-					i_size = save->vs_goldMaterials.size();
+					i_size = HWLSaveEdit::HWLMaterial::vs_goldMaterials.size();
 					break;
 		}
 

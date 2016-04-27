@@ -168,7 +168,7 @@ void CZeldaEditCharaStatsDlg::calc_players()
 	int unused_charas = 0;
 
 
-	for (int i = 0; i < save->vs_players.size(); i++)
+	for (int i = 0; i < HWLSaveEdit::HWLPlayer::vs_players.size(); i++)
 	{
 		CString s_player_name(save->get_player(i)->get_name().c_str());
 
@@ -306,7 +306,7 @@ void CZeldaEditCharaStatsDlg::OnBnClickedUnlockCheck(UINT nID)
 		{
 			int unused_charas = 0;
 			int i_unused_last_id = 0;
-			for (int i = 0; i < save->vs_players.size(); i++)
+			for (int i = 0; i < HWLSaveEdit::HWLPlayer::vs_players.size(); i++)
 			{
 				CString s_player_name(save->get_player(i)->get_name().c_str());
 
@@ -329,7 +329,7 @@ void CZeldaEditCharaStatsDlg::OnBnClickedUnlockCheck(UINT nID)
 
 			if (save->get_player(i_current_chara_id)->get_weapon_count(0) == 0)
 			{
-				save->generate_default_weapon(i_current_chara_id, 0, 0);
+				save->get_player(i_current_chara_id)->get_weapon_slot(0, 0)->generate_default_weapon();
 				save->get_player(i_current_chara_id)->get_weapon_slot(0, 0)->save_weapon();
 
 				CString cs_info("This character hasn't a default weapon, so maybe he wasn't "
@@ -347,7 +347,7 @@ void CZeldaEditCharaStatsDlg::save_players()
 	{
 		int unused_charas = 0;
 
-		for (int i = 0; i < save->vs_players.size(); i++)
+		for (int i = 0; i < HWLSaveEdit::HWLPlayer::vs_players.size(); i++)
 		{
 			CString s_player_name(save->get_player(i)->get_name().c_str());
 			CString s_player_lvl;
@@ -502,7 +502,7 @@ void CZeldaEditCharaStatsDlg::OnBnClickedCharaMaxExpAll()
 	{
 		int unused_charas = 0;
 
-		for (int i = 0; i < save->vs_players.size(); i++)
+		for (int i = 0; i < HWLSaveEdit::HWLPlayer::vs_players.size(); i++)
 		{
 			CString s_player_name(save->get_player(i)->get_name().c_str());
 
@@ -533,7 +533,7 @@ void CZeldaEditCharaStatsDlg::OnBnClickedCharaMaxAtkAll()
 	{
 		int unused_charas = 0;
 
-		for (int i = 0; i < save->vs_players.size(); i++)
+		for (int i = 0; i < HWLSaveEdit::HWLPlayer::vs_players.size(); i++)
 		{
 			CString s_player_name(save->get_player(i)->get_name().c_str());
 
@@ -564,7 +564,7 @@ void CZeldaEditCharaStatsDlg::OnBnClickedCharaUnlockAll()
 	{
 		int unused_charas = 0;
 		bool b_no_weapon = false;
-		for (int i = 0; i < save->vs_players.size(); i++)
+		for (int i = 0; i < HWLSaveEdit::HWLPlayer::vs_players.size(); i++)
 		{
 			CString s_player_name(save->get_player(i)->get_name().c_str());
 			CButton *cb_check;
@@ -581,7 +581,7 @@ void CZeldaEditCharaStatsDlg::OnBnClickedCharaUnlockAll()
 			if (save->get_player(i)->get_weapon_count(0) == 0)
 			{
 				b_no_weapon = true;
-				save->generate_default_weapon(i, 0, 0);
+				save->get_player(i)->get_weapon_slot(0, 0)->generate_default_weapon();
 				save->get_player(i)->get_weapon_slot(0, 0)->save_weapon();
 			}
 

@@ -41,7 +41,7 @@ void CZeldaEditFairyFoods::DoDataExchange(CDataExchange* pDX)
 
 	if (save != nullptr)
 	{
-		this->i_page_max = (save->vs_fairyFood.size() / this->maxFairyFoodsShown) + 1;
+		this->i_page_max = (HWLSaveEdit::HWLFairyFood::vs_fairyFood.size() / this->maxFairyFoodsShown) + 1;
 
 		if (this->i_page <= 1)
 			GetDlgItem(IDC_FAIRYFOOD_PAGE_PREVIOUS)->EnableWindow(false);
@@ -225,7 +225,7 @@ void CZeldaEditFairyFoods::OnBnClickedSave()
 
 void CZeldaEditFairyFoods::calc_fairyFood()
 {
-	int i_size = save->vs_fairyFood.size();
+	int i_size = HWLSaveEdit::HWLFairyFood::vs_fairyFood.size();
 	int i_diff = i_size - ((this->i_page - 1) * this->maxFairyFoodsShown);
 
 	for (int i = 0; i < this->maxFairyFoodsShown; i++)
@@ -261,7 +261,7 @@ void CZeldaEditFairyFoods::save_fairyFood()
 {
 
 
-	int i_size = save->vs_fairyFood.size();
+	int i_size = HWLSaveEdit::HWLFairyFood::vs_fairyFood.size();
 	int i_diff = i_size - ((this->i_page - 1) * this->maxFairyFoodsShown);
 
 	for (int i = 0; i < this->maxFairyFoodsShown; i++)
@@ -371,7 +371,7 @@ void CZeldaEditFairyFoods::OnBnClickedFairyfoodMaxValuePage()
 	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
 	if (save != nullptr)
 	{
-		int i_size = save->vs_fairyFood.size();
+		int i_size = HWLSaveEdit::HWLFairyFood::vs_fairyFood.size();
 		int i_diff = i_size - ((this->i_page - 1) * this->maxFairyFoodsShown);
 
 		for (int i = 0; i < this->maxFairyFoodsShown; i++)
@@ -398,7 +398,7 @@ void CZeldaEditFairyFoods::OnBnClickedFairyfoodMaxValueAll()
 	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
 	if (save != nullptr)
 	{
-		for (int i = 0; i < save->vs_fairyFood.size(); i++)
+		for (int i = 0; i < HWLSaveEdit::HWLFairyFood::vs_fairyFood.size(); i++)
 		{
 			save->get_fairyFood(i)->set_value(HWLSaveEdit::HWLFairyFood::fairyFoodlValueMax);
 			save->get_fairyFood(i)->save_FairyFood();

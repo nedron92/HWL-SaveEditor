@@ -1,6 +1,15 @@
 #include <iostream>
 #include "../core/HWLSaveEditor.h"
 
+//define CLEAR as string "cls" or "clear",
+//for system()-function
+#ifdef _WIN32
+#define CLEAR "cls"
+#else //any other OS
+#define CLEAR "clear"
+#endif
+
+
 using namespace std;
 HWLSaveEdit::HWLSaveEditor *save;
 vector<int> vi_ids;
@@ -31,8 +40,18 @@ void change_weapon_values(int i_chara_id, int i_type_id, int i_current_id, int i
 void get_skills(int i_chara_id, int i_weapon_type_id, int i_weapon_slot_id);
 void change_skill_values(int i_chara_id, int i_weapon_type_id, int i_weapon_slot_id, int i_skill_slot_id, int i_skill_id, int i_choose);
 
-int main()
+int main(int argc, char* argv[])
 {
+	//check, if we have more then the standard-parameter count
+	if (argc >= 2)
+	{
+		//if we have --version, print out the current version of the editor itself
+		if (argv[1] == string("--version"))
+		{
+			cout << HWLSaveEdit::HWLSaveEditorCore::version << endl;
+			return 0;
+		}
+	}
 
 	try
 	{
@@ -61,7 +80,7 @@ int main()
 				if (atoi(&i_choose) == 0) break;
 				else
 				{
-					system("cls");
+					system(CLEAR);
 					get_submenu(atoi(&i_choose));
 					i_choose = 0;
 				}
@@ -70,7 +89,7 @@ int main()
 				cout << "Wrong Menu-Number, try again" << endl;
 				cin.get();
 				cin.get();
-				system("cls");
+				system(CLEAR);
 			}
 		} 
 	}
@@ -154,7 +173,7 @@ void get_ruby_menu()
 		{
 			if (atoi(&c_choose) == 0)
 			{
-				system("cls");
+				system(CLEAR);
 				break;
 			}
 			else
@@ -205,7 +224,7 @@ void get_ruby_menu()
 			cout << "Wrong Menu-Number, try again" << endl;
 			cin.get();
 			cin.get();
-			system("cls");
+			system(CLEAR);
 		}
 	}
 }
@@ -251,7 +270,7 @@ void get_chara_menu()
 		{
 			if (atoi(&s_choose[0]) == 0)
 			{
-				system("cls");
+				system(CLEAR);
 				break;
 			}
 			else
@@ -259,7 +278,7 @@ void get_chara_menu()
 		}
 
 		save->save_file();
-		system("cls");
+		system(CLEAR);
 
 	}
 }
@@ -287,7 +306,7 @@ void change_chara_values(int i_type, int i_chara_id)
 				  cin.clear();
 				  getchar();
 				  cin.get();
-				  system("cls");
+				  system(CLEAR);
 			  }
 			  else{
 				  bool check_id = false;
@@ -316,7 +335,7 @@ void change_chara_values(int i_type, int i_chara_id)
 				  cin.clear();
 				  getchar();
 				  cin.get();
-				  system("cls");
+				  system(CLEAR);
 			  }
 			  break;
 	}
@@ -338,7 +357,7 @@ void change_chara_values(int i_type, int i_chara_id)
 				  cin.clear();
 				  getchar();
 				  cin.get();
-				  system("cls");
+				  system(CLEAR);
 			  }
 			  else{
 				  bool check_id = false;
@@ -367,7 +386,7 @@ void change_chara_values(int i_type, int i_chara_id)
 				  cin.clear();
 				  getchar();
 				  cin.get();
-				  system("cls");
+				  system(CLEAR);
 			  }
 			  break;
 	}
@@ -404,7 +423,7 @@ void change_chara_values(int i_type, int i_chara_id)
 				  cin.clear();
 				  getchar();
 				  cin.get();
-				  system("cls");
+				  system(CLEAR);
 			  }
 			  else{
 				  bool check_id = false;
@@ -444,7 +463,7 @@ void change_chara_values(int i_type, int i_chara_id)
 				  cin.clear();
 				  getchar();
 				  cin.get();
-				  system("cls");
+				  system(CLEAR);
 			  }
 			  break;
 	}
@@ -470,7 +489,7 @@ void change_chara_values(int i_type, int i_chara_id)
 				  cin.clear();
 				  getchar();
 				  cin.get();
-				  system("cls");
+				  system(CLEAR);
 			  }
 
 
@@ -485,7 +504,7 @@ void change_chara_values(int i_type, int i_chara_id)
 void get_weapons_type(int i_chara_id)
 {
 	string s_choose;
-	system("cls");
+	system(CLEAR);
 
 	while (1)
 	{
@@ -520,7 +539,7 @@ void get_weapons_type(int i_chara_id)
 		{
 			if (atoi(&s_choose[0]) == 0)
 			{
-				system("cls");
+				system(CLEAR);
 				break;
 			}
 			else if (i_current_id == -1)
@@ -546,7 +565,7 @@ void get_weapons_type(int i_chara_id)
 		}
 
 		save->save_file();
-		system("cls");
+		system(CLEAR);
 
 	}
 
@@ -560,7 +579,7 @@ void get_weapons(int i_chara_id, int i_type_id, int i_choose)
 	case 1:
 	{
 			  string s_choose;
-			  system("cls");
+			  system(CLEAR);
 
 			  while (1)
 			  {
@@ -602,7 +621,7 @@ void get_weapons(int i_chara_id, int i_type_id, int i_choose)
 				  {
 					  if (atoi(&s_choose[0]) == 0)
 					  {
-						  system("cls");
+						  system(CLEAR);
 						  break;
 					  }
 					  else{
@@ -622,7 +641,7 @@ void get_weapons(int i_chara_id, int i_type_id, int i_choose)
 
 				  //save->get_player(i_chara_id)->save_Player();
 				  save->save_file();
-				  system("cls");
+				  system(CLEAR);
 
 			  }
 	}
@@ -639,7 +658,7 @@ void change_weapon_values(int i_chara_id, int i_type_id, int i_current_id, int i
 
 	case 1:
 	{
-			  system("cls");
+			  system(CLEAR);
 
 			  int i_used_slot_count = save->get_player(i_chara_id)->get_weapon_count(i_type_id);
 			  if (i_used_slot_count != 0)
@@ -663,7 +682,7 @@ void change_weapon_values(int i_chara_id, int i_type_id, int i_current_id, int i
 	{
 			  if (i_type_id == 4 && i_chara_id == 0)
 			  {
-				  system("cls");
+				  system(CLEAR);
 				  cout << "Sorry, you can't max the Lvl of the Master Sword, \ndue to there is only this ONE Sword." << endl;
 				  cin.clear();
 				  getchar();
@@ -708,7 +727,7 @@ void change_weapon_values(int i_chara_id, int i_type_id, int i_current_id, int i
 	{
 			  if (i_type_id == 4 && i_chara_id == 0)
 			  {
-				  system("cls");
+				  system(CLEAR);
 				  cout << "Sorry, you can't max the Damage-Base of the Master Sword, \ndue to it's a unique legendary Weapon." << endl;
 				  cin.clear();
 				  getchar();
@@ -791,7 +810,7 @@ void change_weapon_values(int i_chara_id, int i_type_id, int i_current_id, int i
 	{
 			  if (i_type_id == 4 && i_chara_id == 0)
 			  {
-				  system("cls");
+				  system(CLEAR);
 				  cout << "Sorry, you can't change the legendary-state of the Master Sword, \ndue to it's a unique legendary Weapon." << endl;
 				  cin.clear();
 				  getchar();
@@ -900,7 +919,7 @@ void change_weapon_values(int i_chara_id, int i_type_id, int i_current_id, int i
 
 	case 8:
 	{
-			  system("cls");
+			  system(CLEAR);
 
 			  cout << "Generate a new Weapon " << endl;
 
@@ -992,7 +1011,7 @@ void change_weapon_values(int i_chara_id, int i_type_id, int i_current_id, int i
 void get_skills(int i_chara_id, int i_weapon_type_id, int i_weapon_slot_id)
 {
 	string s_choose;
-	system("cls");
+	system(CLEAR);
 
 	while (1)
 	{
@@ -1036,7 +1055,7 @@ void get_skills(int i_chara_id, int i_weapon_type_id, int i_weapon_slot_id)
 		{
 			if (atoi(&s_choose[0]) == 0)
 			{
-				system("cls");
+				system(CLEAR);
 				break;
 			}
 			else{
@@ -1055,7 +1074,7 @@ void get_skills(int i_chara_id, int i_weapon_type_id, int i_weapon_slot_id)
 		}
 
 		save->save_file();
-		system("cls");
+		system(CLEAR);
 
 	}
 }
@@ -1066,7 +1085,7 @@ void change_skill_values(int i_chara_id, int i_weapon_type_id, int i_weapon_slot
 	{
 	case 1:
 	{
-			  system("cls");
+			  system(CLEAR);
 			  for (int i = 0; i < (signed)HWLSaveEdit::HWLWeapon::weaponSkillNames.size(); i++)
 			  {
 				  cout << "ID: " << i << "  -  " << HWLSaveEdit::HWLWeapon::weaponSkillNames[i] << endl;
@@ -1128,7 +1147,7 @@ void get_materials_menu()
 		{
 			if (atoi(&c_choose) == 0)
 			{
-				system("cls");
+				system(CLEAR);
 				break;
 			}
 			else
@@ -1138,7 +1157,7 @@ void get_materials_menu()
 			cout << "Wrong Menu-Number, try again" << endl;
 			cin.get();
 			cin.get();
-			system("cls");
+			system(CLEAR);
 		}
 	}
 }
@@ -1198,7 +1217,7 @@ void get_materials_submenu(int i_type)
 			{
 				if (atoi(&s_choose[0]) == 0)
 				{
-					system("cls");
+					system(CLEAR);
 					break;
 				}
 				else
@@ -1226,7 +1245,7 @@ void change_materials_values(int i_choose, int i_material_id, int i_type, int i_
 				  cin.clear();
 				  getchar();
 				  cin.get();
-				  system("cls");
+				  system(CLEAR);
 			  }
 			  else{
 				  bool check_id = false;
@@ -1270,7 +1289,7 @@ void change_materials_values(int i_choose, int i_material_id, int i_type, int i_
 				  cin.clear();
 				  getchar();
 				  cin.get();
-				  system("cls");
+				  system(CLEAR);
 			  }
 			  break;
 	}
@@ -1289,7 +1308,7 @@ void change_materials_values(int i_choose, int i_material_id, int i_type, int i_
 				  cin.clear();
 				  getchar();
 				  cin.get();
-				  system("cls");
+				  system(CLEAR);
 
 			  }
 			  else{
@@ -1314,7 +1333,7 @@ void change_materials_values(int i_choose, int i_material_id, int i_type, int i_
 				  cin.clear();
 				  getchar();
 				  cin.get();
-				  system("cls");
+				  system(CLEAR);
 			  }
 			  break;
 	}
@@ -1356,7 +1375,7 @@ void get_fairyFood_menu()
 		{
 			if (atoi(&s_choose[0]) == 0)
 			{
-				system("cls");
+				system(CLEAR);
 				break;
 			}
 			else
@@ -1366,7 +1385,7 @@ void get_fairyFood_menu()
 		save->save_file();
 
 		if(atoi(&s_choose[0]) > 2)
-			system("cls");
+			system(CLEAR);
 
 	}
 }
@@ -1380,7 +1399,7 @@ void change_fairyFood_values(int i_choose, int i_fairyFood_id)
 	{
 	case 1:
 	{
-			  system("cls");
+			  system(CLEAR);
 
 			  for (int i = 0; i <= 65; i++)
 			  {
@@ -1391,7 +1410,7 @@ void change_fairyFood_values(int i_choose, int i_fairyFood_id)
 
 	case 2:
 	{
-			  system("cls");
+			  system(CLEAR);
 
 			  for (int i = 66; i < (signed)HWLSaveEdit::HWLFairyFood::vs_fairyFood.size(); i++)
 			  {
@@ -1408,7 +1427,7 @@ void change_fairyFood_values(int i_choose, int i_fairyFood_id)
 				  cin.clear();
 				  getchar();
 				  cin.get();
-				  system("cls");
+				  system(CLEAR);
 			  }
 			  else{
 				  bool check_id = false;
@@ -1452,7 +1471,7 @@ void change_fairyFood_values(int i_choose, int i_fairyFood_id)
 				  cin.clear();
 				  getchar();
 				  cin.get();
-				  system("cls");
+				  system(CLEAR);
 			  }
 			  break;
 	}
@@ -1472,7 +1491,7 @@ void change_fairyFood_values(int i_choose, int i_fairyFood_id)
 				  cin.clear();
 				  getchar();
 				  cin.get();
-				  system("cls");
+				  system(CLEAR);
 
 			  }
 			  else{
@@ -1497,7 +1516,7 @@ void change_fairyFood_values(int i_choose, int i_fairyFood_id)
 				  cin.clear();
 				  getchar();
 				  cin.get();
-				  system("cls");
+				  system(CLEAR);
 			  }
 			  break;
 	}
@@ -1515,7 +1534,7 @@ void change_fairyFood_values(int i_choose, int i_fairyFood_id)
 			  cin.clear();
 			  getchar();
 			  cin.get();
-			  system("cls");
+			  system(CLEAR);
 	}
 
 
@@ -1547,7 +1566,7 @@ void get_amItem_menu()
 		{
 			if (atoi(&c_choose) == 0)
 			{
-				system("cls");
+				system(CLEAR);
 				break;
 			}
 			else
@@ -1557,7 +1576,7 @@ void get_amItem_menu()
 			cout << "Wrong Menu-Number, try again" << endl;
 			cin.get();
 			cin.get();
-			system("cls");
+			system(CLEAR);
 		}
 
 		save->save_file();
@@ -1573,7 +1592,7 @@ void change_amItem_values(int i_choose)
 	{
 	case 1:
 	{
-			  system("cls");
+			  system(CLEAR);
 
 			  int i_max_ids = HWLSaveEdit::HWLAdventureModeItems::amItemPerMapMax * save->get_adventureMode_maxItemCount();
 
@@ -1586,7 +1605,7 @@ void change_amItem_values(int i_choose)
 			  cin.clear();
 			  getchar();
 			  cin.get();
-			  system("cls");
+			  system(CLEAR);
 			  break;
 	}
 
@@ -1617,7 +1636,7 @@ void change_amItem_values(int i_choose)
 			  cin.clear();
 			  getchar();
 			  cin.get();
-			  system("cls");
+			  system(CLEAR);
 			  break;
 	}
 
@@ -1666,7 +1685,7 @@ void get_fairy_menu()
 		{
 			if (atoi(&s_choose[0]) == 0)
 			{
-				system("cls");
+				system(CLEAR);
 				break;
 			}
 			else
@@ -1676,7 +1695,7 @@ void get_fairy_menu()
 		save->save_file();
 
 		if (atoi(&s_choose[0]) > 2)
-			system("cls");
+			system(CLEAR);
 
 	}
 }
@@ -1689,7 +1708,7 @@ void change_fairy_values(int i_choose, int i_fairy_id)
 	{
 	case 1:
 	{
-			  system("cls");
+			  system(CLEAR);
 
 			  if (i_fairy_id == -1)
 			  {
@@ -1697,7 +1716,7 @@ void change_fairy_values(int i_choose, int i_fairy_id)
 				  cin.clear();
 				  getchar();
 				  cin.get();
-				  system("cls");
+				  system(CLEAR);
 			  }
 			  else{
 				  bool check_id = false;
@@ -1735,7 +1754,7 @@ void change_fairy_values(int i_choose, int i_fairy_id)
 				  cin.clear();
 				  getchar();
 				  cin.get();
-				  system("cls");
+				  system(CLEAR);
 			  }
 
 
@@ -1744,7 +1763,7 @@ void change_fairy_values(int i_choose, int i_fairy_id)
 
 	case 2:
 	{
-			  system("cls");
+			  system(CLEAR);
 
 			  if (i_fairy_id == -1)
 			  {
@@ -1760,7 +1779,7 @@ void change_fairy_values(int i_choose, int i_fairy_id)
 				  cin.clear();
 				  getchar();
 				  cin.get();
-				  system("cls");
+				  system(CLEAR);
 			  }else
 			  {
 				  bool check_id = false;
@@ -1784,7 +1803,7 @@ void change_fairy_values(int i_choose, int i_fairy_id)
 				  cin.clear();
 				  getchar();
 				  cin.get();
-				  system("cls");
+				  system(CLEAR);
 			  }
 
 			  break;
@@ -1792,7 +1811,7 @@ void change_fairy_values(int i_choose, int i_fairy_id)
 
 	case 3:
 	{
-			  system("cls");
+			  system(CLEAR);
 
 			  if (i_fairy_id == -1)
 			  {
@@ -1808,7 +1827,7 @@ void change_fairy_values(int i_choose, int i_fairy_id)
 				  cin.clear();
 				  getchar();
 				  cin.get();
-				  system("cls");
+				  system(CLEAR);
 			  }
 			  else
 			  {
@@ -1833,7 +1852,7 @@ void change_fairy_values(int i_choose, int i_fairy_id)
 				  cin.clear();
 				  getchar();
 				  cin.get();
-				  system("cls");
+				  system(CLEAR);
 			  }
 
 			  break;
@@ -1841,7 +1860,7 @@ void change_fairy_values(int i_choose, int i_fairy_id)
 
 	case 4:
 	{
-			  system("cls");
+			  system(CLEAR);
 
 			  if (i_fairy_id == -1)
 			  {
@@ -1857,7 +1876,7 @@ void change_fairy_values(int i_choose, int i_fairy_id)
 				  cin.clear();
 				  getchar();
 				  cin.get();
-				  system("cls");
+				  system(CLEAR);
 			  }
 			  else
 			  {
@@ -1882,7 +1901,7 @@ void change_fairy_values(int i_choose, int i_fairy_id)
 				  cin.clear();
 				  getchar();
 				  cin.get();
-				  system("cls");
+				  system(CLEAR);
 			  }
 
 			  break;

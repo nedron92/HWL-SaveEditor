@@ -77,8 +77,8 @@ namespace HWLSaveEdit
 			  void set_exp(int i_exp);
 			  void set_atk(int i_atk);
 			  void set_isUnlock(bool b_isUnlock);
-			  void HWLPlayer::set_weapon_slot(int i_weapon_type, shared_ptr<HWLWeapon> hwlw_weapon);
-			  void HWLPlayer::set_weapon_slot(int i_weapon_type, int i_weapon_slot, shared_ptr<HWLWeapon> hwlw_weapon);
+			  void set_weapon_slot(int i_weapon_type, shared_ptr<HWLWeapon> hwlw_weapon);
+			  void set_weapon_slot(int i_weapon_type, int i_weapon_slot, shared_ptr<HWLWeapon> hwlw_weapon);
 
 			   int get_id();
 			string get_name();

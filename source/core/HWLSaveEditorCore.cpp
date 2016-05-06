@@ -36,7 +36,7 @@ const int HWLSaveEditorCore::weaponOffsetLengthComplete = 0x28;
 
 //public members
 /* @var version  hold the current version-number as string */
-const string HWLSaveEditorCore::version = "2.0.5";
+const string HWLSaveEditorCore::version = "2.0.6";
 
 
 

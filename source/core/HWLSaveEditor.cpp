@@ -7,6 +7,7 @@
 #include "HWLSaveEditor.h"
 //#include <stdio.h>  //for testing purpose as comment
 //#include <iostream> //for testing purpose as comment
+#include<cstring> //needed for compiling with gcc
 
 //use the project-namespace
 using namespace HWLSaveEdit;

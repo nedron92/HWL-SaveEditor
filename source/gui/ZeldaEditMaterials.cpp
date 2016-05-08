@@ -201,6 +201,9 @@ void CZeldaEditMaterials::OnBnClickedSave()
 		{
 			this->save_materials();
 			save->save_file();
+
+			CString str("Finish! Saving the current values was successfully.");
+			MessageBox(str, L"Information", MB_OK | MB_ICONINFORMATION);
 		}
 		catch (std::exception &e)
 		{

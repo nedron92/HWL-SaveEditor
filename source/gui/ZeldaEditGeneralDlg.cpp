@@ -36,7 +36,7 @@ void CZeldaEditGeneralDlg::DoDataExchange(CDataExchange* pDX)
 	if (save != nullptr)
 	{
 		GetDlgItem(IDC_RUBY_EDIT)->EnableWindow(true);
-		for (int i = IDC_CHECK_GENERAL_UNLOCK_SMITHY; i <= IDC_CHECK_GENERAL_UNLOCK_PLUS_WEAPONS_FOUND; i++)
+		for (int i = IDC_CHECK_GENERAL_UNLOCK_SMITHY; i <= IDC_BUTTON_HELP_UNLOCK_WEAPON_STATES; i++)
 		{
 			GetDlgItem(i)->EnableWindow(true);
 		}
@@ -52,6 +52,7 @@ void CZeldaEditGeneralDlg::DoDataExchange(CDataExchange* pDX)
 			SetDlgItemText(IDC_RUBY_EDIT, L"");
 			GetDlgItem(i)->EnableWindow(false);
 		}
+		GetDlgItem(IDC_BUTTON_HELP_UNLOCK_WEAPON_STATES)->EnableWindow(false);
 	}
 
 	CMenu *cm_menu = GetMenu();
@@ -87,6 +88,7 @@ BEGIN_MESSAGE_MAP(CZeldaEditGeneralDlg, CDialogEx)
 	ON_COMMAND(ID_MENU_EDIT_FAIRIES, &CZeldaEditGeneralDlg::OnMenuEditFairies)
 //	ON_WM_ACTIVATE()
 ON_COMMAND(ID_MENU_EDIT_CHARACTERS_WEAPONS, &CZeldaEditGeneralDlg::OnMenuEditCharactersWeapons)
+ON_BN_CLICKED(IDC_BUTTON_HELP_UNLOCK_WEAPON_STATES, &CZeldaEditGeneralDlg::OnBnClickedButtonHelpUnlockWeaponStates)
 END_MESSAGE_MAP()
 
 
@@ -140,6 +142,9 @@ void CZeldaEditGeneralDlg::OnBnClickedSave()
 		{
 			this->save_general();
 			save->save_file();
+
+			CString str("Finish! Saving the current values was successfully.");
+			MessageBox(str, L"Information", MB_OK | MB_ICONINFORMATION);
 		}
 		catch (std::exception &e)
 		{
@@ -423,23 +428,20 @@ void CZeldaEditGeneralDlg::OnBnClickedRubyMax()
 	}
 }
 
-
-
-
-//void CZeldaEditGeneralDlg::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
-//{
-//	CDialogEx::OnActivate(nState, pWndOther, bMinimized);
-//
-//	// TODO: Fügen Sie hier Ihren Meldungsbehandlungscode ein.
-//	//if (bMinimized)
-//		//this->ShowWindow(SW_SHOWNORMAL);
-//}
-
-
 void CZeldaEditGeneralDlg::OnMenuEditCharactersWeapons()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditCharaWeaponsDlg dlg;
 	EndDialog(this->IDD);
 	dlg.DoModal();
+}
+
+
+void CZeldaEditGeneralDlg::OnBnClickedButtonHelpUnlockWeaponStates()
+{
+	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	CString cs_info("If you activate those check-boxes, then you don't have more weapons\n"
+		"then before, but the game wil believe that you collect them all.\n"
+		"If you have the Master Sword, then please check the Skills ingame ;) ");
+	MessageBox(cs_info, L"Information", MB_OK | MB_ICONINFORMATION);
 }

@@ -68,6 +68,7 @@ const int HWLGeneral::fairiesMax = 10;
 */
 HWLGeneral::HWLGeneral()
 {
+	//set or calculate all needed members
 	this->i_rubies = this->calc_rubies();
 	this->b_unlocked_smithy = this->calc_unlocked_smithy_state();
 	this->b_unlocked_all_normal_weapons = this->calc_unlocked_normal_weapons_state();
@@ -275,7 +276,7 @@ void HWLGeneral::save_unlocked_plus_weapons_state()
 
 	//set the current unlock-state-value (integer) to val to unlock or min-val-1,
 	//based on the aquivalent boolean-member
-	if (this->b_unlocked_smithy)
+	if (this->b_unlocked_all_plus_weapons)
 		i_unlock_state = this->unlockAllPlusWeaponsValue;
 	else
 		i_unlock_state = (this->unlockAllPlusWeaponsValueMin-1);

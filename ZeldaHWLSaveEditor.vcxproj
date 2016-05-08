@@ -99,6 +99,7 @@
     <ClCompile Include="source\core\HWLException.cpp" />
     <ClCompile Include="source\core\HWLFairy.cpp" />
     <ClCompile Include="source\core\HWLFairyFood.cpp" />
+    <ClCompile Include="source\core\HWLGeneral.cpp" />
     <ClCompile Include="source\core\HWLMaterial.cpp" />
     <ClCompile Include="source\core\HWLPlayer.cpp" />
     <ClCompile Include="source\core\HWLSaveEditor.cpp" />
@@ -111,6 +112,7 @@
     <ClInclude Include="source\core\HWLException.h" />
     <ClInclude Include="source\core\HWLFairy.h" />
     <ClInclude Include="source\core\HWLFairyFood.h" />
+    <ClInclude Include="source\core\HWLGeneral.h" />
     <ClInclude Include="source\core\HWLMaterial.h" />
     <ClInclude Include="source\core\HWLPlayer.h" />
     <ClInclude Include="source\core\HWLSaveEditor.h" />

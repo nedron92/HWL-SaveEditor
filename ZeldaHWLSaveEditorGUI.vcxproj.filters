@@ -78,6 +78,9 @@
     <ClInclude Include="source\gui\ZeldaEditCharaWeaponsDlg.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="source\core\HWLGeneral.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\gui\stdafx.cpp">
@@ -135,6 +138,9 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="source\gui\ZeldaEditCharaWeaponsDlg.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\HWLGeneral.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>

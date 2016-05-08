@@ -45,6 +45,9 @@
     <ClCompile Include="source\core\HWLWeapon.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="source\core\HWLGeneral.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\core\HWLException.h">
@@ -75,6 +78,9 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="source\core\HWLWeapon.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\HWLGeneral.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

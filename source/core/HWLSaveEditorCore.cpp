@@ -36,7 +36,7 @@ const int HWLSaveEditorCore::weaponOffsetLengthComplete = 0x28;
 
 //public members
 /* @var version  hold the current version-number as string */
-const string HWLSaveEditorCore::version = "2.0.6";
+const string HWLSaveEditorCore::version = "2.1";
 
 
 
@@ -325,7 +325,7 @@ string HWLSaveEditorCore::getHexStringFromFileContent(int i_offset, int i_offset
 	//define the string for holding data later
 	string s_hexString;
 
-	//if the length for that offste is bigger then one
+	//if the length for that offset is bigger then one
 	//we have to iterate
 	if (i_offset_length > 1)
 	{

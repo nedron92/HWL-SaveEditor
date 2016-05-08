@@ -17,13 +17,6 @@ using namespace HWLSaveEdit;
 const int HWLSaveEditor::fileHeaderOffsetBegin = 0x0;
 
 
-/* @var rubyOffset				the offset-begin for rubies */
-const int HWLSaveEditor::rubyOffset = 0xde;
-
-/* @var rubyOffsetLength		length for ruby-offset */
-const int HWLSaveEditor::rubyOffsetLength = 0x3;
-
-
 /* @var playerOffsetBegin		beginning of player-offsets (first character) */
 const int HWLSaveEditor::playerOffsetBegin = 0x2EBF2;
 
@@ -85,13 +78,6 @@ const int HWLSaveEditor::fairyOffsetBegin = 0x1AEA;
 const int HWLSaveEditor::weaponOffsetBegin = 0x2F372;
 
 
-//public members
-/* @var rubyMax				max value for rubies */
-const int HWLSaveEditor::rubyMax = 9999999;
-
-/* @var maxFairies			maximal count of fairies*/
-const int HWLSaveEditor::fairiesMax = 10;
-
 
 /**
 * Only the initialization of the normal-constructor
@@ -124,7 +110,7 @@ HWLSaveEditor::HWLSaveEditor(string s_filepathname)
 		//If not, throw Exception
 		if (this->check_savefile())
 		{
-			this->i_rubies = this->calc_rubies();
+			this->calc_general();
 			this->calc_weapons();
 			this->calc_players();
 			this->calc_materials();
@@ -168,23 +154,15 @@ HWLSaveEditor::~HWLSaveEditor()
 }
 
 
+
 /**
-* This method calculate the current ruby-value
-*
-*	@return int		the current rubies
+* This method calculate the current general-thing-object 
+* and so all needed general ingame-things like rubies etc.
 *
 */
-int HWLSaveEditor::calc_rubies()
+void HWLSaveEditor::calc_general()
 {
-	//declare needed variables
-	string s_rubies;
-	int i_ruby_offset = this->rubyOffset;
-
-	//get the current ruby-value as an hexString
-	s_rubies = this->getHexStringFromFileContent(i_ruby_offset, this->rubyOffsetLength);
-
-	//return the converted ruby-value
-	return this->HexStringToInt(s_rubies);
+	this->sp_general = make_shared<HWLGeneral>();
 }
 
 /**
@@ -588,7 +566,7 @@ void HWLSaveEditor::calc_myFairies()
 	int i_offset = this->fairyOffsetBegin;
 
 	//iterate over all myFairies and create new objects
-	for (int i = 0; i < this->fairiesMax; i++)
+	for (int i = 0; i < HWLGeneral::fairiesMax; i++)
 	{
 		//create new object, based on offset
 		shared_ptr<HWLFairy> hwlf_tmp = make_shared<HWLFairy>(i_offset);
@@ -604,28 +582,6 @@ void HWLSaveEditor::calc_myFairies()
 
 
 /**
-* This method save the current ruby-value to the file-content holder
-*
-*/
-void HWLSaveEditor::save_rubies()
-{
-	//declare/define needed variables
-	int i_ruby_tmp = this->i_rubies; //tmp variable of current ruby-value
-	string s_rubies; //needed for hold the hex-value
-	int i_ruby_offset = this->rubyOffset; //the offset
-
-	//convert the integer ruby-value to hex-value and save to string, also added
-	//missed zeros
-	s_rubies = this->intToHexString(i_ruby_tmp, false);
-	this->addZeroToHexString(s_rubies, this->rubyOffsetLength * 2);
-
-	//set the current hex-value to the file-content holder, based on offset
-	this->setHexStringToFileContent(s_rubies, i_ruby_offset);
-}
-
-
-
-/**
 * This method return the current error-state
 *
 */
@@ -635,12 +591,12 @@ int HWLSaveEditor::get_error()
 }
 
 /**
-* This method return the current ruby-value
+* This method return the coressponding character-object, based on character-id
 *
 */
-int HWLSaveEditor::get_rubies()
+shared_ptr<HWLGeneral> HWLSaveEditor::get_general_things()
 {
-	return this->i_rubies;
+	return this->sp_general;
 }
 
 /**
@@ -780,22 +736,6 @@ int HWLSaveEditor::get_adventureMode_maxItemCount()
 
 
 /**
-* This method set the given ruby-value to the class-member
-*
-*/
-void HWLSaveEditor::set_rubies(int i_rubies)
-{
-	if (i_rubies < 0)
-		i_rubies = 0;
-	else if (i_rubies > this->rubyMax)
-		i_rubies = rubyMax;
-
-	this->i_rubies = i_rubies;
-}
-
-
-
-/**
 * This method checks, if we have an valid savegame
 *
 */
@@ -833,9 +773,6 @@ void HWLSaveEditor::save_file()
 	//else throw an Exception
 	if (this->fs_filehandler.is_open())
 	{
-		//first, save the current ruby-value to the file-content holder
-		this->save_rubies();
-
 		//set the file-pointer to te begin of the file and clear all other things
 		//before we will write
 		this->fs_filehandler.seekp(0, this->fs_filehandler.beg);

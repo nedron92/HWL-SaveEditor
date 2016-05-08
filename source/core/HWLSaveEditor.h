@@ -4,6 +4,7 @@
 //include the other needed classes
 #include "HWLSaveEditorCore.h"
 #include "HWLException.h"
+#include "HWLGeneral.h"
 #include "HWLPlayer.h"
 #include "HWLMaterial.h"
 #include "HWLFairyFood.h"
@@ -31,14 +32,8 @@ namespace HWLSaveEdit
 			/* @var i_error			for indicate specific errors*/
 			int i_error = 0;
 
-			/* @var i_rubies		hold the rubies-value */
-			int i_rubies = 0;
-
 			//offset-const declaration
 			static const int fileHeaderOffsetBegin;
-
-			static const int rubyOffset;
-			static const int rubyOffsetLength;
 
 			static const int playerOffsetBegin;
 
@@ -59,6 +54,9 @@ namespace HWLSaveEdit
 			static const int weaponOffsetBegin;
 
 			// member declarations
+			/* @var sp_general		pointer for holding all general thnings */
+			shared_ptr<HWLGeneral> sp_general;
+
 			/* @var m_players		map for holding all playable characters */
 			map< string, shared_ptr<HWLPlayer> > m_players;
 
@@ -80,9 +78,9 @@ namespace HWLSaveEdit
 			/* @var vi_blank_weapons	vector, which hold all free weapon offsets */
 			vector<int> vi_blank_weapons;
 
-			//calculate methods for rubies, weapons, player, material, fairyFood, 
-			//am-items and fairies, also for setting an weapon to the correct player
-			int  calc_rubies();
+			//calculate methods for generals, weapons, player, material, fairyFood, 
+			//am-items and fairies, also for setting an weapon to the correct player	
+			void calc_general();
 			void calc_weapons();
 			void calc_players();
 			bool calc_players_weapons(int i_player_id, int i_weapon_id, string &s_weapon_name, int &i_weapon_type, int &i_weapon_lvl, vector<int> &vi_lvl_hexValues);
@@ -91,20 +89,14 @@ namespace HWLSaveEdit
 			void calc_amItems();
 			void calc_myFairies();
 
-			//save new ruby-value
-			void save_rubies();
-
 		public:
-			static const int rubyMax;
-			static const int fairiesMax;
-
-
 			HWLSaveEditor(string s_filepathname = "zmha.bin");
 			~HWLSaveEditor();
 
-			//getter for rubies, players and materials and errors
+			//getter for errors, general things, players(with weapons), materials, fairyFoods, 
+			//am-items and fairies
 			int get_error();
-			int get_rubies();
+			shared_ptr<HWLGeneral> get_general_things();
 			shared_ptr<HWLPlayer> get_player(int i_id);
 			shared_ptr<HWLPlayer> get_player(string s_name);
 			shared_ptr<HWLMaterial> get_material(int i_id, int i_type);
@@ -118,9 +110,6 @@ namespace HWLSaveEdit
 			//special getter for the size of current adventure-mode-offsets vector,
 			//better how many maps we have
 			int get_adventureMode_maxItemCount();
-
-			//setter for rubies
-			void set_rubies(int i_rubies);
 
 			//method for checking file-header
 			bool check_savefile();

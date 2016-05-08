@@ -21,6 +21,11 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV-Unterstützung
 
 	DECLARE_MESSAGE_MAP()
+
+	//own methods
+	void calc_general();
+	void save_general();
+
 public:
 	afx_msg void OnBnClickedSave();
 	afx_msg void OnBnClickedExit();

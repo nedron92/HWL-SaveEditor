@@ -40,7 +40,7 @@ void CZeldaEditFairyDlg::DoDataExchange(CDataExchange* pDX)
 
 	if (save != nullptr)
 	{
-		this->i_fairy_max = save->fairiesMax;
+		this->i_fairy_max = HWLSaveEdit::HWLGeneral::fairiesMax;
 
 		if (this->i_fairy <= 1)
 			GetDlgItem(IDC_FAIRY_PAGE_PREVIOUS)->EnableWindow(false);

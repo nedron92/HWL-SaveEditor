@@ -36,14 +36,22 @@ void CZeldaEditGeneralDlg::DoDataExchange(CDataExchange* pDX)
 	if (save != nullptr)
 	{
 		GetDlgItem(IDC_RUBY_EDIT)->EnableWindow(true);
+		for (int i = IDC_CHECK_GENERAL_UNLOCK_SMITHY; i <= IDC_CHECK_GENERAL_UNLOCK_PLUS_WEAPONS_FOUND; i++)
+		{
+			GetDlgItem(i)->EnableWindow(true);
+		}
 
-		CString str;
-		str.Format(L"%d", save->get_rubies());
-		SetDlgItemText(IDC_RUBY_EDIT, str);
+		this->calc_general();
 	}
 	else{
 		SetDlgItemText(IDC_RUBY_EDIT, L"");
+
 		GetDlgItem(IDC_RUBY_EDIT)->EnableWindow(false);
+		for (int i = IDC_CHECK_GENERAL_UNLOCK_SMITHY; i <= IDC_CHECK_GENERAL_UNLOCK_PLUS_WEAPONS_FOUND; i++)
+		{
+			SetDlgItemText(IDC_RUBY_EDIT, L"");
+			GetDlgItem(i)->EnableWindow(false);
+		}
 	}
 
 	CMenu *cm_menu = GetMenu();
@@ -85,6 +93,44 @@ END_MESSAGE_MAP()
 // CZeldaEditGeneralDlg-Meldungshandler
 
 
+
+void CZeldaEditGeneralDlg::calc_general()
+{
+	CString s_ruby_value;
+	s_ruby_value.Format(L"%d", save->get_general_things()->get_rubies());
+	SetDlgItemText(IDC_RUBY_EDIT, s_ruby_value);
+
+	CButton *cb_check;
+	cb_check = (CButton*)GetDlgItem(IDC_CHECK_GENERAL_UNLOCK_SMITHY);
+	cb_check->SetCheck(save->get_general_things()->get_unlocked_smithy_state());
+
+	cb_check = (CButton*)GetDlgItem(IDC_CHECK_GENERAL_UNLOCK_NORMAL_WEAPONS_FOUND);
+	cb_check->SetCheck(save->get_general_things()->get_unlocked_normal_weapons_state());
+
+	cb_check = (CButton*)GetDlgItem(IDC_CHECK_GENERAL_UNLOCK_PLUS_WEAPONS_FOUND);
+	cb_check->SetCheck(save->get_general_things()->get_unlocked_plus_weapons_state());
+}
+
+void CZeldaEditGeneralDlg::save_general()
+{
+	CString s_ruby_value;
+	GetDlgItemText(IDC_RUBY_EDIT, s_ruby_value);
+	int i_ruby_value = _wtoi(s_ruby_value);
+	save->get_general_things()->set_rubies(i_ruby_value);
+
+	CButton *cb_check;
+	cb_check = (CButton*)GetDlgItem(IDC_CHECK_GENERAL_UNLOCK_SMITHY);
+	save->get_general_things()->set_unlocked_smithy_state((bool)cb_check->GetCheck());
+
+	cb_check = (CButton*)GetDlgItem(IDC_CHECK_GENERAL_UNLOCK_NORMAL_WEAPONS_FOUND);
+	save->get_general_things()->set_unlocked_normal_weapons_state((bool)cb_check->GetCheck());
+
+	cb_check = (CButton*)GetDlgItem(IDC_CHECK_GENERAL_UNLOCK_PLUS_WEAPONS_FOUND);
+	save->get_general_things()->set_unlocked_plus_weapons_state((bool)cb_check->GetCheck());
+
+	save->get_general_things()->save_General();
+}
+
 void CZeldaEditGeneralDlg::OnBnClickedSave()
 {
 	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
@@ -92,6 +138,7 @@ void CZeldaEditGeneralDlg::OnBnClickedSave()
 	{
 		try
 		{
+			this->save_general();
 			save->save_file();
 		}
 		catch (std::exception &e)
@@ -128,20 +175,20 @@ void CZeldaEditGeneralDlg::OnEnChangeRubyEdit()
 		CString test;
 		CEdit *e_test = (CEdit*)GetDlgItem(IDC_RUBY_EDIT);
 		CString cs_max_chars;
-		cs_max_chars.Format(L"%d", save->rubyMax);
+		cs_max_chars.Format(L"%d", HWLSaveEdit::HWLGeneral::rubyMax);
 		e_test->SetLimitText(cs_max_chars.GetLength() + 1);
 		GetDlgItemText(IDC_RUBY_EDIT, test);
 		int i_test = _wtoi(test);
 
-		if (i_test > save->rubyMax)
+		if (i_test > HWLSaveEdit::HWLGeneral::rubyMax)
 		{
-			test.Format(L"%d", save->rubyMax);
+			test.Format(L"%d", HWLSaveEdit::HWLGeneral::rubyMax);
 			SetDlgItemText(IDC_RUBY_EDIT, test);
 			e_test->SetLimitText(cs_max_chars.GetLength());
 		}
 
 		i_test = _wtoi(test);
-		save->set_rubies(i_test);
+		save->get_general_things()->set_rubies(i_test);
 	}
 }
 
@@ -179,7 +226,7 @@ void CZeldaEditGeneralDlg::OnMenuMainFileOpen()
 				if (i_active_window_id == this->IDD)
 				{
 					CString str;
-					str.Format(L"%d", save->get_rubies());
+					str.Format(L"%d", save->get_general_things()->get_rubies());
 					SetDlgItemText(IDC_RUBY_EDIT, str);
 				}
 				else{
@@ -367,8 +414,8 @@ void CZeldaEditGeneralDlg::OnBnClickedRubyMax()
 	{
 		CString cs_ruby_value;
 
-		save->set_rubies(save->rubyMax);
-		cs_ruby_value.Format(L"%d", save->get_rubies());
+		save->get_general_things()->set_rubies(HWLSaveEdit::HWLGeneral::rubyMax);
+		cs_ruby_value.Format(L"%d", save->get_general_things()->get_rubies());
 		SetDlgItemText(IDC_RUBY_EDIT, cs_ruby_value);
 
 		CString str("Finish! All needed Values are updated.");

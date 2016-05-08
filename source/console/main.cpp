@@ -15,6 +15,9 @@ HWLSaveEdit::HWLSaveEditor *save;
 vector<int> vi_ids;
 
 void get_submenu(int i_menu_code);
+
+void get_general_menu();
+void change_general_things(int i_choose);
 void get_ruby_menu();
 
 void get_chara_menu();
@@ -65,7 +68,7 @@ int main(int argc, char* argv[])
 			cout << "________________________________________________" << endl << endl;
 
 			cout << "Menue: " << endl;
-			cout << "1 - Rubies (Submenu)" << endl;
+			cout << "1 - General things (Submenu)" << endl;
 			cout << "2 - Characters (Submenu)" << endl;
 			cout << "3 - Materials (Submenu)" << endl;
 			cout << "4 - FairyFood (Submenu)" << endl;
@@ -115,7 +118,7 @@ void get_submenu(int i_menu_code)
 
 	case 1:
 	{
-			  get_ruby_menu();
+			  get_general_menu();
 			  break;
 	}
 
@@ -154,13 +157,116 @@ void get_submenu(int i_menu_code)
 }
 
 
+void get_general_menu()
+{
+	char c_choose;
+
+	while (1)
+	{
+		cout << save->get_general_things()->get_GeneralThingsForOutput() << endl;
+
+		cout << "Menue: " << endl;
+		cout << "1 - Edit Rubies (Submenu)" << endl;
+		cout << "2 - Unlock-State: Ingame-Smithy" << endl;
+		cout << "3 - Unlock-State: All normal weapons found (for MasterSword Skill 1)" << endl;
+		cout << "4 - Unlock-State: All 'plus' weapons found (for MasterSword Skill 2)" << endl;
+		cout << "0 - back" << endl;
+		cout << "Your choose: ";
+		cin >> c_choose;
+
+
+		if (iswdigit(c_choose))
+		{
+			if (atoi(&c_choose) == 0)
+			{
+				system(CLEAR);
+				break;
+			}
+			else
+				change_general_things(atoi(&c_choose));
+		}
+		else{
+			cout << "Wrong Menu-Number, try again" << endl;
+			cin.get();
+			cin.get();
+			system(CLEAR);
+		}
+	}
+}
+
+void change_general_things(int i_choose)
+{
+	//i_choose is number of menu-entry
+
+	switch (i_choose)
+	{
+	case 1:
+	{
+			  system(CLEAR);
+			  get_ruby_menu();
+			  break;
+	}
+
+	case 2:
+	{
+			  cout << "Unlock-State: Ingame-Smithy" << endl;
+			  save->get_general_things()->set_unlocked_smithy_state(true);
+			  cout << "Finish. The ingame-smithy is unlocked now." << endl;
+
+			  cin.clear();
+			  getchar();
+			  cin.get();
+			  system(CLEAR);
+			  break;
+	}
+
+	case 3:
+	{
+			  cout << "Unlock-State: All normal weapons found" << endl;
+			  cout << "  You don't have more normal weapons then before, only the game" << endl;
+			  cout << "  believe you collect them all. " << endl;
+			  save->get_general_things()->set_unlocked_normal_weapons_state(true);
+			  cout << "Finish. The state is set to 'unlock'. \nCheck your MasterSword-Skills by the way ;) " << endl;
+
+			  cin.clear();
+			  getchar();
+			  cin.get();
+			  system(CLEAR);
+			  break;
+	}
+
+	case 4:
+	{
+			  cout << "Unlock-State: All 'plus' weapons found" << endl;
+			  cout << "  You don't have more 'plus' weapons then before, only the game" << endl;
+			  cout << "  believe you collect them all. " << endl;
+			  save->get_general_things()->set_unlocked_plus_weapons_state(true);
+			  cout << "Finish. The state is set to 'unlock'. \nCheck your MasterSword-Skills by the way ;) " << endl;
+
+
+			  cin.clear();
+			  getchar();
+			  cin.get();
+			  system(CLEAR);
+			  break;
+	}
+
+	default:
+		break;
+	}
+
+	save->get_general_things()->save_General();
+	save->save_file();
+
+}
+
 void get_ruby_menu()
 {
 	char c_choose;
 
 	while (1)
 	{
-		cout << "You rubies: " << save->get_rubies() << endl;
+		cout << "Your rubies: " << save->get_general_things()->get_rubies() << endl;
 		cout << "Menue: " << endl;
 		cout << "1 - Change Value" << endl;
 		cout << "2 - Maximize Rubies" << endl;
@@ -181,19 +287,19 @@ void get_ruby_menu()
 				if (atoi(&c_choose) == 1)
 				{
 					string s_ruby_value = "";
-					cout << "Enter your new Value (Max: " << save->rubyMax << ") : ";
+					cout << "Enter your new Value (Max: " << HWLSaveEdit::HWLGeneral::rubyMax << ") : ";
 					cin >> s_ruby_value;
 
 					if (iswdigit(s_ruby_value[0]))
 					{
 						int i_rubies = atoi(s_ruby_value.c_str());
-						if (i_rubies > save->rubyMax)
-							i_rubies = save->rubyMax;
+						if (i_rubies > HWLSaveEdit::HWLGeneral::rubyMax)
+							i_rubies = HWLSaveEdit::HWLGeneral::rubyMax;
 
 						if (i_rubies < 0)
 							i_rubies = 0;
 
-						save->set_rubies(i_rubies);
+						save->get_general_things()->set_rubies(i_rubies);
 						save->save_file();
 
 						cout << "The new value was saved. :)" << endl;
@@ -211,8 +317,7 @@ void get_ruby_menu()
 
 				if (atoi(&c_choose) == 2)
 				{
-					save->set_rubies(save->rubyMax);
-					save->save_file();
+					save->get_general_things()->set_rubies(HWLSaveEdit::HWLGeneral::rubyMax);		
 
 					cout << "The max value was saved. :)" << endl;
 					cin.get();
@@ -1656,7 +1761,7 @@ void get_fairy_menu()
 	while (1)
 	{
 
-		for (int i = 0; i < save->fairiesMax; i++)
+		for (int i = 0; i < HWLSaveEdit::HWLGeneral::fairiesMax; i++)
 		{
 			cout << "ID: " << i << endl << save->get_fairy(i)->get_fairyForOutput() << endl;
 		}
@@ -1721,7 +1826,7 @@ void change_fairy_values(int i_choose, int i_fairy_id)
 			  else{
 				  bool check_id = false;
 
-				  if (i_fairy_id < save->fairiesMax && i_fairy_id >= 0)
+				  if (i_fairy_id < HWLSaveEdit::HWLGeneral::fairiesMax && i_fairy_id >= 0)
 					  check_id = true;
 
 				  if (check_id)
@@ -1769,7 +1874,7 @@ void change_fairy_values(int i_choose, int i_fairy_id)
 			  {
 				  cout << "Maximize Lvl of all Fairies" << endl;
 
-				  for (int i = 0; i < save->fairiesMax; i++)
+				  for (int i = 0; i < HWLSaveEdit::HWLGeneral::fairiesMax; i++)
 				  {
 					  save->get_fairy(i)->set_lvl(HWLSaveEdit::HWLFairy::fairyLVLMax);
 					  save->get_fairy(i)->save_Fairy();
@@ -1784,7 +1889,7 @@ void change_fairy_values(int i_choose, int i_fairy_id)
 			  {
 				  bool check_id = false;
 
-				  if (i_fairy_id < save->fairiesMax && i_fairy_id >= 0)
+				  if (i_fairy_id < HWLSaveEdit::HWLGeneral::fairiesMax && i_fairy_id >= 0)
 					  check_id = true;
 
 				  if (check_id)
@@ -1817,7 +1922,7 @@ void change_fairy_values(int i_choose, int i_fairy_id)
 			  {
 				  cout << "Maximize Trust of all Fairies" << endl;
 
-				  for (int i = 0; i < save->fairiesMax; i++)
+				  for (int i = 0; i < HWLSaveEdit::HWLGeneral::fairiesMax; i++)
 				  {
 					  save->get_fairy(i)->set_trust(HWLSaveEdit::HWLFairy::fairyTrustMax);
 					  save->get_fairy(i)->save_Fairy();
@@ -1833,7 +1938,7 @@ void change_fairy_values(int i_choose, int i_fairy_id)
 			  {
 				  bool check_id = false;
 
-				  if (i_fairy_id < save->fairiesMax && i_fairy_id >= 0)
+				  if (i_fairy_id < HWLSaveEdit::HWLGeneral::fairiesMax && i_fairy_id >= 0)
 					  check_id = true;
 
 				  if (check_id)
@@ -1866,7 +1971,7 @@ void change_fairy_values(int i_choose, int i_fairy_id)
 			  {
 				  cout << "Unlock all Fairies" << endl;
 
-				  for (int i = 0; i < save->fairiesMax; i++)
+				  for (int i = 0; i < HWLSaveEdit::HWLGeneral::fairiesMax; i++)
 				  {
 					  save->get_fairy(i)->set_isUnlock(true);
 					  save->get_fairy(i)->save_Fairy();
@@ -1882,7 +1987,7 @@ void change_fairy_values(int i_choose, int i_fairy_id)
 			  {
 				  bool check_id = false;
 
-				  if (i_fairy_id < save->fairiesMax && i_fairy_id >= 0)
+				  if (i_fairy_id < HWLSaveEdit::HWLGeneral::fairiesMax && i_fairy_id >= 0)
 					  check_id = true;
 
 				  if (check_id)

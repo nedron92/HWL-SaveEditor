@@ -29,6 +29,14 @@ If you not able to run homebrew yet, then visit http://smealum.github.io/3ds/ fo
 First, download the latest stable release!  
 Once you have your savefile (normally called "zmha.bin"), copy to your PC, made a backup of that savefile before you edit   anything, run the editor, open the savefile and change what you want, save the file, copy it back to your 3DS SD-Card and   import it back with the programm, you used before to get the savefile.   
 
+## Nightly-Builds
+If you don't want to wait for a new stable-release, then you can check the nightly-build-server.  
+It will build automatically windows- and linux-builds every night (about 3 o'clock CET) after there was a new commit to  
+this repository.  
+But use them on your own risk, the nightly-builds can be unstable and with more failures/bugs as a new release.  
+You can download them on https://nightly.nedron92.php-friends.de/hwl_save-editor/
+
+
 ## Questions?
 Ask me wherever you want, but basically at http://gbatemp.net/ (my name there is also nedron92).   
 You can also ask your question within the main-thread:   

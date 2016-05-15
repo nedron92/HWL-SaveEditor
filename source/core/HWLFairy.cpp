@@ -51,7 +51,7 @@ const int HWLFairy::fairyLVLMax = 99;
 const int HWLFairy::fairyTrustMax = 100;
 
 /* @var fairyIteratorMax				maximal-value of the fairy-refreshes */
-const int HWLFairy::fairyIteratorMax = 99;
+const int HWLFairy::fairyIteratorMax = 255;
 
 
 
@@ -464,6 +464,7 @@ bool HWLFairy::get_isUnlock()
 string HWLFairy::get_fairyForOutput()
 {
 	string s_output = "Name: " + this->s_name + "\n"
+		//+ "  Offset: " + this->intToHexString(this->i_offset,false)+ "\n" //show offset for testing purposes
 		+ "  Unlock?: " + to_string(this->b_isUnlock) + "\n"
 		+ "  Level: " + to_string(this->i_lvl) + "\n"
 		+ "  Trust: " + to_string(this->i_trust) + "\n"

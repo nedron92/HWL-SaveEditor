@@ -19,7 +19,7 @@ const int HWLFairy::fairyLVLOffsetLength = 0x1;
 const int HWLFairy::fairyTrustOffsetLength = 0x1;
 
 /* @var fairyIteratorOffsetLength		offset length of the fairy Refreshes */
-const int HWLFairy::fairyIteratorOffsetLength = 0x1;
+const int HWLFairy::fairyIteratorOffsetLength = 0x2;
 
 /* @var fairyIsUnlockOffsetLength		offset length of the fairy Unlock-State */
 const int HWLFairy::fairyIsUnlockOffsetLength = 0x1;
@@ -51,7 +51,7 @@ const int HWLFairy::fairyLVLMax = 99;
 const int HWLFairy::fairyTrustMax = 100;
 
 /* @var fairyIteratorMax				maximal-value of the fairy-refreshes */
-const int HWLFairy::fairyIteratorMax = 255;
+const int HWLFairy::fairyIteratorMax = 999;
 
 
 

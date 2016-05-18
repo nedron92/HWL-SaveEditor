@@ -503,6 +503,7 @@ int HWLPlayer::get_weapon_count(int i_weapon_type)
 string HWLPlayer::get_playersStatiForOutput()
 {
 	string s_output = "Name: " + this->s_name + "\n"
+		//  + "  Offset: " + this->intToHexString(this->i_offset,false) + "\n" //offset for testing purpose
 		+ "  Unlock?: " + to_string(this->b_isUnlock) + "\n"
 		+ "  Level: " + to_string(this->i_lvl) + "\n"
 		+ "  EXP: " + to_string(this->i_exp) + "\n"

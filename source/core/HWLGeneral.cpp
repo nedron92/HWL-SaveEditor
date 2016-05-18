@@ -44,6 +44,19 @@ const int HWLGeneral::unlockAllPlusWeaponsOffsetLength = 1;
 const int HWLGeneral::unlockAllPlusWeaponsOffsetPart = 1;
 
 
+/* @var unlockAllMaterialsOffsets				offset-begins for all material-found-flags */
+const vector<int> HWLGeneral::unlockAllMaterialsOffsets =
+{
+	0x1A24, //first part, Metal Plate -> Impa's Hair Band
+	0x1A28, //second part, Ganondorf's Gauntlet -> Wizzro's Ring
+	0x1A2C, //third part, Link's Scarf -> Keaton Mask
+	0x1A30, //fourth part, Tingle's Watch -> King Daphnes's Crown
+};
+
+/* @var unlockAllMaterialsOffsetsLength			offset-length of all material-found-flag-offsets */
+const int HWLGeneral::unlockAllMaterialsOffsetsLength = 0x4;
+
+
 /* @var unlockIngameSmithyValue			value to unlock the ingame-smithy */
 const int HWLGeneral::unlockIngameSmithyValue = 0xF;
 
@@ -52,6 +65,18 @@ const int HWLGeneral::unlockAllPlusWeaponsValue = 0xF;
 
 /* @var unlockAllPlusWeaponsValueMin	min-value to set the unlock-state of all plus-weapons to TRUE */
 const int HWLGeneral::unlockAllPlusWeaponsValueMin = 0x6;
+
+/* @var unlockAllMaterialsMinValue			value for first-to-third part to set materials to "Not-found" */
+const unsigned int HWLGeneral::unlockAllMaterialsMinValue = 0x00FFFFFF;
+
+/* @var unlockAllMaterialsMaxValue			max-value for first-to-third part to set all materials to "found" */
+const unsigned int HWLGeneral::unlockAllMaterialsMaxValue = 0xFFFFFFFF;
+
+/* @var unlockAllMaterialsMinValueLastOffset		value for fourth part to set materials to "Not-found"  */
+const int HWLGeneral::unlockAllMaterialsMinValueLastOffset = 0x0F;
+
+/* @var unlockAllMaterialsMaxValueLastOffset		max-value for fourth part to set all materials to "found"  */
+const int HWLGeneral::unlockAllMaterialsMaxValueLastOffset = 0x3F;
 
 
 //public members
@@ -73,7 +98,7 @@ HWLGeneral::HWLGeneral()
 	this->b_unlocked_smithy = this->calc_unlocked_smithy_state();
 	this->b_unlocked_all_normal_weapons = this->calc_unlocked_normal_weapons_state();
 	this->b_unlocked_all_plus_weapons = this->calc_unlocked_plus_weapons_state();
-
+	this->b_unlocked_all_materials = this->calc_unlock_all_materials_state();
 }
 
 /**
@@ -174,6 +199,51 @@ bool HWLGeneral::calc_unlocked_plus_weapons_state()
 
 	//return the true or false, based on the converted unlock-state value
 	if (this->HexStringToInt(s_unlock_state_tmp) >= this->unlockAllPlusWeaponsValueMin)
+		return true;
+	else
+		return false;
+}
+
+/**
+* This method calculate the current state, if
+*  all materials were already found
+*
+*	@return bool		the unlock-state
+*
+*/
+bool HWLGeneral::calc_unlock_all_materials_state()
+{
+	//declare needed variables
+	string s_unlock_state;
+	int i_bool_counter = 0;
+
+	//iterate over all unlock-materials-offsets we have
+	for (int i = 0; i < this->unlockAllMaterialsOffsets.size(); i++)
+	{
+		int i_unlock_state_offset = this->unlockAllMaterialsOffsets[i];
+
+		//get the current unlock-state-value as an hexString
+		s_unlock_state = this->getHexStringFromFileContent(i_unlock_state_offset, this->unlockAllMaterialsOffsetsLength);
+
+		//if we have not the last flag-offset, then proof with the MaxValue, else proof
+		//with the MaxValue for the last Offset
+		if (i != (this->unlockAllMaterialsOffsets.size() - 1))
+		{
+			if (this->HexStringToInt(s_unlock_state) == this->unlockAllMaterialsMaxValue)
+				i_bool_counter++;
+			else
+				i_bool_counter--;
+		}
+		else{
+			if (this->HexStringToInt(s_unlock_state) >= this->unlockAllMaterialsMaxValueLastOffset)
+				i_bool_counter++;
+			else
+				i_bool_counter--;
+		}
+	}
+
+	//return the calculated unlock-state
+	if (i_bool_counter == this->unlockAllMaterialsOffsets.size())
 		return true;
 	else
 		return false;
@@ -295,6 +365,60 @@ void HWLGeneral::save_unlocked_plus_weapons_state()
 	this->setHexStringToFileContent(s_unlock_state, i_unlock_state_offset);
 }
 
+/**
+* This method save the current unlock-state-value of the
+*  materials to the file-content holder
+*
+*/
+void HWLGeneral::save_unlock_all_materials_state()
+{
+	//declare/define needed variables
+	unsigned int i_unlock_state;
+	string s_unlock_state;
+
+	//iterate over all unlock-materials-offsets we have
+	for (int i = 0; i < this->unlockAllMaterialsOffsets.size(); i++)
+	{
+		int i_unlock_state_offset = this->unlockAllMaterialsOffsets[i];
+
+		//set the current unlock-state-value (integer) to max or min,
+		//based on the aquivalent boolean-member
+		if (this->b_unlocked_all_materials)
+		{
+			//if we have not the last flag-offset, then set i_unlock_state to MaxValue, else set
+			//i_unlock_state to MaxValue for the last Offset
+			if (i != (this->unlockAllMaterialsOffsets.size() - 1))
+			{
+				i_unlock_state = this->unlockAllMaterialsMaxValue;
+			}
+			else
+			{
+				i_unlock_state = this->unlockAllMaterialsMaxValueLastOffset;
+			}
+		}else
+		{
+			//if we have not the last flag-offset, then set i_unlock_state to MinValue, else set
+			//i_unlock_state to MinValue for the last Offset
+			if (i != (this->unlockAllMaterialsOffsets.size() - 1))
+			{
+				i_unlock_state = this->unlockAllMaterialsMinValue;
+			}
+			else
+			{
+				i_unlock_state = this->unlockAllMaterialsMinValueLastOffset;
+			}
+		}
+
+		//convert the integer unlock-state-value to hex-value and save to string, also added
+		//missed zeros
+		s_unlock_state = this->intToHexString(i_unlock_state, false);
+		this->addZeroToHexString(s_unlock_state, this->unlockAllMaterialsOffsetsLength * 2);
+
+		//set the current hex-value to the file-content holder, based on offset
+		this->setHexStringToFileContent(s_unlock_state, i_unlock_state_offset);
+	}
+}
+
 
 
 /**
@@ -339,6 +463,17 @@ bool HWLGeneral::get_unlocked_normal_weapons_state()
 bool HWLGeneral::get_unlocked_plus_weapons_state()
 {
 	return this->b_unlocked_all_plus_weapons;
+}
+
+/**
+* Getter for the current unlocked-all-materials-state-value
+*
+*	@return bool		the unlocked-all-materials-state
+*
+*/
+bool HWLGeneral::get_unlocked_all_materials_state()
+{
+	return this->b_unlocked_all_materials;
 }
 
 
@@ -392,6 +527,17 @@ void HWLGeneral::set_unlocked_plus_weapons_state(bool b_unlocked_all_plus_weapon
 	this->b_unlocked_all_plus_weapons = b_unlocked_all_plus_weapons;
 }
 
+/**
+* Setter for the unlocked-all-materials-state-value
+*
+*	@var bool	b_unlocked_all_materials		unlocked-all-materials-state-value
+*
+*/
+void HWLGeneral::set_unlocked_all_materials_state(bool b_unlocked_all_materials)
+{
+	this->b_unlocked_all_materials = b_unlocked_all_materials;
+}
+
 
 
 /**
@@ -407,7 +553,8 @@ string HWLGeneral::get_GeneralThingsForOutput()
 	string s_output = s_begin
 		+ " Unlock-State: Ingame-Smithy: " + to_string(this->b_unlocked_smithy) + "\n"
 		+ " Unlock-State: All normal weapons found  : " + to_string(this->b_unlocked_all_normal_weapons) + "\n"
-		+ " Unlock-State: All 'plus' weapons found  : " + to_string(this->b_unlocked_all_plus_weapons) + "\n";
+		+ " Unlock-State: All 'plus' weapons found  : " + to_string(this->b_unlocked_all_plus_weapons) + "\n"
+		+ " Unlock-State: All materials found: " + to_string(this->b_unlocked_all_materials) + "\n";
 
 	return s_output;
 }
@@ -424,4 +571,5 @@ void HWLGeneral::save_General()
 	this->save_unlocked_smithy_state();
 	this->save_unlocked_normal_weapons_state();
 	this->save_unlocked_plus_weapons_state();
+	this->save_unlock_all_materials_state();
 }

@@ -36,7 +36,7 @@ const int HWLSaveEditorCore::weaponOffsetLengthComplete = 0x28;
 
 //public members
 /* @var version  hold the current version-number as string */
-const string HWLSaveEditorCore::version = "2.1.0.6";
+const string HWLSaveEditorCore::version = "2.1.1";
 
 
 
@@ -67,7 +67,7 @@ HWLSaveEditorCore::~HWLSaveEditorCore()
 *	@return string				the converted HexString
 *
 */
-string HWLSaveEditorCore::intToHexString(int i_value, bool is_file_content)
+string HWLSaveEditorCore::intToHexString(unsigned int i_value, bool is_file_content)
 {
 	//define a string for holding the correct string
 	//and define stringstream for converting
@@ -126,8 +126,8 @@ int HWLSaveEditorCore::HexStringToInt(string s_hexString)
 	//initialize it with the current hexString
 	stringstream sstream_hexStream(s_hexString);
 
-	//define an integer and convert the string
-	int i_value;
+	//define an unsigned-integer and convert the string
+	unsigned int i_value;
 	sstream_hexStream >> std::hex >> i_value;
 
 	//return the converted integer

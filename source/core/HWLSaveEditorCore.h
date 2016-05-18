@@ -42,7 +42,7 @@ namespace HWLSaveEdit
 			   way around with zero-adding. 
 			   Also Convertions between MultiByte- and WideStrings
 			   */
-			string intToHexString(int i_value, bool is_file_content = true);
+			string intToHexString(unsigned int i_value, bool is_file_content = true);
 			int HexStringToInt(string s_hexString);
 			string HexStringToByteString(string s_hexString);
 			string ByteStringToHexString(string s_byteString);

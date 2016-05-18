@@ -36,7 +36,7 @@ void CZeldaEditGeneralDlg::DoDataExchange(CDataExchange* pDX)
 	if (save != nullptr)
 	{
 		GetDlgItem(IDC_RUBY_EDIT)->EnableWindow(true);
-		for (int i = IDC_CHECK_GENERAL_UNLOCK_SMITHY; i <= IDC_BUTTON_HELP_UNLOCK_WEAPON_STATES; i++)
+		for (int i = IDC_CHECK_GENERAL_UNLOCK_SMITHY; i <= IDC_BUTTON_HELP_UNLOCK_ALL_MATERIALS; i++)
 		{
 			GetDlgItem(i)->EnableWindow(true);
 		}
@@ -47,20 +47,20 @@ void CZeldaEditGeneralDlg::DoDataExchange(CDataExchange* pDX)
 		SetDlgItemText(IDC_RUBY_EDIT, L"");
 
 		GetDlgItem(IDC_RUBY_EDIT)->EnableWindow(false);
-		for (int i = IDC_CHECK_GENERAL_UNLOCK_SMITHY; i <= IDC_CHECK_GENERAL_UNLOCK_PLUS_WEAPONS_FOUND; i++)
+		for (int i = IDC_CHECK_GENERAL_UNLOCK_SMITHY; i <= IDC_CHECK_GENERAL_UNLOCK_ALL_MATERIALS_FOUND; i++)
 		{
 			SetDlgItemText(IDC_RUBY_EDIT, L"");
 			GetDlgItem(i)->EnableWindow(false);
 		}
 		GetDlgItem(IDC_BUTTON_HELP_UNLOCK_WEAPON_STATES)->EnableWindow(false);
+		GetDlgItem(IDC_BUTTON_HELP_UNLOCK_ALL_MATERIALS)->EnableWindow(false);
+
 	}
 
 	CMenu *cm_menu = GetMenu();
 	CMenu* cm_submenu = cm_menu->GetSubMenu(1);
 	cm_submenu->CheckMenuItem(0, MF_CHECKED | MF_BYPOSITION);
 
-
-	
 	CDialogEx::DoDataExchange(pDX);
 }
 
@@ -86,9 +86,9 @@ BEGIN_MESSAGE_MAP(CZeldaEditGeneralDlg, CDialogEx)
 	ON_COMMAND(ID_MENU_EDIT_AM_TLMAP, &CZeldaEditGeneralDlg::OnMenuEditAmTlmap)
 	ON_COMMAND(ID_MENU_EDIT_AM_TMMAP, &CZeldaEditGeneralDlg::OnMenuEditAmTmmap)
 	ON_COMMAND(ID_MENU_EDIT_FAIRIES, &CZeldaEditGeneralDlg::OnMenuEditFairies)
-//	ON_WM_ACTIVATE()
 ON_COMMAND(ID_MENU_EDIT_CHARACTERS_WEAPONS, &CZeldaEditGeneralDlg::OnMenuEditCharactersWeapons)
 ON_BN_CLICKED(IDC_BUTTON_HELP_UNLOCK_WEAPON_STATES, &CZeldaEditGeneralDlg::OnBnClickedButtonHelpUnlockWeaponStates)
+ON_BN_CLICKED(IDC_BUTTON_HELP_UNLOCK_ALL_MATERIALS, &CZeldaEditGeneralDlg::OnBnClickedButtonHelpUnlockAllMaterials)
 END_MESSAGE_MAP()
 
 
@@ -111,6 +111,9 @@ void CZeldaEditGeneralDlg::calc_general()
 
 	cb_check = (CButton*)GetDlgItem(IDC_CHECK_GENERAL_UNLOCK_PLUS_WEAPONS_FOUND);
 	cb_check->SetCheck(save->get_general_things()->get_unlocked_plus_weapons_state());
+
+	cb_check = (CButton*)GetDlgItem(IDC_CHECK_GENERAL_UNLOCK_ALL_MATERIALS_FOUND);
+	cb_check->SetCheck(save->get_general_things()->get_unlocked_all_materials_state());
 }
 
 void CZeldaEditGeneralDlg::save_general()
@@ -129,6 +132,9 @@ void CZeldaEditGeneralDlg::save_general()
 
 	cb_check = (CButton*)GetDlgItem(IDC_CHECK_GENERAL_UNLOCK_PLUS_WEAPONS_FOUND);
 	save->get_general_things()->set_unlocked_plus_weapons_state((bool)cb_check->GetCheck());
+
+	cb_check = (CButton*)GetDlgItem(IDC_CHECK_GENERAL_UNLOCK_ALL_MATERIALS_FOUND);
+	save->get_general_things()->set_unlocked_all_materials_state((bool)cb_check->GetCheck());
 
 	save->get_general_things()->save_General();
 }
@@ -443,5 +449,14 @@ void CZeldaEditGeneralDlg::OnBnClickedButtonHelpUnlockWeaponStates()
 	CString cs_info("If you activate those check-boxes, then you don't have more weapons\n"
 		"then before, but the game wil believe that you collect them all.\n"
 		"If you have the Master Sword, then please check the Skills ingame ;) ");
+	MessageBox(cs_info, L"Information", MB_OK | MB_ICONINFORMATION);
+}
+
+
+void CZeldaEditGeneralDlg::OnBnClickedButtonHelpUnlockAllMaterials()
+{
+	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	CString cs_info("If you activate this check-box, then you don't have more materials\n"
+		"then before, but the game wil believe that you collect them all.\n");
 	MessageBox(cs_info, L"Information", MB_OK | MB_ICONINFORMATION);
 }

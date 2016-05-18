@@ -170,6 +170,7 @@ void get_general_menu()
 		cout << "2 - Unlock-State: Ingame-Smithy" << endl;
 		cout << "3 - Unlock-State: All normal weapons found (for MasterSword Skill 1)" << endl;
 		cout << "4 - Unlock-State: All 'plus' weapons found (for MasterSword Skill 2)" << endl;
+		cout << "5 - Unlock-State: All materials found" << endl;
 		cout << "0 - back" << endl;
 		cout << "Your choose: ";
 		cin >> c_choose;
@@ -250,7 +251,23 @@ void change_general_things(int i_choose)
 			  system(CLEAR);
 			  break;
 	}
+        
+	case 5:
+	{
+			  cout << "Unlock-State: All materials found" << endl;
+			  cout << "  You don't have more materials then before, only the game" << endl;
+			  cout << "  believe you collect them all. " << endl;
+			  save->get_general_things()->set_unlocked_all_materials_state(true);
+			  cout << "Finish. The state is set to 'unlock'. \nCheck it ingame. " << endl;
 
+
+			  cin.clear();
+			  getchar();
+			  cin.get();
+			  system(CLEAR);
+			  break;
+	}
+        
 	default:
 		break;
 	}
@@ -1409,7 +1426,7 @@ void change_materials_values(int i_choose, int i_material_id, int i_type, int i_
 					  save->get_material(i, i_type)->set_value(HWLSaveEdit::HWLMaterial::materialValueMax);
 					  save->get_material(i, i_type)->save_Material();
 				  }
-				  cout << "Finish. You have now enough of all material!s" << endl;
+				  cout << "Finish. You have now enough of all materials" << endl;
 				  cin.clear();
 				  getchar();
 				  cin.get();
@@ -1998,8 +2015,7 @@ void change_fairy_values(int i_choose, int i_fairy_id)
 					  save->get_fairy(i_fairy_id)->save_Fairy();
 					  cout << "Finish. Press a key to go back." << endl;
 
-				  }
-				  else{
+				  }else{
 					  cout << "Sorry, but this Fairy-ID doesn't exist!" << endl;
 				  }
 

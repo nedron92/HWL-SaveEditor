@@ -32,6 +32,9 @@ namespace HWLSaveEdit
 			/* @var b_isUnlock			unlock-state of the character */
 			bool b_isUnlock;
 			
+			/* @var b_canUseAttackBadges		state, if character can use Attack-Badges */
+			bool b_canUseAttackBadges;
+                        
 			/* @var m_player_weapon		holding all weapons of that character */
 			map<int, vector<shared_ptr<HWLWeapon>> > m_player_weapon;
 			//int-key = weapon-type, and via a weapon_slot_id access to a 
@@ -42,23 +45,27 @@ namespace HWLSaveEdit
 			static const int playerEXPOffsetLength;
 			static const int playerATKOffsetLength;
 			static const int playerIsUnlockOffsetLength;
+			static const int playerCanUseAttackBadgesOffsetLength;
 
 			static const int playerLVLOffsetDiff;
 			static const int playerEXPOffsetDiff;
 			static const int playerATKOffsetDiff;
 			static const int playerIsUnlockOffsetDiff;
+			static const int playerCanUseAttackBadgesOffsetDiff;
 
 			//methods for calculation of all (known) stati-values
 			int calc_players_lvl();
 			int calc_players_exp();
 			int calc_players_atk();
 			bool calc_players_isUnlockState();
+			bool calc_players_canUseAttackBadgesState();
 
 			//methods for saving all current stati-values
 			void save_players_lvl();
 			void save_players_exp();
 			void save_players_atk();
 			void save_players_isUnlockState();
+			void save_players_canUseAttackBadgesState();
 
 		public:
 			//needed public members/constans
@@ -66,6 +73,7 @@ namespace HWLSaveEdit
 			static const int playerLVLMax;
 			static const int playerEXPMax;
 			static const int playerATKMax;
+			static const int playerIsUnlockMax;
 			static const int playerWeaponSlotsMax;
 
 			//constructor and destructor

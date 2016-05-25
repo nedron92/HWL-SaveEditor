@@ -21,6 +21,9 @@ const int HWLPlayer::playerATKOffsetLength = 0x2;
 /* @var playerIsUnlockOffsetLength	offset length of the characters Unlock-State */
 const int HWLPlayer::playerIsUnlockOffsetLength = 0x1;
 
+/* @var playerCanUseAttackBadgesOffsetLength	offset length of the characters Attack-Badges using state */
+const int HWLPlayer::playerCanUseAttackBadgesOffsetLength = 0x1;
+
 
 /* @var playerLVLOffsetDiff			offset-diff from begin of the characters LVL */
 const int HWLPlayer::playerLVLOffsetDiff = 0x20;
@@ -33,6 +36,9 @@ const int HWLPlayer::playerATKOffsetDiff = 0x12;
 
 /* @var playerIsUnlockOffsetDiff	offset-diff from begin of the characters Unlock-State */
 const int HWLPlayer::playerIsUnlockOffsetDiff = 0x10;
+
+/* @var playerCanUseAttackBadgesOffsetDiff	offset-diff from begin of the characters Attack-Badges using state */
+const int HWLPlayer::playerCanUseAttackBadgesOffsetDiff = 0x1E;
 
 
 /* @var vs_players					vector for holding all names of the characters */
@@ -75,6 +81,9 @@ const int HWLPlayer::playerEXPMax = 3178257;
 /* @var playerATKMax				maximal-value of the characters ATK */
 const int HWLPlayer::playerATKMax = 999;
 
+/* @var playerIsUnlockMax			maximal-value of the characters isUnlock-State*/
+const int HWLPlayer::playerIsUnlockMax = 0xF;
+
 /* @var playerWeaponSlotsMax		maximal-value of the characters Weapons, which it can take */
 const int HWLPlayer::playerWeaponSlotsMax = 15;
 
@@ -93,6 +102,7 @@ HWLPlayer::HWLPlayer(int i_id, string s_name, int i_offset)
 	this->i_exp = this->calc_players_exp();
 	this->i_atk = this->calc_players_atk();
 	this->b_isUnlock = this->calc_players_isUnlockState();
+	this->b_canUseAttackBadges = this->calc_players_canUseAttackBadgesState();
 }
 
 /**
@@ -185,6 +195,26 @@ bool HWLPlayer::calc_players_isUnlockState()
 	return (bool)i_playerIsUnlock;
 }
 
+/**
+* This method calculates the current characters Attack-Badges using state
+*
+*	@return bool		the current Using-State
+*
+*/
+bool HWLPlayer::calc_players_canUseAttackBadgesState()
+{
+	//declare/define needed variables
+	string s_playerCanUseAttackBadges;
+	int i_player_canUseAttackBadges_offset = this->i_offset + this->playerCanUseAttackBadgesOffsetDiff;
+
+	//get hex-value from the file-content holder and convert it to int
+	s_playerCanUseAttackBadges = this->getHexStringFromFileContent(i_player_canUseAttackBadges_offset, this->playerCanUseAttackBadgesOffsetLength);
+	int i_playerCanUseAttackBadges = this->HexStringToInt(s_playerCanUseAttackBadges);
+
+	//return the current int-value, casted as bool here
+	return (bool)i_playerCanUseAttackBadges;
+}
+
 
 
 /**
@@ -259,16 +289,42 @@ void HWLPlayer::save_players_isUnlockState()
 {
 	//declare/define needed variables
 	bool b_isUnlock_tmp = this->b_isUnlock;
+	int i_isUnlock_tmp = 0;
 	string s_playerIsUnlock;
 	int i_player_isUnlock_offset = this->i_offset + this->playerIsUnlockOffsetDiff;
 
-	//convert the current integer-value (casted from bool) to hex and add needed zeros, if we
+	//if we have an unlocked character, set the Value to 0xF (highest value for one-offset-part)
+	if (b_isUnlock_tmp)
+		i_isUnlock_tmp = this->playerIsUnlockMax;
+
+	//convert the current integer-value to hex and add needed zeros, if we
 	//don't have the complete length (calculate with offset-length multiplied by 2)
-	s_playerIsUnlock = this->intToHexString(b_isUnlock_tmp, false);
+	s_playerIsUnlock = this->intToHexString(i_isUnlock_tmp, false);
 	this->addZeroToHexString(s_playerIsUnlock, this->playerIsUnlockOffsetLength * 2);
 
 	//set converted hex-value to the file-content holder
 	this->setHexStringToFileContent(s_playerIsUnlock, i_player_isUnlock_offset);
+}
+
+/**
+* This method set the current characters Attack-Badges using state-value
+* to the file-content holder
+*
+*/
+void HWLPlayer::save_players_canUseAttackBadgesState()
+{
+	//declare/define needed variables
+	bool b_canUseAttackBadges_tmp = this->b_canUseAttackBadges;
+	string s_playerCanUseAttackBadges;
+	int i_player_canUseAttackBadges_offset = this->i_offset + this->playerCanUseAttackBadgesOffsetDiff;
+
+	//convert the current integer-value (casted from bool) to hex and add needed zeros, if we
+	//don't have the complete length (calculate with offset-length multiplied by 2)
+	s_playerCanUseAttackBadges = this->intToHexString(b_canUseAttackBadges_tmp, false);
+	this->addZeroToHexString(s_playerCanUseAttackBadges, this->playerCanUseAttackBadgesOffsetLength * 2);
+
+	//set converted hex-value to the file-content holder
+	this->setHexStringToFileContent(s_playerCanUseAttackBadges, i_player_canUseAttackBadges_offset);
 }
 
 
@@ -338,6 +394,11 @@ void HWLPlayer::set_atk(int i_atk)
 void HWLPlayer::set_isUnlock(bool b_isUnlock)
 {
 	this->b_isUnlock = b_isUnlock;
+        
+        //check if character will be unlock and due to a security-reason ingame, we have
+        //to set, that the character can use his Attack-Badges then
+        if(b_isUnlock)
+            this->b_canUseAttackBadges = true;
 }
 
 /**
@@ -503,8 +564,9 @@ int HWLPlayer::get_weapon_count(int i_weapon_type)
 string HWLPlayer::get_playersStatiForOutput()
 {
 	string s_output = "Name: " + this->s_name + "\n"
-		//  + "  Offset: " + this->intToHexString(this->i_offset,false) + "\n" //offset for testing purpose
+		//+ "  Offset: " + this->intToHexString(this->i_offset,false) + "\n" //offset for testing purpose
 		+ "  Unlock?: " + to_string(this->b_isUnlock) + "\n"
+		//+ "  Can Use Attack-Badges?: " + to_string(this->b_canUseAttackBadges) + "\n" //for testing purpose
 		+ "  Level: " + to_string(this->i_lvl) + "\n"
 		+ "  EXP: " + to_string(this->i_exp) + "\n"
 		+ "  ATK: " + to_string(this->i_atk) + "\n";
@@ -524,6 +586,7 @@ void HWLPlayer::save_Player()
 	this->save_players_exp();
 	this->save_players_atk();
 	this->save_players_isUnlockState();
+	this->save_players_canUseAttackBadgesState();
 }
 
 /*

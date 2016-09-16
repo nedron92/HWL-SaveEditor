@@ -54,11 +54,18 @@ int main(int argc, char* argv[])
 			cout << HWLSaveEdit::HWLSaveEditorCore::version << endl;
 			return 0;
 		}
+
+		//if we have --disable-auto-trim", disable the trim-function
+		if (argv[1] == string("--disable-auto-trim"))
+		{
+			HWLSaveEdit::HWLSaveEditor::enable_auto_trim(false);
+		}
 	}
 
 	try
 	{
 		save = new HWLSaveEdit::HWLSaveEditor();
+
 
 		char i_choose;
 

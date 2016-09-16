@@ -52,4 +52,5 @@ public:
 	afx_msg void OnMenuEditCharactersWeapons();
 	afx_msg void OnBnClickedButtonHelpUnlockWeaponStates();
 	afx_msg void OnBnClickedButtonHelpUnlockAllMaterials();
+	afx_msg void OnBnClickedStaticGeneral();
 };

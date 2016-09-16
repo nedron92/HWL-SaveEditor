@@ -52,5 +52,7 @@ public:
 	afx_msg void OnMenuEditAmTmmap();
 	afx_msg void OnMenuEditFairies();
 	afx_msg void OnMenuEditCharactersWeapons();
+//	afx_msg void OnEnChangeEditCharaLvl9();
+//	afx_msg void OnEnChangeEditCharaLvl9();
 };
 

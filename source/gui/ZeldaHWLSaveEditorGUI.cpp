@@ -69,9 +69,18 @@ BOOL CZeldaHWLSaveEditorGUIApp::InitInstance()
 	// Change the registry key under which our settings are stored
 	// TODO: You should modify this string to be something appropriate
 	// such as the name of your company or organization
-	SetRegistryKey(_T("Local AppWizard-Generated Applications"));
+	//SetRegistryKey(_T("Local AppWizard-Generated Applications"));
 
 	CZeldaEditGeneralDlg dlg;
+
+	//get the current command-line parameter
+	CString cs_cmd_param = theApp.m_lpCmdLine;
+
+	//check if we have to disable the auto-trim fucntion or not
+	if (cs_cmd_param == L"--disable-auto-trim")
+	{
+		HWLSaveEdit::HWLSaveEditor::enable_auto_trim(false);
+	}
 
 	//own initialization
 	try

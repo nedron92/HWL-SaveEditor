@@ -43,22 +43,22 @@ void CZeldaEditCharaStatsDlg::DoDataExchange(CDataExchange* pDX)
 
 	if (save != nullptr)
 	{
-		for (int i = IDC_EDIT_CHARA_LVL1; i <= IDC_EDIT_CHARA_LVL24; i++)
+		for (int i = IDC_EDIT_CHARA_LVL1; i <= IDC_EDIT_CHARA_LVL25; i++)
 		{
 			GetDlgItem(i)->EnableWindow(true);
 		}
 
-		for (int i = IDC_EDIT_CHARA_EXP1; i <= IDC_EDIT_CHARA_EXP24; i++)
+		for (int i = IDC_EDIT_CHARA_EXP1; i <= IDC_EDIT_CHARA_EXP25; i++)
 		{
 			GetDlgItem(i)->EnableWindow(true);
 		}
 
-		for (int i = IDC_EDIT_CHARA_ATK1; i <= IDC_EDIT_CHARA_ATK24; i++)
+		for (int i = IDC_EDIT_CHARA_ATK1; i <= IDC_EDIT_CHARA_ATK25; i++)
 		{
 			GetDlgItem(i)->EnableWindow(true);
 		}
 
-		for (int i = IDC_CHECK_CHARA_UNLOCK1; i <= IDC_CHECK_CHARA_UNLOCK24; i++)
+		for (int i = IDC_CHECK_CHARA_UNLOCK1; i <= IDC_CHECK_CHARA_UNLOCK25; i++)
 		{
 			GetDlgItem(i)->EnableWindow(true);
 		}
@@ -69,30 +69,30 @@ void CZeldaEditCharaStatsDlg::DoDataExchange(CDataExchange* pDX)
 	else
 	{
 
-		for (int i = IDC_STATIC_CHARA1; i <= IDC_STATIC_CHARA24; i++)
+		for (int i = IDC_STATIC_CHARA1; i <= IDC_STATIC_CHARA25; i++)
 		{
 			SetDlgItemText(i, L"Chara");
 		}
 
-		for (int i = IDC_EDIT_CHARA_LVL1; i <= IDC_EDIT_CHARA_LVL24; i++)
+		for (int i = IDC_EDIT_CHARA_LVL1; i <= IDC_EDIT_CHARA_LVL25; i++)
 		{
 			SetDlgItemText(i, L"");
 			GetDlgItem(i)->EnableWindow(false);
 		}
 
-		for (int i = IDC_EDIT_CHARA_EXP1; i <= IDC_EDIT_CHARA_EXP24; i++)
+		for (int i = IDC_EDIT_CHARA_EXP1; i <= IDC_EDIT_CHARA_EXP25; i++)
 		{
 			SetDlgItemText(i, L"");
 			GetDlgItem(i)->EnableWindow(false);
 		}	
 
-		for (int i = IDC_EDIT_CHARA_ATK1; i <= IDC_EDIT_CHARA_ATK24; i++)
+		for (int i = IDC_EDIT_CHARA_ATK1; i <= IDC_EDIT_CHARA_ATK25; i++)
 		{
 			SetDlgItemText(i, L"");
 			GetDlgItem(i)->EnableWindow(false);
 		}
 
-		for (int i = IDC_CHECK_CHARA_UNLOCK1; i <= IDC_CHECK_CHARA_UNLOCK24; i++)
+		for (int i = IDC_CHECK_CHARA_UNLOCK1; i <= IDC_CHECK_CHARA_UNLOCK25; i++)
 		{
 			((CButton*)GetDlgItem(i))->SetCheck(0);
 			GetDlgItem(i)->EnableWindow(false);
@@ -107,9 +107,9 @@ void CZeldaEditCharaStatsDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CZeldaEditCharaStatsDlg, CDialogEx)
 	ON_BN_CLICKED(ID_EXIT, &CZeldaEditCharaStatsDlg::OnBnClickedExit)
 	ON_BN_CLICKED(ID_SAVE, &CZeldaEditCharaStatsDlg::OnBnClickedSave)
-	ON_CONTROL_RANGE(EN_CHANGE, IDC_EDIT_CHARA_LVL1, IDC_EDIT_CHARA_LVL24, &OnEnChangeLVLEdit)
-	ON_CONTROL_RANGE(EN_CHANGE, IDC_EDIT_CHARA_EXP1, IDC_EDIT_CHARA_EXP24, &OnEnChangeEXPEdit)
-	ON_CONTROL_RANGE(EN_CHANGE, IDC_EDIT_CHARA_ATK1, IDC_EDIT_CHARA_ATK24, &OnEnChangeATKEdit)
+	ON_CONTROL_RANGE(EN_CHANGE, IDC_EDIT_CHARA_LVL1, IDC_EDIT_CHARA_LVL25, &OnEnChangeLVLEdit)
+	ON_CONTROL_RANGE(EN_CHANGE, IDC_EDIT_CHARA_EXP1, IDC_EDIT_CHARA_EXP25, &OnEnChangeEXPEdit)
+	ON_CONTROL_RANGE(EN_CHANGE, IDC_EDIT_CHARA_ATK1, IDC_EDIT_CHARA_ATK25, &OnEnChangeATKEdit)
 	ON_COMMAND(ID_MENU_ABOUT, &CZeldaEditCharaStatsDlg::OnMenuAbout)
 	ON_COMMAND(ID_MENU_EDIT_GENERAL, &CZeldaEditCharaStatsDlg::OnMenuEditGeneral)
 	ON_COMMAND(ID_MENU_EDIT_CHARACTERS_STATS, &CZeldaEditCharaStatsDlg::OnMenuEditCharactersStats)
@@ -129,6 +129,8 @@ BEGIN_MESSAGE_MAP(CZeldaEditCharaStatsDlg, CDialogEx)
 	ON_COMMAND(ID_MENU_EDIT_FAIRIES, &CZeldaEditCharaStatsDlg::OnMenuEditFairies)
 	ON_COMMAND(ID_MENU_EDIT_CHARACTERS_WEAPONS, &CZeldaEditCharaStatsDlg::OnMenuEditCharactersWeapons)
 	ON_CONTROL_RANGE(BN_CLICKED, IDC_CHECK_CHARA_UNLOCK1, IDC_CHECK_CHARA_UNLOCK24, &OnBnClickedUnlockCheck)
+//	ON_EN_CHANGE(IDC_EDIT_CHARA_LVL9, &CZeldaEditCharaStatsDlg::OnEnChangeEditCharaLvl9)
+//ON_EN_CHANGE(IDC_EDIT_CHARA_LVL9, &CZeldaEditCharaStatsDlg::OnEnChangeEditCharaLvl9)
 END_MESSAGE_MAP()
 
 
@@ -625,3 +627,25 @@ void CZeldaEditCharaStatsDlg::OnMenuEditCharactersWeapons()
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }
+
+
+//void CZeldaEditCharaStatsDlg::OnEnChangeEditCharaLvl9()
+//{
+//	// TODO:  Falls dies ein RICHEDIT-Steuerelement ist, wird das Kontrollelement
+//	// diese Benachrichtigung nicht senden, es sei denn, Sie überschreiben die CDialogEx::OnInitDialog()-
+//	// Funktion und rufen CRichEditCtrl().SetEventMask() auf
+//	// mit dem ENM_CHANGE-Flag ORed in der Eingabe.
+//
+//	// TODO:  Fügen Sie hier Ihren Code für die Kontrollbenachrichtigungsbehandlung ein.
+//}
+
+
+//void CZeldaEditCharaStatsDlg::OnEnChangeEditCharaLvl9()
+//{
+//	// TODO:  Falls dies ein RICHEDIT-Steuerelement ist, wird das Kontrollelement
+//	// diese Benachrichtigung nicht senden, es sei denn, Sie überschreiben die CDialogEx::OnInitDialog()-
+//	// Funktion und rufen CRichEditCtrl().SetEventMask() auf
+//	// mit dem ENM_CHANGE-Flag ORed in der Eingabe.
+//
+//	// TODO:  Fügen Sie hier Ihren Code für die Kontrollbenachrichtigungsbehandlung ein.
+//}

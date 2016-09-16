@@ -35,8 +35,7 @@ void CZeldaEditGeneralDlg::DoDataExchange(CDataExchange* pDX)
 
 	if (save != nullptr)
 	{
-		GetDlgItem(IDC_RUBY_EDIT)->EnableWindow(true);
-		for (int i = IDC_CHECK_GENERAL_UNLOCK_SMITHY; i <= IDC_BUTTON_HELP_UNLOCK_ALL_MATERIALS; i++)
+		for (int i = IDC_EDIT_SAVEFILE_GAME_VERSION; i <= IDC_BUTTON_HELP_UNLOCK_ALL_MATERIALS; i++)
 		{
 			GetDlgItem(i)->EnableWindow(true);
 		}
@@ -44,16 +43,13 @@ void CZeldaEditGeneralDlg::DoDataExchange(CDataExchange* pDX)
 		this->calc_general();
 	}
 	else{
+		SetDlgItemText(IDC_EDIT_SAVEFILE_GAME_VERSION, L"");
 		SetDlgItemText(IDC_RUBY_EDIT, L"");
 
-		GetDlgItem(IDC_RUBY_EDIT)->EnableWindow(false);
-		for (int i = IDC_CHECK_GENERAL_UNLOCK_SMITHY; i <= IDC_CHECK_GENERAL_UNLOCK_ALL_MATERIALS_FOUND; i++)
+		for (int i = IDC_EDIT_SAVEFILE_GAME_VERSION; i <= IDC_BUTTON_HELP_UNLOCK_ALL_MATERIALS; i++)
 		{
-			SetDlgItemText(IDC_RUBY_EDIT, L"");
 			GetDlgItem(i)->EnableWindow(false);
 		}
-		GetDlgItem(IDC_BUTTON_HELP_UNLOCK_WEAPON_STATES)->EnableWindow(false);
-		GetDlgItem(IDC_BUTTON_HELP_UNLOCK_ALL_MATERIALS)->EnableWindow(false);
 
 	}
 
@@ -98,6 +94,9 @@ END_MESSAGE_MAP()
 
 void CZeldaEditGeneralDlg::calc_general()
 {
+	CString s_game_version_value(save->get_general_things()->get_current_savefile_game_version().c_str());
+	SetDlgItemText(IDC_EDIT_SAVEFILE_GAME_VERSION, s_game_version_value);
+
 	CString s_ruby_value;
 	s_ruby_value.Format(L"%d", save->get_general_things()->get_rubies());
 	SetDlgItemText(IDC_RUBY_EDIT, s_ruby_value);

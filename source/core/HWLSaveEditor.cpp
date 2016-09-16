@@ -12,9 +12,14 @@
 //use the project-namespace
 using namespace HWLSaveEdit;
 
+bool HWLSaveEditor::b_auto_trim = true;
+
 //offsets definitions
 /* @var fileHeaderOffsetBegin	the offset-begin for the file-header */
 const int HWLSaveEditor::fileHeaderOffsetBegin = 0x0;
+
+/* @var fileNormalLength	the normal filelength in bytes */
+const int HWLSaveEditor::fileNormalLength = 234594;
 
 
 /* @var playerOffsetBegin		beginning of player-offsets (first character) */
@@ -110,13 +115,53 @@ HWLSaveEditor::HWLSaveEditor(string s_filepathname)
 		//If not, throw Exception
 		if (this->check_savefile())
 		{
-			this->calc_general();
-			this->calc_weapons();
-			this->calc_players();
-			this->calc_materials();
-			this->calc_fairyFood();
-			this->calc_amItems();
-			this->calc_myFairies();
+			//check if we have a valid savegame-filelength
+			int i_check_savefile_length_state = this->check_savefile_length();
+			if (i_check_savefile_length_state == 0)
+			{
+				this->calc_general();
+				this->calc_weapons();
+				this->calc_materials();
+				this->calc_fairyFood();
+				this->calc_amItems();
+				this->calc_myFairies();
+				this->calc_players();
+			}
+			else
+			{
+				this->i_error = 401;
+				string s_tmp;
+				char *cstr;
+
+				switch (i_check_savefile_length_state)
+				{
+				case 1: 
+					s_tmp = "File '" + s_filepathname + "' is valid but too short. \nPlease try to export again.";
+					break;
+
+				case 2:
+					s_tmp = "File '" + s_filepathname + "' is valid, but too long \nand the editor couldn't trimm it. Sorry.";
+					break;
+
+				case 3:
+					s_tmp = "File '" + s_filepathname + "' is valid, but too long. The editor "
+						+ "created a \ntrimmed file automatically and made a backup of the original save.\n"
+						+ "The original savefile has the name '" + s_filepathname + ".bak' \nand the trimmed save "
+						+ "has the normal name. \nPlease try to import the trimmed file back and if all is ok, then \n"
+						+ "you can edit the savegame. :)";
+					break;
+
+				default:
+					break;
+				}
+
+				cstr = new char[s_tmp.length() + 1];
+				strcpy(cstr, s_tmp.c_str());
+				throw HWLException(cstr, this->i_error);
+
+				delete[] cstr;
+			}
+
 		}
 		else{
 			this->i_error = 400;
@@ -177,8 +222,13 @@ void HWLSaveEditor::calc_weapons()
 
 	//iterate from first-offset-begin to the end of the file with a distance of 
 	//the length of the complete-weapon-offset
-	for (int i = i_offset; i < (this->i_filelength - 1); i += this->weaponOffsetLengthComplete)
+	for (int i = i_offset; i < this->i_filelength; i += this->weaponOffsetLengthComplete)
 	{
+		//check, if iterator + complete offset length is bigger then the current filelength
+		//break the loop if its true
+		if (i + this->weaponOffsetLengthComplete > this->i_filelength)
+			break;
+                
 		//get the current weapon of that offset as an HexString
 		string s_weapon = this->getHexStringFromFileContent(i, this->weaponOffsetLength, true);
 
@@ -736,6 +786,73 @@ int HWLSaveEditor::get_adventureMode_maxItemCount()
 
 
 /**
+* This method checks, if we have a valid savegame-file length and truncate bigger
+*  files.
+*
+*/
+int HWLSaveEditor::check_savefile_length()
+{
+	//check if we have the normal length, then all is ok.
+	if (this->i_filelength == this->fileNormalLength || !this->b_auto_trim )
+		return 0;
+	//check if we have a smaller savegame-file and return 1 
+	// = throw exception with specified massage then
+	else if (this->i_filelength < this->fileNormalLength)
+	{
+		return 1;
+	//check if we have a bigger savegame file , do renaming stuff and
+	//return 2 or 3, 2 = failure with renaming/create second file, 3 = all ok
+	}else if (this->i_filelength > this->fileNormalLength)
+	{
+		//declare/define needed variables
+		string s_filepathname_trimmed = this->s_filepathname + ".trimmed";
+		string s_filepathname_backup = this->s_filepathname + ".bak";
+
+		//create new trimmed-file, clear and close handler
+		fstream fs_filehandler_trimmed = fstream(s_filepathname_trimmed, fstream::out);
+		fs_filehandler_trimmed.clear();
+		fs_filehandler_trimmed.close();
+
+		//open new trimmed-file for writing and reading in binary mode
+		fs_filehandler_trimmed = fstream(s_filepathname_trimmed,
+			fstream::binary | fstream::in | fstream::out);
+
+		//check if new trimmed-file is open, else return failure-state
+		if (fs_filehandler_trimmed.is_open())
+		{
+			//set the new file-pointer to te begin of the file and clear all other things
+			//before we will write
+			fs_filehandler_trimmed.seekp(0, fs_filehandler_trimmed.beg);
+			fs_filehandler_trimmed.clear();
+
+			//calculate difference between normal-length and current length
+			int i_filelength_diff = this->i_filelength - this->fileNormalLength;
+
+			//write the current needed part of the file-cotent holder to the trimmed-savefile
+			// and clear/close handler after it
+			fs_filehandler_trimmed.write((char*)cp_filecontent, this->i_filelength - i_filelength_diff);
+			fs_filehandler_trimmed.clear();
+			fs_filehandler_trimmed.close();
+
+			// clear and close filehandler of the current savefile (need for renaming)
+			this->fs_filehandler.clear();
+			this->fs_filehandler.close();
+
+			//rename current savefile to backup and trimmed savefile to normal-savefile
+			rename(this->s_filepathname.c_str(), s_filepathname_backup.c_str());
+			rename(s_filepathname_trimmed.c_str(), this->s_filepathname.c_str());
+
+			//return 3 and throw specified exception then
+			return 3;
+		}
+		else{
+			//return 2 and throw specified exception then
+			return 2;
+		}
+	}
+}
+
+/**
 * This method checks, if we have an valid savegame
 *
 */
@@ -758,6 +875,18 @@ bool HWLSaveEditor::check_savefile()
 		return true;
 	else
 		return false;
+}
+
+
+
+/**
+* This method is for triggering the autmatic trim. 
+* Default: TRUE, and auto-trim is enabled.
+*
+*/
+void HWLSaveEditor::enable_auto_trim(bool b_auto_trim_value)
+{
+	b_auto_trim = b_auto_trim_value;
 }
 
 

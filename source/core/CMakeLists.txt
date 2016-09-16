@@ -5,4 +5,4 @@ file(GLOB HWLSaveSrc
 
 #create a static library from core-sources
 add_library(core STATIC ${HWLSaveSrc})
-
+target_link_libraries(core http_client)

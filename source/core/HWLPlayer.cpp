@@ -18,6 +18,9 @@ const int HWLPlayer::playerEXPOffsetLength = 0x4;
 /* @var playerATKOffsetLength		offset length of the characters ATK */
 const int HWLPlayer::playerATKOffsetLength = 0x2;
 
+/* @var playerHeartsOffsetLength		offset length of the characters Hearts */
+const int HWLPlayer::playerHeartsOffsetLength = 0x1;
+
 /* @var playerIsUnlockOffsetLength	offset length of the characters Unlock-State */
 const int HWLPlayer::playerIsUnlockOffsetLength = 0x1;
 
@@ -33,6 +36,9 @@ const int HWLPlayer::playerEXPOffsetDiff = 0x18;
 
 /* @var playerATKOffsetDiff			offset-diff from begin of the characters ATK */
 const int HWLPlayer::playerATKOffsetDiff = 0x12;
+
+/* @var playerHeartsOffsetDiff			offset-diff from begin of the characters Hearts */
+const int HWLPlayer::playerHeartsOffsetDiff = 0x22;
 
 /* @var playerIsUnlockOffsetDiff	offset-diff from begin of the characters Unlock-State */
 const int HWLPlayer::playerIsUnlockOffsetDiff = 0x10;
@@ -69,7 +75,9 @@ const vector<string> HWLPlayer::vs_players =
 	"Skull Kid",
 	"Toon Link",
 	"Tetra",
-	"King Daphnes"
+	"King Daphnes",
+	"Medli",
+        "Marin"
 };
 
 /* @var playerLVLMax				maximal-value of the characters LVL */
@@ -81,11 +89,14 @@ const int HWLPlayer::playerEXPMax = 3178257;
 /* @var playerATKMax				maximal-value of the characters ATK */
 const int HWLPlayer::playerATKMax = 999;
 
+/* @var playerHeartsMax				maximal-value of the characters hearts*/
+const int HWLPlayer::playerHeartsMax = 18;
+
 /* @var playerIsUnlockMax			maximal-value of the characters isUnlock-State*/
 const int HWLPlayer::playerIsUnlockMax = 0xF;
 
 /* @var playerWeaponSlotsMax		maximal-value of the characters Weapons, which it can take */
-const int HWLPlayer::playerWeaponSlotsMax = 15;
+const int HWLPlayer::playerWeaponSlotsMax = 10;
 
 
 
@@ -101,6 +112,7 @@ HWLPlayer::HWLPlayer(int i_id, string s_name, int i_offset)
 	this->i_lvl = this->calc_players_lvl();
 	this->i_exp = this->calc_players_exp();
 	this->i_atk = this->calc_players_atk();
+  	this->i_hearts = this->calc_players_hearts();      
 	this->b_isUnlock = this->calc_players_isUnlockState();
 	this->b_canUseAttackBadges = this->calc_players_canUseAttackBadgesState();
 }
@@ -173,6 +185,26 @@ int HWLPlayer::calc_players_atk()
 
 	//return the current int-value
 	return i_playerATK;
+}
+
+/**
+* This method calculates the current characters Hearts-value
+*
+*	@return int		the current hearts
+*
+*/
+int HWLPlayer::calc_players_hearts()
+{
+	//declare/define needed variables
+	string s_playerHearts;
+	int i_player_hearts_offset = this->i_offset + this->playerHeartsOffsetDiff;
+
+	//get hex-value from the file-content holder and convert it to int
+	s_playerHearts = this->getHexStringFromFileContent(i_player_hearts_offset, this->playerHeartsOffsetLength);
+	int i_playerHearts = this->HexStringToInt(s_playerHearts);
+
+	//return the current int-value
+	return i_playerHearts;
 }
 
 /**
@@ -281,6 +313,27 @@ void HWLPlayer::save_players_atk()
 }
 
 /**
+* This method set the current characters Hearts
+* to the file-content holder
+*
+*/
+void HWLPlayer::save_players_hearts()
+{
+	//declare/define needed variables
+	int i_hearts_tmp = this->i_hearts;
+	string s_playerHearts;
+	int i_player_hearts_offset = this->i_offset + this->playerHeartsOffsetDiff;
+
+	//convert the current integer-value to hex and add needed zeros, if we
+	//don't have the complete length (calculate with offset-length multiplied by 2)
+	s_playerHearts = this->intToHexString(i_hearts_tmp, false);
+	this->addZeroToHexString(s_playerHearts, this->playerHeartsOffsetLength * 2);
+
+	//set converted hex-value to the file-content holder
+	this->setHexStringToFileContent(s_playerHearts, i_player_hearts_offset);
+}
+
+/**
 * This method set the current characters Unlock-State
 * to the file-content holder
 *
@@ -382,6 +435,25 @@ void HWLPlayer::set_atk(int i_atk)
 		i_atk = playerATKMax;
 
 	this->i_atk = i_atk;
+
+}
+
+/**
+* Setter for the characters-Hearts
+*
+*	@var int	i_hearts		hearts-value to set
+*
+*/
+void HWLPlayer::set_hearts(int i_hearts)
+{
+	//check if heart-value smaller then 5 then set it directly to 5
+	//also check for the maximal-value
+	if (i_hearts < 5)
+		i_hearts = 5;
+	else if (i_hearts > this->playerHeartsMax)
+		i_hearts = this->playerHeartsMax;
+
+	this->i_hearts = i_hearts;
 
 }
 
@@ -497,6 +569,18 @@ int HWLPlayer::get_atk()
 }
 
 /**
+* Getter for the characters-hearts
+*
+*	@return int		the current characters-hearts
+*
+*/
+int HWLPlayer::get_hearts()
+{
+	return this->i_hearts;
+}
+
+
+/**
 * Getter for the characters Unlock-State
 *
 *	@return bool	the current characters Unlock-State
@@ -536,7 +620,7 @@ int HWLPlayer::get_weapon_count(int i_weapon_type)
 	int i_max_iterations = 0;
 
 	//check if we have Link's Master Sword, so we have only ONE Iteration,
-	//cause of that unique weapon, esle we have the maximal-value
+	//cause of that unique weapon, else we have the maximal-value
 	if (this->i_id == 0 && i_weapon_type == 4)
 		i_max_iterations = 1;
 	else
@@ -569,7 +653,8 @@ string HWLPlayer::get_playersStatiForOutput()
 		//+ "  Can Use Attack-Badges?: " + to_string(this->b_canUseAttackBadges) + "\n" //for testing purpose
 		+ "  Level: " + to_string(this->i_lvl) + "\n"
 		+ "  EXP: " + to_string(this->i_exp) + "\n"
-		+ "  ATK: " + to_string(this->i_atk) + "\n";
+		+ "  ATK: " + to_string(this->i_atk) + "\n"
+                + "  Hearts: " + to_string(this->i_hearts) + "\n";
 
 	return s_output;
 }

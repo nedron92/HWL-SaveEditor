@@ -59,10 +59,11 @@ const int HWLWeapon::weaponSkillSlotsLength = 0x1;
 /* @var vi_playerWeaponTypeCount	vector for holding information about how many weapon types a chara have */
 const vector<int> HWLWeapon::vi_playerWeaponTypeCount =
 {
-	7, 3, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1,
+	7, 3, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1
 	// 0.Link, 1.Zelda, 2.Shiek, 3.Impa, 4.Ganondorf, 5.Darunia, 6.Ruto, 7.Agitha, 8.Imp Midna, 
 	// 9.Fi, 10.Ghirahim, 11.Zant, 12.Lana, 13.Cia, 14.Volga, 15.Wizzro, 16.Twili Midna, 17.Young Link, 
-	// 18.Tingle, 19.??? 20.???, 21.Linkle, 22.Skull Kid, 23.Toon Link, 24.Tetra, 25.King Daphnes
+	// 18.Tingle, 19.??? 20.???, 21.Linkle, 22.Skull Kid, 23.Toon Link, 24.Tetra, 25.King Daphnes, 26.Medli
+        // 27.Marin
 };
 
 /* @var vs_playerWeaponTypeNames	vector for holding all weapon-type names */
@@ -153,6 +154,13 @@ const vector<string> HWLWeapon::vs_playerWeaponTypeNames =
 
 	//King Daphnes - Weapon Types
 	"Sail",
+
+	//Medli - Weapon Types
+	"Rito Harp",
+        
+        //Marin - Weapon Types
+        "Bell",
+      
 };
 
 /* @var vi_playerWeaponTypeHexValues	vector for holding information about all weapon-type offsets-begin */
@@ -243,6 +251,12 @@ const vector<int> HWLWeapon::vi_playerWeaponTypeHexValues =
 
 	//King Daphnes - Weapon Types Hex
 	0x7D,
+
+	//Medli - Weapon Types Hex
+	0x8F,
+        
+        //Mrin - Weapon Types Hex
+	0x93,
 };
 
 /* @var vi_playerWeaponTypeHexValuesLVL4	vector for holding information about all weapon-type offsets, LVL 4*/
@@ -333,6 +347,12 @@ const vector<int> HWLWeapon::vi_playerWeaponTypeHexValuesLVL4 =
 
 	//King Daphnes - Weapon Types Hex LVL 4
 	0x8E,
+
+	//Medli - Weapon Types Hex LVL 4
+	0x92,
+        
+	//Marin - Weapon Types Hex LVL 4
+	0x96,        
 };
 
 

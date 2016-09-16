@@ -5,6 +5,11 @@
 #include <sstream>
 #include <iomanip>
 #include <memory>
+//#include <thread> //for later usage with threads
+
+//including needed third-party libraries
+#include "../libs/HTTP_Client/HWLHttp.h"
+
 
 //add the class to the project-namespace
 namespace HWLSaveEdit
@@ -18,6 +23,7 @@ namespace HWLSaveEdit
 		protected:
 			//needed member in all subclasses
 			static unsigned char *cp_filecontent;
+			static shared_ptr<HWLHttp> hwlhttp_client;
 
 			//const declaration, needed for subclasses
 			static const int playerOffsetLength;

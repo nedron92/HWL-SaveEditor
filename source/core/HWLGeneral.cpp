@@ -79,12 +79,59 @@ const int HWLGeneral::unlockAllMaterialsMinValueLastOffset = 0x0F;
 const int HWLGeneral::unlockAllMaterialsMaxValueLastOffset = 0x3F;
 
 
+/* @var savefileGameVersionOffset				the offset-begin for get the current savefile-game-version */
+const int HWLGeneral::savefileGameVersionOffset = 0xD3;
+
+/* @var savefileGameVersionOffsetLength			offset-length for the current-savefie-game-version offset */
+const int HWLGeneral::savefileGameVersionOffsetLength = 0x1;
+
+/* @var savefileGameVersionOffsetPart			offset-part where the savefile-game-version is located */
+const int HWLGeneral::savefileGameVersionOffsetPart = 2;
+
+/* @var vs_version_strings		vector, which hold the version strings for calculation  */
+const vector<string> HWLGeneral::vs_game_version_strings =
+{
+	"1.0.0", //X0, offset D3
+	"1.2.0", //X1, offset D3
+	"1.3.0", //X2, offset D3
+	"1.3.0", //X3, offset D3
+	"1.4.0", //X4, offset D3
+	"1.4.0", //X5, offset D3
+	"1.4.0", //X6, offset D3
+	"1.4.0", //X7, offset D3
+	"Unknown", //X8, offset D3
+	"Unknown", //X9, offset D3
+	"Unknown", //XA, offset D3
+	"Unknown", //XB, offset D3
+	"Unknown", //XC, offset D3
+	"Unknown", //XD, offset D3
+	"Unknown", //XE, offset D3
+	"Unknown", //XF, offset D3
+
+};
+
+
+/* @var vs_version_strings		vector, which hold the version strings for calculation  */
+const vector<string> HWLGeneral::vs_game_dlc_strings =
+{
+	"Master Wind Waker DLC",
+	//"Link's Awakening DLC", 
+	//"Phantom Hourglass and Spirit Tracks DLC",
+	//"A Link Between Worlds DLC",
+};
+
+/* @var vs_version_strings		vector, which hold the version strings for calculation  */
+const vector<int> HWLGeneral::vi_game_dlc_identifier_offsets =
+{
+	0x2536, //Check for 'Master Wind Waker DLC'
+};
+
 //public members
 /* @var rubyMax			max value for rubies */
 const int HWLGeneral::rubyMax = 9999999;
 
 /* @var fairiesMax		maximal count of fairies*/
-const int HWLGeneral::fairiesMax = 10;
+const int HWLGeneral::fairiesMax = 12;
 
 
 
@@ -99,6 +146,7 @@ HWLGeneral::HWLGeneral()
 	this->b_unlocked_all_normal_weapons = this->calc_unlocked_normal_weapons_state();
 	this->b_unlocked_all_plus_weapons = this->calc_unlocked_plus_weapons_state();
 	this->b_unlocked_all_materials = this->calc_unlock_all_materials_state();
+	this->s_savefile_game_version = this->calc_current_savefile_game_version();
 }
 
 /**
@@ -109,6 +157,28 @@ HWLGeneral::~HWLGeneral()
 }
 
 
+/**
+* This method calculate the current savefile-game
+* version
+*
+*	@return string		the current savefile-game-version
+*
+*/
+string HWLGeneral::calc_current_savefile_game_version()
+{
+	//declare needed variables
+	string s_savefile_game_version, s_savefile_game_version_tmp;
+	int i_savefile_game_version = this->savefileGameVersionOffset;
+
+	//get the current savefile-version as an hexString
+	s_savefile_game_version = this->getHexStringFromFileContent(i_savefile_game_version, this->savefileGameVersionOffsetLength);
+
+	//we need only one part of the offset, get it here
+	s_savefile_game_version_tmp = s_savefile_game_version[this->savefileGameVersionOffsetPart - 1];
+
+	//return the current version based on the value and the vector-index
+	return (this->vs_game_version_strings[this->HexStringToInt(s_savefile_game_version_tmp)]);
+}
 
 /**
 * This method calculate the current ruby-value
@@ -422,6 +492,17 @@ void HWLGeneral::save_unlock_all_materials_state()
 
 
 /**
+* Getter for the current game-version of the savefile
+*
+*	@return string		the current game-version of the savefile
++
+*/
+string HWLGeneral::get_current_savefile_game_version()
+{
+	return this->s_savefile_game_version;
+}
+
+/**
 * Getter for the current ruby-value
 *
 *	@return int		the current ruby-value
@@ -551,6 +632,7 @@ string HWLGeneral::get_GeneralThingsForOutput()
 	string s_begin = "General-things: \n";
 
 	string s_output = s_begin
+		+ " Savefile-Game-Version: " + this->s_savefile_game_version + "\n"
 		+ " Unlock-State: Ingame-Smithy: " + to_string(this->b_unlocked_smithy) + "\n"
 		+ " Unlock-State: All normal weapons found  : " + to_string(this->b_unlocked_all_normal_weapons) + "\n"
 		+ " Unlock-State: All 'plus' weapons found  : " + to_string(this->b_unlocked_all_plus_weapons) + "\n"

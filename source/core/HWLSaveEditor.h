@@ -20,20 +20,25 @@ namespace HWLSaveEdit
 	{
 
 		private:
-			/* @var s_filepathname  the path/name of the file*/
+			/* @var s_filepathname  the path/name of the file */
 			string s_filepathname;
 
-			/* @var fs_filehandler  stream-handler for file-operations*/
+			/* @var fs_filehandler  stream-handler for file-operations */
 			fstream fs_filehandler;
 
-			/* @var i_filelength	hold the file-length*/
+			/* @var i_filelength	hold the file-length */
 			int i_filelength;
 
-			/* @var i_error			for indicate specific errors*/
+			/* @var i_error			for indicate specific errors */
 			int i_error = 0;
+
+			/* @var b_auto_trim		TRUE, if auto-trim for too large savefiles are enabled, FALSE if not 
+									Default: TRUE: */
+			static bool b_auto_trim;
 
 			//offset-const declaration
 			static const int fileHeaderOffsetBegin;
+			static const int fileNormalLength;
 
 			static const int playerOffsetBegin;
 
@@ -111,8 +116,12 @@ namespace HWLSaveEdit
 			//better how many maps we have
 			int get_adventureMode_maxItemCount();
 
-			//method for checking file-header
+			//method for checking file-header and file-length
+			int check_savefile_length();
 			bool check_savefile();
+
+			//method for setting the automatic trim
+			static void enable_auto_trim(bool b_auto_trim = true);
 
 			//saving file method
 			void save_file();

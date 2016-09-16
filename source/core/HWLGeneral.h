@@ -25,6 +25,9 @@ namespace HWLSaveEdit
 			/* @var b_unlocked_all_materials			state, if all materials where found */
 			bool b_unlocked_all_materials = false;
 
+			/* @var s_savefile_game_version		hold the current game-version of the savefile */
+			string s_savefile_game_version = "";
+
 			//offset-const declaration
 			static const int rubyOffset;
 			static const int rubyOffsetLength;
@@ -52,7 +55,16 @@ namespace HWLSaveEdit
 			static const int unlockAllMaterialsMinValueLastOffset;
 			static const int unlockAllMaterialsMaxValueLastOffset;
 
+			static const int savefileGameVersionOffset;
+			static const int savefileGameVersionOffsetLength;
+			static const int savefileGameVersionOffsetPart;
+			static const vector<string> vs_game_version_strings;
+
+			static const vector<string> vs_game_dlc_strings;
+			static const vector<int> vi_game_dlc_identifier_offsets;
+
 			//methods for calculation of all (known) general-things
+			string calc_current_savefile_game_version();
 			int  calc_rubies();
 			bool calc_unlocked_smithy_state();
 			bool calc_unlocked_normal_weapons_state();
@@ -76,6 +88,7 @@ namespace HWLSaveEdit
 			~HWLGeneral();
 
 			//methods to set and get all (known) general-things
+			string get_current_savefile_game_version();
 			int get_rubies();
 			bool get_unlocked_smithy_state();
 			bool get_unlocked_normal_weapons_state();

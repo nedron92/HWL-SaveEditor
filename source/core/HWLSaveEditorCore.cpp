@@ -13,6 +13,8 @@ using namespace HWLSaveEdit;
 /* @var *cp_filecontent			holding the content of the save-file */
 unsigned char* HWLSaveEditorCore::cp_filecontent = 0;
 
+shared_ptr<HWLHttp> HWLSaveEditorCore::hwlhttp_client = make_shared<HWLHttp>();
+
 /* @var playerOffsetLength		length of one player/character */
 const int HWLSaveEditorCore::playerOffsetLength = 0x30;
 
@@ -36,7 +38,7 @@ const int HWLSaveEditorCore::weaponOffsetLengthComplete = 0x28;
 
 //public members
 /* @var version  hold the current version-number as string */
-const string HWLSaveEditorCore::version = "2.1.2";
+const string HWLSaveEditorCore::version = "2.5a";
 
 
 

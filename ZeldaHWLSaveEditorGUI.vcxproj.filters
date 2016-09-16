@@ -13,135 +13,198 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Headerdateien\core">
+      <UniqueIdentifier>{c88cf407-5c15-4107-9883-4ba3227921d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\gui">
+      <UniqueIdentifier>{0e74be7a-19ee-470f-8196-d263c9562eb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\core">
+      <UniqueIdentifier>{00a3f4b5-a320-4e92-8804-012c1baa7fa5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\gui">
+      <UniqueIdentifier>{e5db2d5e-aaae-4856-9e0d-f22a4a5274a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\libs">
+      <UniqueIdentifier>{be2a0fb2-50b3-46b7-8035-9ebcc78519a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\libs\HTTP_Client">
+      <UniqueIdentifier>{6ea3465a-c258-44f3-9237-1f1b1aa03a8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\libs\HTTP_Client\API">
+      <UniqueIdentifier>{a5143f7c-85a8-45e5-98e6-22083550474c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\libs">
+      <UniqueIdentifier>{9cca8664-7f7a-4e8f-8651-bf10e18cfe1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\libs\HTTP_Client">
+      <UniqueIdentifier>{abe18c5b-2161-4bac-861a-b5b4e3a65841}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\libs\HTTP_Client\API">
+      <UniqueIdentifier>{da3d180e-6b0e-4eeb-94dd-7c2fd7774190}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="source\gui\resource.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="source\gui\stdafx.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="source\gui\targetver.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="source\gui\ZeldaAboutDlg.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="source\gui\ZeldaEditCharaStatsDlg.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="source\gui\ZeldaEditGeneralDlg.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="source\gui\ZeldaEditMaterials.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="source\gui\ZeldaHWLSaveEditorGUI.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="source\core\HWLException.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="source\core\HWLMaterial.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="source\core\HWLPlayer.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="source\core\HWLSaveEditor.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="source\core\HWLSaveEditorCore.h">
-      <Filter>Headerdateien</Filter>
+    <ClInclude Include="source\core\HWLWeapon.h">
+      <Filter>Headerdateien\core</Filter>
     </ClInclude>
     <ClInclude Include="source\core\HWLAdventureModeItems.h">
-      <Filter>Headerdateien</Filter>
+      <Filter>Headerdateien\core</Filter>
     </ClInclude>
-    <ClInclude Include="source\core\HWLFairyFood.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="source\gui\ZeldaEditFairyFoods.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="source\gui\ZeldaEditAdventureModeItem.h">
-      <Filter>Headerdateien</Filter>
+    <ClInclude Include="source\core\HWLException.h">
+      <Filter>Headerdateien\core</Filter>
     </ClInclude>
     <ClInclude Include="source\core\HWLFairy.h">
-      <Filter>Headerdateien</Filter>
+      <Filter>Headerdateien\core</Filter>
     </ClInclude>
-    <ClInclude Include="source\gui\ZeldaEditFairyDlg.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="source\core\HWLWeapon.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="source\gui\ZeldaEditCharaWeaponsDlg.h">
-      <Filter>Headerdateien</Filter>
+    <ClInclude Include="source\core\HWLFairyFood.h">
+      <Filter>Headerdateien\core</Filter>
     </ClInclude>
     <ClInclude Include="source\core\HWLGeneral.h">
-      <Filter>Headerdateien</Filter>
+      <Filter>Headerdateien\core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\HWLMaterial.h">
+      <Filter>Headerdateien\core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\HWLPlayer.h">
+      <Filter>Headerdateien\core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\HWLSaveEditor.h">
+      <Filter>Headerdateien\core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\HWLSaveEditorCore.h">
+      <Filter>Headerdateien\core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gui\resource.h">
+      <Filter>Headerdateien\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gui\stdafx.h">
+      <Filter>Headerdateien\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gui\targetver.h">
+      <Filter>Headerdateien\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gui\ZeldaAboutDlg.h">
+      <Filter>Headerdateien\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gui\ZeldaEditAdventureModeItem.h">
+      <Filter>Headerdateien\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gui\ZeldaEditCharaStatsDlg.h">
+      <Filter>Headerdateien\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gui\ZeldaEditCharaWeaponsDlg.h">
+      <Filter>Headerdateien\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gui\ZeldaEditFairyDlg.h">
+      <Filter>Headerdateien\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gui\ZeldaEditFairyFoods.h">
+      <Filter>Headerdateien\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gui\ZeldaEditGeneralDlg.h">
+      <Filter>Headerdateien\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gui\ZeldaEditMaterials.h">
+      <Filter>Headerdateien\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gui\ZeldaHWLSaveEditorGUI.h">
+      <Filter>Headerdateien\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="source\libs\HTTP_Client\HWLHttp.h">
+      <Filter>Headerdateien\libs\HTTP_Client</Filter>
+    </ClInclude>
+    <ClInclude Include="source\libs\HTTP_Client\API\HTTPClientWrapper.h">
+      <Filter>Headerdateien\libs\HTTP_Client\API</Filter>
+    </ClInclude>
+    <ClInclude Include="source\libs\HTTP_Client\API\HTTPClientAuth.h">
+      <Filter>Headerdateien\libs\HTTP_Client\API</Filter>
+    </ClInclude>
+    <ClInclude Include="source\libs\HTTP_Client\API\HTTPClientCommon.h">
+      <Filter>Headerdateien\libs\HTTP_Client\API</Filter>
+    </ClInclude>
+    <ClInclude Include="source\libs\HTTP_Client\API\HTTPClientString.h">
+      <Filter>Headerdateien\libs\HTTP_Client\API</Filter>
+    </ClInclude>
+    <ClInclude Include="source\libs\HTTP_Client\API\HTTPClient.h">
+      <Filter>Headerdateien\libs\HTTP_Client\API</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\gui\stdafx.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="source\gui\ZeldaAboutDlg.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="source\gui\ZeldaEditCharaStatsDlg.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="source\gui\ZeldaEditGeneralDlg.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="source\gui\ZeldaEditMaterials.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="source\gui\ZeldaHWLSaveEditorGUI.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="source\core\HWLException.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="source\core\HWLMaterial.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="source\core\HWLPlayer.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="source\core\HWLSaveEditor.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="source\core\HWLSaveEditorCore.cpp">
-      <Filter>Quelldateien</Filter>
+    <ClCompile Include="source\core\HWLWeapon.cpp">
+      <Filter>Quelldateien\core</Filter>
     </ClCompile>
     <ClCompile Include="source\core\HWLAdventureModeItems.cpp">
-      <Filter>Quelldateien</Filter>
+      <Filter>Quelldateien\core</Filter>
     </ClCompile>
-    <ClCompile Include="source\core\HWLFairyFood.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="source\gui\ZeldaEditFairyFoods.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="source\gui\ZeldaEditAdventureModeItem.cpp">
-      <Filter>Quelldateien</Filter>
+    <ClCompile Include="source\core\HWLException.cpp">
+      <Filter>Quelldateien\core</Filter>
     </ClCompile>
     <ClCompile Include="source\core\HWLFairy.cpp">
-      <Filter>Quelldateien</Filter>
+      <Filter>Quelldateien\core</Filter>
     </ClCompile>
-    <ClCompile Include="source\gui\ZeldaEditFairyDlg.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="source\core\HWLWeapon.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="source\gui\ZeldaEditCharaWeaponsDlg.cpp">
-      <Filter>Quelldateien</Filter>
+    <ClCompile Include="source\core\HWLFairyFood.cpp">
+      <Filter>Quelldateien\core</Filter>
     </ClCompile>
     <ClCompile Include="source\core\HWLGeneral.cpp">
-      <Filter>Quelldateien</Filter>
+      <Filter>Quelldateien\core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\HWLMaterial.cpp">
+      <Filter>Quelldateien\core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\HWLPlayer.cpp">
+      <Filter>Quelldateien\core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\HWLSaveEditor.cpp">
+      <Filter>Quelldateien\core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\HWLSaveEditorCore.cpp">
+      <Filter>Quelldateien\core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gui\stdafx.cpp">
+      <Filter>Quelldateien\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gui\ZeldaAboutDlg.cpp">
+      <Filter>Quelldateien\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gui\ZeldaEditAdventureModeItem.cpp">
+      <Filter>Quelldateien\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gui\ZeldaEditCharaStatsDlg.cpp">
+      <Filter>Quelldateien\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gui\ZeldaEditCharaWeaponsDlg.cpp">
+      <Filter>Quelldateien\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gui\ZeldaEditFairyDlg.cpp">
+      <Filter>Quelldateien\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gui\ZeldaEditFairyFoods.cpp">
+      <Filter>Quelldateien\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gui\ZeldaEditGeneralDlg.cpp">
+      <Filter>Quelldateien\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gui\ZeldaEditMaterials.cpp">
+      <Filter>Quelldateien\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gui\ZeldaHWLSaveEditorGUI.cpp">
+      <Filter>Quelldateien\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\libs\HTTP_Client\HWLHttp.cpp">
+      <Filter>Quelldateien\libs\HTTP_Client</Filter>
+    </ClCompile>
+    <ClCompile Include="source\libs\HTTP_Client\API\HTTPClient.c">
+      <Filter>Quelldateien\libs\HTTP_Client\API</Filter>
+    </ClCompile>
+    <ClCompile Include="source\libs\HTTP_Client\API\HTTPClientAuth.c">
+      <Filter>Quelldateien\libs\HTTP_Client\API</Filter>
+    </ClCompile>
+    <ClCompile Include="source\libs\HTTP_Client\API\HTTPClientString.c">
+      <Filter>Quelldateien\libs\HTTP_Client\API</Filter>
+    </ClCompile>
+    <ClCompile Include="source\libs\HTTP_Client\API\HTTPClientWrapper.c">
+      <Filter>Quelldateien\libs\HTTP_Client\API</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

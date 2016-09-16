@@ -62,6 +62,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <OutputFile>bin\$(Configuration)\$(Platform)\$(TargetName)$(TargetExt)</OutputFile>
       <ProgramDatabaseFile>bin\$(Configuration)\$(Platform)\$(TargetName).pdb</ProgramDatabaseFile>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>rd /s /q "$(IntDir)" &amp;&amp; rd /s /q "$(TargetDir)"</Command>
@@ -86,6 +87,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <OutputFile>bin\$(Configuration)\$(Platform)\$(TargetName)$(TargetExt)</OutputFile>
       <ProgramDatabaseFile>bin\$(Configuration)\$(Platform)\$(TargetName).pdb</ProgramDatabaseFile>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>rd /s /q "$(IntDir)" &amp;&amp; rd /s /q "$(TargetDir)"</Command>
@@ -117,6 +119,12 @@
     <ClInclude Include="source\gui\ZeldaEditGeneralDlg.h" />
     <ClInclude Include="source\gui\ZeldaEditMaterials.h" />
     <ClInclude Include="source\gui\ZeldaHWLSaveEditorGUI.h" />
+    <ClInclude Include="source\libs\HTTP_Client\API\HTTPClient.h" />
+    <ClInclude Include="source\libs\HTTP_Client\API\HTTPClientAuth.h" />
+    <ClInclude Include="source\libs\HTTP_Client\API\HTTPClientCommon.h" />
+    <ClInclude Include="source\libs\HTTP_Client\API\HTTPClientString.h" />
+    <ClInclude Include="source\libs\HTTP_Client\API\HTTPClientWrapper.h" />
+    <ClInclude Include="source\libs\HTTP_Client\HWLHttp.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\core\HWLAdventureModeItems.cpp" />
@@ -139,6 +147,11 @@
     <ClCompile Include="source\gui\ZeldaEditGeneralDlg.cpp" />
     <ClCompile Include="source\gui\ZeldaEditMaterials.cpp" />
     <ClCompile Include="source\gui\ZeldaHWLSaveEditorGUI.cpp" />
+    <ClCompile Include="source\libs\HTTP_Client\API\HTTPClient.c" />
+    <ClCompile Include="source\libs\HTTP_Client\API\HTTPClientAuth.c" />
+    <ClCompile Include="source\libs\HTTP_Client\API\HTTPClientString.c" />
+    <ClCompile Include="source\libs\HTTP_Client\API\HTTPClientWrapper.c" />
+    <ClCompile Include="source\libs\HTTP_Client\HWLHttp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="source\gui\ZeldaHWLSaveEditorGUI.rc" />

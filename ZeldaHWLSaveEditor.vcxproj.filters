@@ -13,75 +13,138 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Headerdateien\core">
+      <UniqueIdentifier>{4dd23ed0-efdd-42c9-93dc-b478c2ddc5e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\console">
+      <UniqueIdentifier>{3da354c8-7e7a-47ad-a82d-0038acdbdf71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\core">
+      <UniqueIdentifier>{eb5f0e1b-3e61-4a0b-8c4c-3596d5512d50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\console">
+      <UniqueIdentifier>{c177ccac-d237-417b-bd1f-8339ceefa334}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\libs">
+      <UniqueIdentifier>{17370d15-9518-4ba8-bcf0-4151278fb40c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\libs\HTTP_Client">
+      <UniqueIdentifier>{2909c556-1735-4fb9-9d0b-69be32a63931}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\libs">
+      <UniqueIdentifier>{48a57311-9998-4a10-97fc-3f107474c35a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\libs\HTTP_Client">
+      <UniqueIdentifier>{49a61997-1061-4f15-9ec6-3303f70a811d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\libs\HTTP_Client\API">
+      <UniqueIdentifier>{b2a4aaa8-2cef-4c02-9754-571ac0bfe680}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\libs\HTTP_Client\API">
+      <UniqueIdentifier>{5266e919-a483-441b-a6f6-e927470129cc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\core\HWLException.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="source\core\HWLMaterial.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="source\core\HWLPlayer.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="source\core\HWLSaveEditor.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="source\core\HWLSaveEditorCore.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="source\console\main.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="source\core\HWLFairyFood.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="source\core\HWLAdventureModeItems.cpp">
-      <Filter>Quelldateien</Filter>
+      <Filter>Quelldateien\core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\HWLException.cpp">
+      <Filter>Quelldateien\core</Filter>
     </ClCompile>
     <ClCompile Include="source\core\HWLFairy.cpp">
-      <Filter>Quelldateien</Filter>
+      <Filter>Quelldateien\core</Filter>
     </ClCompile>
-    <ClCompile Include="source\core\HWLWeapon.cpp">
-      <Filter>Quelldateien</Filter>
+    <ClCompile Include="source\core\HWLFairyFood.cpp">
+      <Filter>Quelldateien\core</Filter>
     </ClCompile>
     <ClCompile Include="source\core\HWLGeneral.cpp">
-      <Filter>Quelldateien</Filter>
+      <Filter>Quelldateien\core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\HWLMaterial.cpp">
+      <Filter>Quelldateien\core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\HWLPlayer.cpp">
+      <Filter>Quelldateien\core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\HWLSaveEditor.cpp">
+      <Filter>Quelldateien\core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\HWLSaveEditorCore.cpp">
+      <Filter>Quelldateien\core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\HWLWeapon.cpp">
+      <Filter>Quelldateien\core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\console\main.cpp">
+      <Filter>Quelldateien\console</Filter>
+    </ClCompile>
+    <ClCompile Include="source\libs\HTTP_Client\HWLHttp.cpp">
+      <Filter>Quelldateien\libs\HTTP_Client</Filter>
+    </ClCompile>
+    <ClCompile Include="source\libs\HTTP_Client\API\HTTPClient.c">
+      <Filter>Quelldateien\libs\HTTP_Client\API</Filter>
+    </ClCompile>
+    <ClCompile Include="source\libs\HTTP_Client\API\HTTPClientAuth.c">
+      <Filter>Quelldateien\libs\HTTP_Client\API</Filter>
+    </ClCompile>
+    <ClCompile Include="source\libs\HTTP_Client\API\HTTPClientString.c">
+      <Filter>Quelldateien\libs\HTTP_Client\API</Filter>
+    </ClCompile>
+    <ClCompile Include="source\libs\HTTP_Client\API\HTTPClientWrapper.c">
+      <Filter>Quelldateien\libs\HTTP_Client\API</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="source\core\HWLException.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="source\core\HWLMaterial.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="source\core\HWLPlayer.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="source\core\HWLSaveEditor.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="source\core\HWLSaveEditorCore.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="source\console\resource.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="source\core\HWLFairyFood.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
     <ClInclude Include="source\core\HWLAdventureModeItems.h">
-      <Filter>Headerdateien</Filter>
+      <Filter>Headerdateien\core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\HWLException.h">
+      <Filter>Headerdateien\core</Filter>
     </ClInclude>
     <ClInclude Include="source\core\HWLFairy.h">
-      <Filter>Headerdateien</Filter>
+      <Filter>Headerdateien\core</Filter>
     </ClInclude>
-    <ClInclude Include="source\core\HWLWeapon.h">
-      <Filter>Headerdateien</Filter>
+    <ClInclude Include="source\core\HWLFairyFood.h">
+      <Filter>Headerdateien\core</Filter>
     </ClInclude>
     <ClInclude Include="source\core\HWLGeneral.h">
-      <Filter>Headerdateien</Filter>
+      <Filter>Headerdateien\core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\HWLMaterial.h">
+      <Filter>Headerdateien\core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\HWLPlayer.h">
+      <Filter>Headerdateien\core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\HWLSaveEditor.h">
+      <Filter>Headerdateien\core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\HWLSaveEditorCore.h">
+      <Filter>Headerdateien\core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\HWLWeapon.h">
+      <Filter>Headerdateien\core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\console\resource.h">
+      <Filter>Headerdateien\console</Filter>
+    </ClInclude>
+    <ClInclude Include="source\libs\HTTP_Client\HWLHttp.h">
+      <Filter>Headerdateien\libs\HTTP_Client</Filter>
+    </ClInclude>
+    <ClInclude Include="source\libs\HTTP_Client\API\HTTPClient.h">
+      <Filter>Headerdateien\libs\HTTP_Client\API</Filter>
+    </ClInclude>
+    <ClInclude Include="source\libs\HTTP_Client\API\HTTPClientAuth.h">
+      <Filter>Headerdateien\libs\HTTP_Client\API</Filter>
+    </ClInclude>
+    <ClInclude Include="source\libs\HTTP_Client\API\HTTPClientCommon.h">
+      <Filter>Headerdateien\libs\HTTP_Client\API</Filter>
+    </ClInclude>
+    <ClInclude Include="source\libs\HTTP_Client\API\HTTPClientString.h">
+      <Filter>Headerdateien\libs\HTTP_Client\API</Filter>
+    </ClInclude>
+    <ClInclude Include="source\libs\HTTP_Client\API\HTTPClientWrapper.h">
+      <Filter>Headerdateien\libs\HTTP_Client\API</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

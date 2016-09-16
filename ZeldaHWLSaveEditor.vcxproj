@@ -61,6 +61,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <OutputFile>bin\$(Configuration)\$(Platform)\$(TargetName)$(TargetExt)</OutputFile>
       <ProgramDatabaseFile>bin\$(Configuration)\$(Platform)\$(TargetName).pdb</ProgramDatabaseFile>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent />
     <BuildLog>
@@ -105,6 +106,11 @@
     <ClCompile Include="source\core\HWLSaveEditor.cpp" />
     <ClCompile Include="source\core\HWLSaveEditorCore.cpp" />
     <ClCompile Include="source\core\HWLWeapon.cpp" />
+    <ClCompile Include="source\libs\HTTP_Client\API\HTTPClient.c" />
+    <ClCompile Include="source\libs\HTTP_Client\API\HTTPClientAuth.c" />
+    <ClCompile Include="source\libs\HTTP_Client\API\HTTPClientString.c" />
+    <ClCompile Include="source\libs\HTTP_Client\API\HTTPClientWrapper.c" />
+    <ClCompile Include="source\libs\HTTP_Client\HWLHttp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\console\resource.h" />
@@ -118,6 +124,12 @@
     <ClInclude Include="source\core\HWLSaveEditor.h" />
     <ClInclude Include="source\core\HWLSaveEditorCore.h" />
     <ClInclude Include="source\core\HWLWeapon.h" />
+    <ClInclude Include="source\libs\HTTP_Client\API\HTTPClient.h" />
+    <ClInclude Include="source\libs\HTTP_Client\API\HTTPClientAuth.h" />
+    <ClInclude Include="source\libs\HTTP_Client\API\HTTPClientCommon.h" />
+    <ClInclude Include="source\libs\HTTP_Client\API\HTTPClientString.h" />
+    <ClInclude Include="source\libs\HTTP_Client\API\HTTPClientWrapper.h" />
+    <ClInclude Include="source\libs\HTTP_Client\HWLHttp.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="source\core\res\ZeldaHWLSaveEditorGUI.ico" />

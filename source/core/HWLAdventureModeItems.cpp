@@ -264,7 +264,7 @@ string HWLAdventureModeItems::get_AMItemForOutput()
 {
 	string s_output = "Name: " + this->s_name + "\n"
 		+ "  Type: " + this->get_type(true) + "\n"
-		+ "  Value: " + to_string(this->i_value) + "\n"
+		+ "  Value: " + to_string(this->i_value) + "\n";
         //+ "  Offset: " + to_string(this->i_offset) + "\n";
         
 

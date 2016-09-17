@@ -85,6 +85,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <OutputFile>bin\$(Configuration)\$(Platform)\$(TargetName)$(TargetExt)</OutputFile>
       <ProgramDatabaseFile>bin\$(Configuration)\$(Platform)\$(TargetName).pdb</ProgramDatabaseFile>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent />
     <BuildLog>

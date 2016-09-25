@@ -57,6 +57,9 @@ namespace HWLSaveEdit
 			static const int fairyOffsetBegin;
 
 			static const int weaponOffsetBegin;
+                        
+                        //other const declaration
+			static shared_ptr<HWLHttp> http_request;
 
 			// member declarations
 			/* @var sp_general		pointer for holding all general thnings */
@@ -101,6 +104,7 @@ namespace HWLSaveEdit
 			//getter for errors, general things, players(with weapons), materials, fairyFoods, 
 			//am-items and fairies
 			int get_error();
+                        shared_ptr<HWLHttp> get_http_object();
 			shared_ptr<HWLGeneral> get_general_things();
 			shared_ptr<HWLPlayer> get_player(int i_id);
 			shared_ptr<HWLPlayer> get_player(string s_name);

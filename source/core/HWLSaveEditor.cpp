@@ -7,7 +7,7 @@
 #include "HWLSaveEditor.h"
 //#include <stdio.h>  //for testing purpose as comment
 //#include <iostream> //for testing purpose as comment
-#include<cstring> //needed for compiling with gcc
+#include <cstring> //needed for compiling with gcc
 
 //use the project-namespace
 using namespace HWLSaveEdit;
@@ -81,6 +81,11 @@ const int HWLSaveEditor::fairyOffsetBegin = 0x1AEA;
 
 /* @var weaponOffsetBegin	offset begin of first weapon */
 const int HWLSaveEditor::weaponOffsetBegin = 0x2F372;
+
+
+
+/* @var sp_http_request	offset  pointer for hwl-http-requests */
+shared_ptr<HWLHttp> HWLSaveEditor::http_request = make_shared<HWLHttp>();
 
 
 
@@ -641,7 +646,16 @@ int HWLSaveEditor::get_error()
 }
 
 /**
-* This method return the coressponding character-object, based on character-id
+* This method return the http-object for sending http-requests.
+*
+*/
+shared_ptr<HWLHttp> HWLSaveEditor::get_http_object()
+{
+    return this->http_request;
+}
+
+/**
+* This method return the general-object, with widely game-things
 *
 */
 shared_ptr<HWLGeneral> HWLSaveEditor::get_general_things()

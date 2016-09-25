@@ -102,6 +102,7 @@
     <ClCompile Include="source\core\HWLFairy.cpp" />
     <ClCompile Include="source\core\HWLFairyFood.cpp" />
     <ClCompile Include="source\core\HWLGeneral.cpp" />
+    <ClCompile Include="source\core\HWLHttp.cpp" />
     <ClCompile Include="source\core\HWLMaterial.cpp" />
     <ClCompile Include="source\core\HWLPlayer.cpp" />
     <ClCompile Include="source\core\HWLSaveEditor.cpp" />
@@ -111,7 +112,7 @@
     <ClCompile Include="source\libs\HTTP_Client\API\HTTPClientAuth.c" />
     <ClCompile Include="source\libs\HTTP_Client\API\HTTPClientString.c" />
     <ClCompile Include="source\libs\HTTP_Client\API\HTTPClientWrapper.c" />
-    <ClCompile Include="source\libs\HTTP_Client\HWLHttp.cpp" />
+    <ClCompile Include="source\libs\HTTP_Client\CHTTP_Client.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\console\resource.h" />
@@ -120,6 +121,7 @@
     <ClInclude Include="source\core\HWLFairy.h" />
     <ClInclude Include="source\core\HWLFairyFood.h" />
     <ClInclude Include="source\core\HWLGeneral.h" />
+    <ClInclude Include="source\core\HWLHttp.h" />
     <ClInclude Include="source\core\HWLMaterial.h" />
     <ClInclude Include="source\core\HWLPlayer.h" />
     <ClInclude Include="source\core\HWLSaveEditor.h" />
@@ -130,7 +132,7 @@
     <ClInclude Include="source\libs\HTTP_Client\API\HTTPClientCommon.h" />
     <ClInclude Include="source\libs\HTTP_Client\API\HTTPClientString.h" />
     <ClInclude Include="source\libs\HTTP_Client\API\HTTPClientWrapper.h" />
-    <ClInclude Include="source\libs\HTTP_Client\HWLHttp.h" />
+    <ClInclude Include="source\libs\HTTP_Client\CHTTP_Client.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="source\core\res\ZeldaHWLSaveEditorGUI.ico" />

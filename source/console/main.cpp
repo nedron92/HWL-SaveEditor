@@ -43,6 +43,8 @@ void change_weapon_values(int i_chara_id, int i_type_id, int i_current_id, int i
 void get_skills(int i_chara_id, int i_weapon_type_id, int i_weapon_slot_id);
 void change_skill_values(int i_chara_id, int i_weapon_type_id, int i_weapon_slot_id, int i_skill_slot_id, int i_skill_id, int i_choose);
 
+void get_check_update_menu();
+
 int main(int argc, char* argv[])
 {
 	//check, if we have more then the standard-parameter count
@@ -55,10 +57,16 @@ int main(int argc, char* argv[])
 			return 0;
 		}
 
-		//if we have --disable-auto-trim", disable the trim-function
+		//if we have --disable-auto-trim, disable the trim-function
 		if (argv[1] == string("--disable-auto-trim"))
 		{
 			HWLSaveEdit::HWLSaveEditor::enable_auto_trim(false);
+		}
+                
+                //if we have --check-updates, check for updates
+		if (argv[1] == string("--check-updates"))
+		{
+			get_check_update_menu();
 		}
 	}
 
@@ -81,6 +89,7 @@ int main(int argc, char* argv[])
 			cout << "4 - FairyFood (Submenu)" << endl;
 			cout << "5 - Adventure Mode-Items (Submenu)" << endl;
 			cout << "6 - My Fairies (Submenu)" << endl;
+                        cout << "7 - Check for updates (Submenu)" << endl;
 			cout << "0 - Quit" << endl;
 			cout << "Your choose: ";
 			cin >> i_choose;
@@ -158,7 +167,13 @@ void get_submenu(int i_menu_code)
 			  get_fairy_menu();
 			  break;
 	}
-
+        
+	case 7:
+	{
+			  get_check_update_menu();
+			  break;
+	}
+        
 	}
 
 }
@@ -2039,4 +2054,199 @@ void change_fairy_values(int i_choose, int i_fairy_id)
 		break;
 
 	}
+}
+
+void get_check_update_menu()
+{
+	string s_choose;
+
+
+	while (1)
+	{
+
+		cout << "Menue: " << endl;
+		cout << "1 - Check for latest stable version" << endl;
+		cout << "2 - Check for latest nightly version" << endl;
+		cout << "0 - back" << endl;
+		cout << "Your choose: ";
+		cin >> s_choose;
+
+		if (iswdigit(s_choose[0]))
+		{
+			if (atoi(&s_choose[0]) == 0)
+			{
+				system(CLEAR);
+				break;
+			}
+			else {
+				switch (atoi(&s_choose[0]))
+				{
+				case 1:
+				{
+					  system(CLEAR);
+					  cout << endl;
+					  cout << "Your version: " << HWLSaveEdit::HWLSaveEditorCore::version << endl;
+					  cout << "Latest stable Version: " << save->get_http_object()->get_current_version() << endl;
+					  cout << "URL: " << save->get_http_object()->latestURL << endl << endl;
+
+
+					  const int maxLength = 10;
+
+					  string version = HWLSaveEdit::HWLSaveEditorCore::version;
+					  string version2 = save->get_http_object()->get_current_version();
+
+					  int i_length = maxLength - version.length();
+
+					  char c1 = ' ';
+					  char c2 = ' ';
+					  if (isalpha(version.back()))
+					  {
+						  c1 = version.back();
+						  version.back() = ' ';
+					  }
+
+					  if (isalpha(version2.back()))
+					  {
+						  c2 = version2.back();
+						  version2.back() = ' ';
+					  }
+
+					  for (int i = 0; i < i_length; i++) {
+						  version = version + " ";
+					  }
+
+					  i_length = maxLength - version2.length();
+					  for (int i = 0; i < i_length; i++) {
+						  version2 = version2 + " ";
+					  }
+
+					  //add addiotnal check
+					  bool b_add_check = true;
+
+					  if (version.compare(version2) == 0)
+						  b_add_check = false;
+
+					  if (c1 != ' ')
+						  version.back() = c1;
+
+					  if (c2 != ' ')
+						  version2.back() = c2;
+
+					  int compare = version.compare(version2);
+
+					  if (c1 != ' ' && !b_add_check)
+						  compare = 0;
+
+					  if (compare < 0)
+					  {
+						  cout << "There is a new stable version. \nPlease download it at the above URL! " << endl;
+					  }
+                                          
+                                          if (compare == 0)
+					  {
+						  cout << "You are on the newest stable version." << endl;
+					  }	
+                                          
+					  if (compare > 0)
+					  {
+						  cout << "You are on a nightly version which is newer then the stable release." << endl;
+					  }	
+                                          
+                                          cout<<endl;
+					  break;
+				}
+
+				case 2:
+				{
+					  system(CLEAR);
+					  cout << endl;
+					  cout << "Your version: " << HWLSaveEdit::HWLSaveEditorCore::version << endl;
+					  cout << "Latest nightly Version: " << save->get_http_object()->get_current_nightly_version() << endl;
+					  cout << "URL: " << save->get_http_object()->nightlyURL << endl << endl;
+
+					  const int maxLength = 10;
+
+					  string version = HWLSaveEdit::HWLSaveEditorCore::version;
+					  string version2 = save->get_http_object()->get_current_nightly_version();
+
+					  int i_length = maxLength - version.length();
+
+					  char c1 = ' ';
+					  char c2 = ' ';
+					  if (isalpha(version.back()))
+					  {
+						  c1 = version.back();
+						  version.back() = ' ';
+					  }
+
+					  if (isalpha(version2.back()))
+					  {
+						  c2 = version2.back();
+						  version2.back() = ' ';
+					  }
+
+					  for (int i = 0; i < i_length; i++) {
+						  version = version + " ";
+					  }
+
+					  i_length = maxLength - version2.length();
+					  for (int i = 0; i < i_length; i++) {
+						  version2 = version2 + " ";
+					  }
+
+					  //add addiotnal check
+					  bool b_add_check = true;
+
+					  if (version.compare(version2) == 0)
+						  b_add_check = false;
+
+					  if (c1 != ' ')
+						  version.back() = c1;
+
+					  if (c2 != ' ')
+						  version2.back() = c2;
+
+					  int compare = version.compare(version2);
+
+					  if (c2 != ' ' && !b_add_check)
+						  compare = 0;
+
+					  if (compare < 0)
+					  {
+						  cout << "There is a new nightly Version, you can download at the above URL. \nBut always take "
+                                                          "care with those versions!" << endl;
+					  }
+                                          
+					  if (compare == 0)
+					  {
+						  cout << "You are on the newest nightly version." << endl;
+					  }	
+                                          
+					  if (compare > 0)
+					  {
+						  cout << "You are on a dev-version, which is newer and not released yet." << endl;
+					  }	
+
+
+                                          cout<<endl;
+					  break;
+				}
+
+				default:
+					break;
+				}
+                                
+                                cout<<"Press any key to go back to the menu"<<endl;
+                                cin.clear();
+				getchar();
+				cin.get();
+                                
+			}
+
+			if (atoi(&s_choose[0]) > 0)
+				system(CLEAR);
+
+		}
+	}
+
 }

@@ -111,9 +111,6 @@
     <ClInclude Include="source\gui\ZeldaHWLSaveEditorGUI.h">
       <Filter>Headerdateien\gui</Filter>
     </ClInclude>
-    <ClInclude Include="source\libs\HTTP_Client\HWLHttp.h">
-      <Filter>Headerdateien\libs\HTTP_Client</Filter>
-    </ClInclude>
     <ClInclude Include="source\libs\HTTP_Client\API\HTTPClientWrapper.h">
       <Filter>Headerdateien\libs\HTTP_Client\API</Filter>
     </ClInclude>
@@ -128,6 +125,15 @@
     </ClInclude>
     <ClInclude Include="source\libs\HTTP_Client\API\HTTPClient.h">
       <Filter>Headerdateien\libs\HTTP_Client\API</Filter>
+    </ClInclude>
+    <ClInclude Include="source\libs\HTTP_Client\CHTTP_Client.h">
+      <Filter>Headerdateien\libs\HTTP_Client</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\HWLHttp.h">
+      <Filter>Headerdateien\core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gui\ZeldaCheckForUpdatesDlg.h">
+      <Filter>Headerdateien\gui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -191,9 +197,6 @@
     <ClCompile Include="source\gui\ZeldaHWLSaveEditorGUI.cpp">
       <Filter>Quelldateien\gui</Filter>
     </ClCompile>
-    <ClCompile Include="source\libs\HTTP_Client\HWLHttp.cpp">
-      <Filter>Quelldateien\libs\HTTP_Client</Filter>
-    </ClCompile>
     <ClCompile Include="source\libs\HTTP_Client\API\HTTPClient.c">
       <Filter>Quelldateien\libs\HTTP_Client\API</Filter>
     </ClCompile>
@@ -205,6 +208,15 @@
     </ClCompile>
     <ClCompile Include="source\libs\HTTP_Client\API\HTTPClientWrapper.c">
       <Filter>Quelldateien\libs\HTTP_Client\API</Filter>
+    </ClCompile>
+    <ClCompile Include="source\libs\HTTP_Client\CHTTP_Client.cpp">
+      <Filter>Quelldateien\libs\HTTP_Client</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\HWLHttp.cpp">
+      <Filter>Quelldateien\core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gui\ZeldaCheckForUpdatesDlg.cpp">
+      <Filter>Quelldateien\gui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

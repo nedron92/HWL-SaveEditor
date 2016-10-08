@@ -129,7 +129,7 @@ END_MESSAGE_MAP()
 
 void CZeldaEditFairyFoods::OnMenuAbout()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaAboutDlg about;
 	about.DoModal();
 }
@@ -137,7 +137,7 @@ void CZeldaEditFairyFoods::OnMenuAbout()
 
 void CZeldaEditFairyFoods::OnMenuEditGeneral()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditGeneralDlg dlg;
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -145,7 +145,7 @@ void CZeldaEditFairyFoods::OnMenuEditGeneral()
 
 void CZeldaEditFairyFoods::OnMenuEditCharactersStats()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditCharaStatsDlg dlg;
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -154,7 +154,7 @@ void CZeldaEditFairyFoods::OnMenuEditCharactersStats()
 
 void CZeldaEditFairyFoods::OnMenuEditMaterialsBronze()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditMaterials dlg(NULL, 0);
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -163,7 +163,7 @@ void CZeldaEditFairyFoods::OnMenuEditMaterialsBronze()
 
 void CZeldaEditFairyFoods::OnMenuEditMaterialsSilver()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditMaterials dlg(NULL, 1);
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -172,7 +172,7 @@ void CZeldaEditFairyFoods::OnMenuEditMaterialsSilver()
 
 void CZeldaEditFairyFoods::OnMenuEditMaterialsGold()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditMaterials dlg(NULL, 2);
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -181,7 +181,7 @@ void CZeldaEditFairyFoods::OnMenuEditMaterialsGold()
 
 void CZeldaEditFairyFoods::OnMenuMainExit()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditFairyFoods::OnOK();
 
 }
@@ -189,13 +189,13 @@ void CZeldaEditFairyFoods::OnMenuMainExit()
 
 void CZeldaEditFairyFoods::OnMenuEditFairyfoods()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 }
 
 
 void CZeldaEditFairyFoods::OnBnClickedExit()
 {
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	// TODO: FÃ¼gen Sie hier Ihren Kontrollbehandlungscode fÃ¼r die Benachrichtigung ein.
 	CZeldaEditFairyFoods::OnOK();
 
 }
@@ -203,7 +203,7 @@ void CZeldaEditFairyFoods::OnBnClickedExit()
 
 void CZeldaEditFairyFoods::OnBnClickedSave()
 {
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	// TODO: FÃ¼gen Sie hier Ihren Kontrollbehandlungscode fÃ¼r die Benachrichtigung ein.
 	if (save != nullptr)
 	{
 		try
@@ -310,7 +310,7 @@ void CZeldaEditFairyFoods::OnEnChangeValueEdit(UINT nID)
 
 void CZeldaEditFairyFoods::OnBnClickedFairyfoodPagePrevious()
 {
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	// TODO: FÃ¼gen Sie hier Ihren Kontrollbehandlungscode fÃ¼r die Benachrichtigung ein.
 	this->save_fairyFood();
 	this->i_page--;
 	this->UpdateData();
@@ -319,7 +319,7 @@ void CZeldaEditFairyFoods::OnBnClickedFairyfoodPagePrevious()
 
 void CZeldaEditFairyFoods::OnBnClickedFairyfoodPageNext()
 {
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	// TODO: FÃ¼gen Sie hier Ihren Kontrollbehandlungscode fÃ¼r die Benachrichtigung ein.
 	this->save_fairyFood();
 	this->i_page++;
 	this->UpdateData();
@@ -328,7 +328,7 @@ void CZeldaEditFairyFoods::OnBnClickedFairyfoodPageNext()
 
 void CZeldaEditFairyFoods::OnMenuEditAmAvmap()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditAdventureModeItem dlg(NULL, 0);
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -337,7 +337,7 @@ void CZeldaEditFairyFoods::OnMenuEditAmAvmap()
 
 void CZeldaEditFairyFoods::OnMenuEditAmGsmap()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditAdventureModeItem dlg(NULL, 1);
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -346,7 +346,7 @@ void CZeldaEditFairyFoods::OnMenuEditAmGsmap()
 
 void CZeldaEditFairyFoods::OnMenuEditAmMqmap()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditAdventureModeItem dlg(NULL, 2);
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -354,7 +354,7 @@ void CZeldaEditFairyFoods::OnMenuEditAmMqmap()
 
 void CZeldaEditFairyFoods::OnMenuEditAmTlmap()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditAdventureModeItem dlg(NULL, 3);
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -362,7 +362,7 @@ void CZeldaEditFairyFoods::OnMenuEditAmTlmap()
 
 void CZeldaEditFairyFoods::OnMenuEditAmTmmap()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditAdventureModeItem dlg(NULL, 4);
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -371,7 +371,7 @@ void CZeldaEditFairyFoods::OnMenuEditAmTmmap()
 
 void CZeldaEditFairyFoods::OnBnClickedFairyfoodMaxValuePage()
 {
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	// TODO: FÃ¼gen Sie hier Ihren Kontrollbehandlungscode fÃ¼r die Benachrichtigung ein.
 	if (save != nullptr)
 	{
 		int i_size = HWLSaveEdit::HWLFairyFood::vs_fairyFood.size();
@@ -398,7 +398,7 @@ void CZeldaEditFairyFoods::OnBnClickedFairyfoodMaxValuePage()
 
 void CZeldaEditFairyFoods::OnBnClickedFairyfoodMaxValueAll()
 {
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	// TODO: FÃ¼gen Sie hier Ihren Kontrollbehandlungscode fÃ¼r die Benachrichtigung ein.
 	if (save != nullptr)
 	{
 		for (int i = 0; i < HWLSaveEdit::HWLFairyFood::vs_fairyFood.size(); i++)
@@ -417,7 +417,7 @@ void CZeldaEditFairyFoods::OnBnClickedFairyfoodMaxValueAll()
 
 void CZeldaEditFairyFoods::OnBnClickedFairyfoodMaxValueGratitude()
 {
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	// TODO: FÃ¼gen Sie hier Ihren Kontrollbehandlungscode fÃ¼r die Benachrichtigung ein.
 	if (save != nullptr)
 	{
 		for (int i = HWLSaveEdit::HWLFairyFood::fairyGratitudeCrystalIDBegin; i <= HWLSaveEdit::HWLFairyFood::fairyGratitudeCrystalIDEnd; i++)
@@ -436,7 +436,7 @@ void CZeldaEditFairyFoods::OnBnClickedFairyfoodMaxValueGratitude()
 
 void CZeldaEditFairyFoods::OnMenuEditFairies()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditFairyDlg dlg;
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -445,7 +445,7 @@ void CZeldaEditFairyFoods::OnMenuEditFairies()
 
 void CZeldaEditFairyFoods::OnMenuEditCharactersWeapons()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditCharaWeaponsDlg dlg;
 	EndDialog(this->IDD);
 	dlg.DoModal();

@@ -18,7 +18,7 @@ protected:
 
 	HWLSaveEdit::HWLSaveEditor *save;
 
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV-Unterstützung
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV-UnterstÃ¼tzung
 
 	DECLARE_MESSAGE_MAP()
 
@@ -53,4 +53,5 @@ public:
 	afx_msg void OnBnClickedButtonHelpUnlockWeaponStates();
 	afx_msg void OnBnClickedButtonHelpUnlockAllMaterials();
 	afx_msg void OnBnClickedStaticGeneral();
+	afx_msg void OnMenuCheckforupdates();
 };

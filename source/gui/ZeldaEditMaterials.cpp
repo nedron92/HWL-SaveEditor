@@ -163,7 +163,7 @@ END_MESSAGE_MAP()
 
 void CZeldaEditMaterials::OnMenuEditGeneral()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditGeneralDlg dlg;
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -172,7 +172,7 @@ void CZeldaEditMaterials::OnMenuEditGeneral()
 
 void CZeldaEditMaterials::OnMenuEditCharactersStats()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditCharaStatsDlg dlg;
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -180,21 +180,21 @@ void CZeldaEditMaterials::OnMenuEditCharactersStats()
 
 void CZeldaEditMaterials::OnBnClickedExit()
 {
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	// TODO: FÃ¼gen Sie hier Ihren Kontrollbehandlungscode fÃ¼r die Benachrichtigung ein.
 	CZeldaEditMaterials::OnOK();
 }
 
 
 void CZeldaEditMaterials::OnBnClickedCancel()
 {
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	// TODO: FÃ¼gen Sie hier Ihren Kontrollbehandlungscode fÃ¼r die Benachrichtigung ein.
 	CDialogEx::OnCancel();
 }
 
 
 void CZeldaEditMaterials::OnBnClickedSave()
 {
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	// TODO: FÃ¼gen Sie hier Ihren Kontrollbehandlungscode fÃ¼r die Benachrichtigung ein.
 	if (save != nullptr)
 	{
 		try
@@ -340,7 +340,7 @@ void CZeldaEditMaterials::OnEnChangeValueEdit(UINT nID)
 
 void CZeldaEditMaterials::OnMenuEditMaterialsBronze()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	if (this->i_type != 0)
 	{
 		CZeldaEditMaterials dlg(NULL, 0);
@@ -352,7 +352,7 @@ void CZeldaEditMaterials::OnMenuEditMaterialsBronze()
 
 void CZeldaEditMaterials::OnMenuEditMaterialsSilver()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	if (this->i_type != 1)
 	{
 		CZeldaEditMaterials dlg(NULL, 1);
@@ -363,7 +363,7 @@ void CZeldaEditMaterials::OnMenuEditMaterialsSilver()
 
 void CZeldaEditMaterials::OnMenuEditMaterialsGold()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	if (this->i_type != 2)
 	{
 		CZeldaEditMaterials dlg(NULL, 2);
@@ -375,7 +375,7 @@ void CZeldaEditMaterials::OnMenuEditMaterialsGold()
 
 void CZeldaEditMaterials::OnBnClickedMaterialPagePrevious()
 {
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	// TODO: FÃ¼gen Sie hier Ihren Kontrollbehandlungscode fÃ¼r die Benachrichtigung ein.
 	this->save_materials();
 	this->i_page--;
 	this->UpdateData();
@@ -384,7 +384,7 @@ void CZeldaEditMaterials::OnBnClickedMaterialPagePrevious()
 
 void CZeldaEditMaterials::OnBnClickedMaterialPageNext()
 {
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	// TODO: FÃ¼gen Sie hier Ihren Kontrollbehandlungscode fÃ¼r die Benachrichtigung ein.
 	this->save_materials();
 	this->i_page++;
 	this->UpdateData();
@@ -395,14 +395,14 @@ void CZeldaEditMaterials::OnBnClickedMaterialPageNext()
 
 void CZeldaEditMaterials::OnMenuMainExit()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditMaterials::OnOK();
 }
 
 
 void CZeldaEditMaterials::OnMenuEditFairyfoods()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditFairyFoods dlg;
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -411,7 +411,7 @@ void CZeldaEditMaterials::OnMenuEditFairyfoods()
 
 void CZeldaEditMaterials::OnMenuEditAmAvmap()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditAdventureModeItem dlg(NULL, 0);
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -420,7 +420,7 @@ void CZeldaEditMaterials::OnMenuEditAmAvmap()
 
 void CZeldaEditMaterials::OnMenuEditAmGsmap()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditAdventureModeItem dlg(NULL, 1);
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -429,7 +429,7 @@ void CZeldaEditMaterials::OnMenuEditAmGsmap()
 
 void CZeldaEditMaterials::OnMenuEditAmMqmap()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditAdventureModeItem dlg(NULL, 2);
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -437,7 +437,7 @@ void CZeldaEditMaterials::OnMenuEditAmMqmap()
 
 void CZeldaEditMaterials::OnMenuEditAmTlmap()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditAdventureModeItem dlg(NULL, 3);
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -445,7 +445,7 @@ void CZeldaEditMaterials::OnMenuEditAmTlmap()
 
 void CZeldaEditMaterials::OnMenuEditAmTmmap()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditAdventureModeItem dlg(NULL, 4);
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -453,7 +453,7 @@ void CZeldaEditMaterials::OnMenuEditAmTmmap()
 
 void CZeldaEditMaterials::OnBnClickedMaterialMaxValueAll()
 {
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	// TODO: FÃ¼gen Sie hier Ihren Kontrollbehandlungscode fÃ¼r die Benachrichtigung ein.
 	if (save != nullptr)
 	{
 		int i_size;
@@ -494,7 +494,7 @@ void CZeldaEditMaterials::OnBnClickedMaterialMaxValueAll()
 
 void CZeldaEditMaterials::OnMenuEditFairies()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditFairyDlg dlg;
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -503,7 +503,7 @@ void CZeldaEditMaterials::OnMenuEditFairies()
 
 void CZeldaEditMaterials::OnMenuEditCharactersWeapons()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditCharaWeaponsDlg dlg;
 	EndDialog(this->IDD);
 	dlg.DoModal();

@@ -356,7 +356,7 @@ END_MESSAGE_MAP()
 
 void CZeldaEditCharaWeaponsDlg::OnMenuEditGeneral()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditGeneralDlg dlg;
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -365,7 +365,7 @@ void CZeldaEditCharaWeaponsDlg::OnMenuEditGeneral()
 
 void CZeldaEditCharaWeaponsDlg::OnMenuEditCharactersStats()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditCharaStatsDlg dlg;
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -374,13 +374,13 @@ void CZeldaEditCharaWeaponsDlg::OnMenuEditCharactersStats()
 
 void CZeldaEditCharaWeaponsDlg::OnMenuEditCharactersWeapons()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 }
 
 
 void CZeldaEditCharaWeaponsDlg::OnMenuEditMaterialsBronze()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditMaterials dlg(NULL, 0);
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -389,7 +389,7 @@ void CZeldaEditCharaWeaponsDlg::OnMenuEditMaterialsBronze()
 
 void CZeldaEditCharaWeaponsDlg::OnMenuEditMaterialsSilver()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditMaterials dlg(NULL, 1);
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -398,7 +398,7 @@ void CZeldaEditCharaWeaponsDlg::OnMenuEditMaterialsSilver()
 
 void CZeldaEditCharaWeaponsDlg::OnMenuEditMaterialsGold()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditMaterials dlg(NULL, 2);
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -407,7 +407,7 @@ void CZeldaEditCharaWeaponsDlg::OnMenuEditMaterialsGold()
 
 void CZeldaEditCharaWeaponsDlg::OnMenuEditFairyfoods()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditFairyFoods dlg;
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -416,7 +416,7 @@ void CZeldaEditCharaWeaponsDlg::OnMenuEditFairyfoods()
 
 void CZeldaEditCharaWeaponsDlg::OnMenuEditAmAvmap()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditAdventureModeItem dlg(NULL, 0);
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -425,7 +425,7 @@ void CZeldaEditCharaWeaponsDlg::OnMenuEditAmAvmap()
 
 void CZeldaEditCharaWeaponsDlg::OnMenuEditAmGsmap()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditAdventureModeItem dlg(NULL, 1);
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -434,7 +434,7 @@ void CZeldaEditCharaWeaponsDlg::OnMenuEditAmGsmap()
 
 void CZeldaEditCharaWeaponsDlg::OnMenuEditAmMqmap()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditAdventureModeItem dlg(NULL, 2);
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -443,7 +443,7 @@ void CZeldaEditCharaWeaponsDlg::OnMenuEditAmMqmap()
 
 void CZeldaEditCharaWeaponsDlg::OnMenuEditAmTlmap()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditAdventureModeItem dlg(NULL, 3);
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -452,7 +452,7 @@ void CZeldaEditCharaWeaponsDlg::OnMenuEditAmTlmap()
 
 void CZeldaEditCharaWeaponsDlg::OnMenuEditAmTmmap()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditAdventureModeItem dlg(NULL, 4);
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -461,7 +461,7 @@ void CZeldaEditCharaWeaponsDlg::OnMenuEditAmTmmap()
 
 void CZeldaEditCharaWeaponsDlg::OnMenuEditFairies()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditFairyDlg dlg;
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -470,7 +470,7 @@ void CZeldaEditCharaWeaponsDlg::OnMenuEditFairies()
 
 void CZeldaEditCharaWeaponsDlg::OnBnClickedSave()
 {
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	// TODO: FÃ¼gen Sie hier Ihren Kontrollbehandlungscode fÃ¼r die Benachrichtigung ein.
 	if (save != nullptr)
 	{
 		try
@@ -496,7 +496,7 @@ void CZeldaEditCharaWeaponsDlg::OnBnClickedSave()
 
 void CZeldaEditCharaWeaponsDlg::OnBnClickedExit()
 {
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	// TODO: FÃ¼gen Sie hier Ihren Kontrollbehandlungscode fÃ¼r die Benachrichtigung ein.
 	CZeldaEditCharaWeaponsDlg::OnOK();
 
 }
@@ -504,7 +504,7 @@ void CZeldaEditCharaWeaponsDlg::OnBnClickedExit()
 
 void CZeldaEditCharaWeaponsDlg::OnBnClickedCweaponCharPagePrevious()
 {
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	// TODO: FÃ¼gen Sie hier Ihren Kontrollbehandlungscode fÃ¼r die Benachrichtigung ein.
 	this->save_weapon();
 
 	this->i_weapon_slot = 0;
@@ -528,7 +528,7 @@ void CZeldaEditCharaWeaponsDlg::OnBnClickedCweaponCharPagePrevious()
 
 void CZeldaEditCharaWeaponsDlg::OnBnClickedCweaponCharPageNext()
 {
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	// TODO: FÃ¼gen Sie hier Ihren Kontrollbehandlungscode fÃ¼r die Benachrichtigung ein.
 	this->save_weapon();
 
 	this->i_weapon_slot = 0;
@@ -552,7 +552,7 @@ void CZeldaEditCharaWeaponsDlg::OnBnClickedCweaponCharPageNext()
 
 void CZeldaEditCharaWeaponsDlg::OnBnClickedCweaponTypePagePrevious()
 {
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	// TODO: FÃ¼gen Sie hier Ihren Kontrollbehandlungscode fÃ¼r die Benachrichtigung ein.
 	this->save_weapon();
 
 	this->i_weapon_slot = 0;
@@ -563,7 +563,7 @@ void CZeldaEditCharaWeaponsDlg::OnBnClickedCweaponTypePagePrevious()
 
 void CZeldaEditCharaWeaponsDlg::OnBnClickedCweaponTypePageNext()
 {
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	// TODO: FÃ¼gen Sie hier Ihren Kontrollbehandlungscode fÃ¼r die Benachrichtigung ein.
 	this->save_weapon();
 
 	this->i_weapon_slot = 0;
@@ -574,7 +574,7 @@ void CZeldaEditCharaWeaponsDlg::OnBnClickedCweaponTypePageNext()
 
 void CZeldaEditCharaWeaponsDlg::OnBnClickedCweaponSlotPagePrevious()
 {
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	// TODO: FÃ¼gen Sie hier Ihren Kontrollbehandlungscode fÃ¼r die Benachrichtigung ein.
 	this->save_weapon();
 
 	this->i_weapon_slot--;
@@ -584,7 +584,7 @@ void CZeldaEditCharaWeaponsDlg::OnBnClickedCweaponSlotPagePrevious()
 
 void CZeldaEditCharaWeaponsDlg::OnBnClickedCweaponSlotPageNext()
 {
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	// TODO: FÃ¼gen Sie hier Ihren Kontrollbehandlungscode fÃ¼r die Benachrichtigung ein.
 	this->save_weapon();
 
 	this->i_weapon_slot++;
@@ -594,7 +594,7 @@ void CZeldaEditCharaWeaponsDlg::OnBnClickedCweaponSlotPageNext()
 
 void CZeldaEditCharaWeaponsDlg::OnBnClickedCweaponDefaultWeapon()
 {
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	// TODO: FÃ¼gen Sie hier Ihren Kontrollbehandlungscode fÃ¼r die Benachrichtigung ein.
 	save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot)->generate_default_weapon();
 	this->UpdateData();
 }
@@ -602,7 +602,7 @@ void CZeldaEditCharaWeaponsDlg::OnBnClickedCweaponDefaultWeapon()
 
 void CZeldaEditCharaWeaponsDlg::OnBnClickedCweaponDeleteWeapon()
 {
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	// TODO: FÃ¼gen Sie hier Ihren Kontrollbehandlungscode fÃ¼r die Benachrichtigung ein.
 	if (this->i_weapon_type == 0)
 	{
 		if (save->get_player(this->i_chara_id)->get_weapon_count(this->i_weapon_type) != 1)
@@ -784,7 +784,7 @@ void CZeldaEditCharaWeaponsDlg::save_weapon()
 
 void CZeldaEditCharaWeaponsDlg::OnCbnSelchangeComboCweaponLevel()
 {
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	// TODO: FÃ¼gen Sie hier Ihren Kontrollbehandlungscode fÃ¼r die Benachrichtigung ein.
 	//Get current stars and set to the object
 	CComboBox *cb_lvl = (CComboBox*)GetDlgItem(IDC_COMBO_CWEAPON_LEVEL);
 	int i_lvl = cb_lvl->GetCurSel() + 1;
@@ -796,7 +796,7 @@ void CZeldaEditCharaWeaponsDlg::OnCbnSelchangeComboCweaponLevel()
 
 void CZeldaEditCharaWeaponsDlg::OnEnChangeEditCweaponDamageBase()
 {
-	// TODO:  Fügen Sie hier Ihren Code für die Kontrollbenachrichtigungsbehandlung ein.
+	// TODO:  FÃ¼gen Sie hier Ihren Code fÃ¼r die Kontrollbenachrichtigungsbehandlung ein.
 	if (save != nullptr)
 	{
 		CString test;
@@ -822,7 +822,7 @@ void CZeldaEditCharaWeaponsDlg::OnEnChangeEditCweaponDamageBase()
 
 void CZeldaEditCharaWeaponsDlg::OnEnKillfocusEditCweaponDamageBase()
 {
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	// TODO: FÃ¼gen Sie hier Ihren Kontrollbehandlungscode fÃ¼r die Benachrichtigung ein.
 	if (save != nullptr)
 	{
 		CString test;
@@ -849,7 +849,7 @@ void CZeldaEditCharaWeaponsDlg::OnEnKillfocusEditCweaponDamageBase()
 
 void CZeldaEditCharaWeaponsDlg::OnBnClickedCheckCweaponLegendary()
 {
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	// TODO: FÃ¼gen Sie hier Ihren Kontrollbehandlungscode fÃ¼r die Benachrichtigung ein.
 	CButton *cb_check_legendary_state = (CButton*)GetDlgItem(IDC_CHECK_CWEAPON_LEGENDARY);
 	bool b_is_legendary = cb_check_legendary_state->GetCheck();
 
@@ -892,7 +892,7 @@ void CZeldaEditCharaWeaponsDlg::OnEnChangeKillSlotEdit(UINT nID)
 
 void CZeldaEditCharaWeaponsDlg::OnBnClickedCweaponResetKills()
 {
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	// TODO: FÃ¼gen Sie hier Ihren Kontrollbehandlungscode fÃ¼r die Benachrichtigung ein.
 	//Set all Kills for all Skills to zero
 	int i_slot_counter = 0;
 	for (int i = IDC_EDIT_CWEAPON_KILLS_SLOT_1; i <= IDC_EDIT_CWEAPON_KILLS_SLOT_8; i++)
@@ -909,7 +909,7 @@ void CZeldaEditCharaWeaponsDlg::OnBnClickedCweaponResetKills()
 
 void CZeldaEditCharaWeaponsDlg::OnBnClickedCweaponResetSkills()
 {
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	// TODO: FÃ¼gen Sie hier Ihren Kontrollbehandlungscode fÃ¼r die Benachrichtigung ein.
 	//Set Skill 1 to an Open Slot and all others to Non-Slot
 	int i_slot_counter = 0;
 	for (int i = IDC_COMBO_CWEAPON_SKILLS_SLOT_1; i <= IDC_COMBO_CWEAPON_SKILLS_SLOT_8; i++)
@@ -942,7 +942,7 @@ void CZeldaEditCharaWeaponsDlg::OnBnClickedCweaponResetSkills()
 
 void CZeldaEditCharaWeaponsDlg::OnCbnSelchangeComboCweaponStars()
 {
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	// TODO: FÃ¼gen Sie hier Ihren Kontrollbehandlungscode fÃ¼r die Benachrichtigung ein.
 	CComboBox *cb_stars = (CComboBox*)GetDlgItem(IDC_COMBO_CWEAPON_STARS);
 	int i_stars = cb_stars->GetCurSel();
 	save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot)->change_stars(i_stars);

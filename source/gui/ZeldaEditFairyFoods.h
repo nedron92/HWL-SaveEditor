@@ -15,7 +15,7 @@ public:
 	enum { IDD = IDD_EDIT_FAIRYFOODS };
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV-Unterstützung
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV-UnterstÃ¼tzung
 
 	HICON m_hIcon;
 	HWLSaveEdit::HWLSaveEditor *save;

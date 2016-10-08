@@ -85,6 +85,7 @@ BEGIN_MESSAGE_MAP(CZeldaEditGeneralDlg, CDialogEx)
 ON_COMMAND(ID_MENU_EDIT_CHARACTERS_WEAPONS, &CZeldaEditGeneralDlg::OnMenuEditCharactersWeapons)
 ON_BN_CLICKED(IDC_BUTTON_HELP_UNLOCK_WEAPON_STATES, &CZeldaEditGeneralDlg::OnBnClickedButtonHelpUnlockWeaponStates)
 ON_BN_CLICKED(IDC_BUTTON_HELP_UNLOCK_ALL_MATERIALS, &CZeldaEditGeneralDlg::OnBnClickedButtonHelpUnlockAllMaterials)
+ON_COMMAND(ID_MENU_CHECKFORUPDATES, &CZeldaEditGeneralDlg::OnMenuCheckforupdates)
 END_MESSAGE_MAP()
 
 
@@ -140,7 +141,7 @@ void CZeldaEditGeneralDlg::save_general()
 
 void CZeldaEditGeneralDlg::OnBnClickedSave()
 {
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	// TODO: FÃ¼gen Sie hier Ihren Kontrollbehandlungscode fÃ¼r die Benachrichtigung ein.
 	if (save != nullptr)
 	{
 		try
@@ -167,7 +168,7 @@ void CZeldaEditGeneralDlg::OnBnClickedSave()
 
 void CZeldaEditGeneralDlg::OnBnClickedExit()
 {
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	// TODO: FÃ¼gen Sie hier Ihren Kontrollbehandlungscode fÃ¼r die Benachrichtigung ein.
 	CZeldaEditGeneralDlg::OnOK();
 
 }
@@ -175,11 +176,11 @@ void CZeldaEditGeneralDlg::OnBnClickedExit()
 void CZeldaEditGeneralDlg::OnEnChangeRubyEdit()
 {
 	// TODO:  Falls dies ein RICHEDIT-Steuerelement ist, wird das Kontrollelement
-	// diese Benachrichtigung nicht senden, es sei denn, Sie überschreiben die CDialogEx::OnInitDialog()-
+	// diese Benachrichtigung nicht senden, es sei denn, Sie Ã¼berschreiben die CDialogEx::OnInitDialog()-
 	// Funktion und rufen CRichEditCtrl().SetEventMask() auf
 	// mit dem ENM_CHANGE-Flag ORed in der Eingabe.
 
-	// TODO:  Fügen Sie hier Ihren Code für die Kontrollbenachrichtigungsbehandlung ein.
+	// TODO:  FÃ¼gen Sie hier Ihren Code fÃ¼r die Kontrollbenachrichtigungsbehandlung ein.
 	if (save != nullptr)
 	{
 		CString test;
@@ -208,7 +209,7 @@ void CZeldaEditGeneralDlg::OnMenuMainFileOpen()
 	CMenu *test = GetMenu();
 	GetActiveWindow()->ShowWindow(SW_MINIMIZE);
 
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	TCHAR szFilters[] = _T("Hyrule Warriors Legends SaveGame (zmha.bin)|*.bin||");
 	CFileDialog fileDlg(TRUE, _T(""), _T(""),
 		OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, szFilters, GetActiveWindow());
@@ -291,7 +292,7 @@ int CZeldaEditGeneralDlg::get_active_window_id()
 
 void CZeldaEditGeneralDlg::OnMenuMainFileClose()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	delete CZeldaHWLSaveEditorGUIApp::save;
 	CZeldaHWLSaveEditorGUIApp::save = nullptr;
 	save = CZeldaHWLSaveEditorGUIApp::save;
@@ -302,22 +303,31 @@ void CZeldaEditGeneralDlg::OnMenuMainFileClose()
 
 void CZeldaEditGeneralDlg::OnMenuMainExit()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditGeneralDlg::OnOK();
 
 }
 
 void CZeldaEditGeneralDlg::OnMenuAbout()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaAboutDlg about;
 	about.DoModal();
 
 }
 
+
+void CZeldaEditGeneralDlg::OnMenuCheckforupdates()
+{
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaCheckForUpdatesDlg updates;
+	updates.DoModal();
+}
+
+
 void CZeldaEditGeneralDlg::OnMenuEditCharactersStats()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditCharaStatsDlg dlg;
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -326,7 +336,7 @@ void CZeldaEditGeneralDlg::OnMenuEditCharactersStats()
 
 void CZeldaEditGeneralDlg::OnMenuEditMaterialsBronze()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditMaterials dlg(NULL,0);
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -335,7 +345,7 @@ void CZeldaEditGeneralDlg::OnMenuEditMaterialsBronze()
 
 void CZeldaEditGeneralDlg::OnMenuEditMaterialsSilver()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditMaterials dlg(NULL, 1);
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -344,7 +354,7 @@ void CZeldaEditGeneralDlg::OnMenuEditMaterialsSilver()
 
 void CZeldaEditGeneralDlg::OnMenuEditMaterialsGold()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditMaterials dlg(NULL, 2);
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -353,7 +363,7 @@ void CZeldaEditGeneralDlg::OnMenuEditMaterialsGold()
 
 void CZeldaEditGeneralDlg::OnMenuEditFairyfoods()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditFairyFoods dlg;
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -362,7 +372,7 @@ void CZeldaEditGeneralDlg::OnMenuEditFairyfoods()
 
 void CZeldaEditGeneralDlg::OnMenuEditAmAvmap()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditAdventureModeItem dlg(NULL, 0);
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -371,7 +381,7 @@ void CZeldaEditGeneralDlg::OnMenuEditAmAvmap()
 
 void CZeldaEditGeneralDlg::OnMenuEditAmGsmap()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditAdventureModeItem dlg(NULL, 1);
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -380,7 +390,7 @@ void CZeldaEditGeneralDlg::OnMenuEditAmGsmap()
 
 void CZeldaEditGeneralDlg::OnMenuEditAmMqmap()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditAdventureModeItem dlg(NULL, 2);
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -388,7 +398,7 @@ void CZeldaEditGeneralDlg::OnMenuEditAmMqmap()
 
 void CZeldaEditGeneralDlg::OnMenuEditAmTlmap()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditAdventureModeItem dlg(NULL, 3);
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -396,7 +406,7 @@ void CZeldaEditGeneralDlg::OnMenuEditAmTlmap()
 
 void CZeldaEditGeneralDlg::OnMenuEditAmTmmap()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditAdventureModeItem dlg(NULL, 4);
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -404,7 +414,7 @@ void CZeldaEditGeneralDlg::OnMenuEditAmTmmap()
 
 void CZeldaEditGeneralDlg::OnMenuEditFairies()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditFairyDlg dlg;
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -413,13 +423,14 @@ void CZeldaEditGeneralDlg::OnMenuEditFairies()
 
 void CZeldaEditGeneralDlg::OnMenuEditGeneral()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
+	
 }
 
 
 void CZeldaEditGeneralDlg::OnBnClickedRubyMax()
 {
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	// TODO: FÃ¼gen Sie hier Ihren Kontrollbehandlungscode fÃ¼r die Benachrichtigung ein.
 	if (save != nullptr)
 	{
 		CString cs_ruby_value;
@@ -435,7 +446,7 @@ void CZeldaEditGeneralDlg::OnBnClickedRubyMax()
 
 void CZeldaEditGeneralDlg::OnMenuEditCharactersWeapons()
 {
-	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	// TODO: FÃ¼gen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditCharaWeaponsDlg dlg;
 	EndDialog(this->IDD);
 	dlg.DoModal();
@@ -444,7 +455,7 @@ void CZeldaEditGeneralDlg::OnMenuEditCharactersWeapons()
 
 void CZeldaEditGeneralDlg::OnBnClickedButtonHelpUnlockWeaponStates()
 {
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	// TODO: FÃ¼gen Sie hier Ihren Kontrollbehandlungscode fÃ¼r die Benachrichtigung ein.
 	CString cs_info("If you activate those check-boxes, then you don't have more weapons\n"
 		"then before, but the game wil believe that you collect them all.\n"
 		"If you have the Master Sword, then please check the Skills ingame ;) ");
@@ -454,7 +465,7 @@ void CZeldaEditGeneralDlg::OnBnClickedButtonHelpUnlockWeaponStates()
 
 void CZeldaEditGeneralDlg::OnBnClickedButtonHelpUnlockAllMaterials()
 {
-	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	// TODO: FÃ¼gen Sie hier Ihren Kontrollbehandlungscode fÃ¼r die Benachrichtigung ein.
 	CString cs_info("If you activate this check-box, then you don't have more materials\n"
 		"then before, but the game wil believe that you collect them all.\n");
 	MessageBox(cs_info, L"Information", MB_OK | MB_ICONINFORMATION);

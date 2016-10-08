@@ -15,7 +15,7 @@ public:
 	enum { IDD = IDD_ABOUTBOX };
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV-Unterstützung
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV-UnterstÃ¼tzung
 
 	DECLARE_MESSAGE_MAP()
 };

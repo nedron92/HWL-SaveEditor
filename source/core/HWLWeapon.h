@@ -12,10 +12,10 @@ namespace HWLSaveEdit
 		private:
 			/* @var s_name						name of the weapon */
 			string s_name;
-			
+
 			/* @var i_offset					offset of the weapon */
 			int i_offset;
-			
+
 			/* @var i_id						offset of the weapon */
 			int i_id;
 
@@ -27,28 +27,28 @@ namespace HWLSaveEdit
 
 			/* @var i_damage_base				offset of the weapon */
 			int i_damage_base;
-			
+
 			/* @var i_stars						offset of the weapon */
 			int i_stars;
-	
+
 			/* @var i_damage					offset of the weapon */
 			int i_damage;
-			
+
 			/* @var i_state						offset of the weapon */
 			int i_state;
-			
+
 			/* @var vi_skill_slot_kills			offset of the weapon */
 			vector<int> vi_skill_slot_kills;
-			
+
 			/* @var vi_skill_slots				offset of the weapon */
 			vector<int> vi_skill_slots;
-			
+
 			/* @var i_character_id				offset of the weapon */
 			int i_character_id;
-			
+
 			/* @var i_type						offset of the weapon */
 			int i_type;
-			
+
 			/* @var b_is_unsued_weapon			offset of the weapon */
 			bool b_is_unsued_weapon;
 
@@ -94,7 +94,7 @@ namespace HWLSaveEdit
 			static const vector<int> vi_playerWeaponTypeHexValues;
 			static const vector<int> vi_playerWeaponTypeHexValuesLVL4;
 
-			static const vector<int>    vi_damage_base_defaults; 
+			static const vector<int>    vi_damage_base_defaults;
 			static const vector<int>    weaponStateValuesHex;
 			static const vector<string> weaponStateValuesNames;
 			static const vector<string> weaponSkillNames;
@@ -124,7 +124,7 @@ namespace HWLSaveEdit
 			void set_character_id(int i_character_id);
 			void set_type(int i_type);
 			void set_IsUnused(bool b_is_unsued_weapon);
-			
+
 
 			string get_name();
 			int get_id();
@@ -161,7 +161,7 @@ namespace HWLSaveEdit
 			//methods to get a formatted output (for console)
 			string get_WeaponsSkillsForOutput();
 			string get_WeaponsForOutput();
-			
+
 			//saving method
 			void save_weapon();
 	};

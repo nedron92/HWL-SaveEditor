@@ -149,10 +149,10 @@ const vector<string> HWLFairyFood::vs_fairyFood =
 /* @var fairyFoodlValueMax				maximal-value of a fairyFood item*/
 const int HWLFairyFood::fairyFoodlValueMax = 255;
 
-/* @var fairyGratitudeCrystalIDBegin	ÌD of the first gratitude crystal */
+/* @var fairyGratitudeCrystalIDBegin	ÃŒD of the first gratitude crystal */
 const int HWLFairyFood::fairyGratitudeCrystalIDBegin = 114;
 
-/* @var fairyGratitudeCrystalIDEnd		ÌD of the last gratitude crystal */
+/* @var fairyGratitudeCrystalIDEnd		ÃŒD of the last gratitude crystal */
 const int HWLFairyFood::fairyGratitudeCrystalIDEnd = 128;
 
 

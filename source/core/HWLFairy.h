@@ -12,19 +12,19 @@ namespace HWLSaveEdit
 		private:
 			/* @var s_name			name of the fairy */
 			string s_name;
-			
+
 			/* @var i_offset		offset of the fairy */
 			int i_offset;
-		
+
 			/* @var i_lvl			lvl of the fairy */
 			int i_lvl;
-			
+
 			/* @var i_trust			trust of the fairy */
 			int i_trust;
-			
+
 			/* @var i_iterator		iterations/refreshes of the fairy */
 			int i_iterator;
-			
+
 			/* @var b_isUnlock		unlock-state of the fairy */
 			bool b_isUnlock;
 

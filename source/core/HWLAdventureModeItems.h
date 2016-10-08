@@ -11,20 +11,20 @@ namespace HWLSaveEdit
 		private:
 			/* @var s_name		name of the AM-Item */
 			string s_name;
-		
+
 			/* @var i_offset	offset of the AM-Item */
 			int i_offset;
-			
+
 			/* @var i_type		type of the AM-Item */
 			int i_type;
-			
+
 			/* @var i_value		value of the AM-Item */
 			int i_value;
 
 			//methods for calculation and saving the AM-Item
 			int  calc_value();
 			void save_value();
-		
+
 		public:
 			//needed public members/constans
 			static const vector<string> vs_amItems;
@@ -54,4 +54,3 @@ namespace HWLSaveEdit
 	};
 
 }
-

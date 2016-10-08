@@ -12,10 +12,10 @@ namespace HWLSaveEdit
 		private:
 			/* @var s_name		name of the fairyFood */
 			string s_name;
-			
+
 			/* @var i_offset	offset of the fairyFood */
 			int i_offset;
-			
+
 			/* @var i_value		value of the fairyFood */
 			int i_value;
 
@@ -44,10 +44,9 @@ namespace HWLSaveEdit
 
 			//method to get a formatted output (for console)
 			string get_FairyFoodForOutput();
-			
+
 			//saving method
 			void save_FairyFood();
 	};
 
 }
-

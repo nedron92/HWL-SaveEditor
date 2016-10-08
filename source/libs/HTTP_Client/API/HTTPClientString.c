@@ -309,6 +309,9 @@ long unsigned int HTTPStrGetDigestToken (HTTP_PARAM pParamSrc, CHAR *pSearched, 
     CHAR *pPtrStart, *pPtrEnd, *pPtrEndSrc;
     BOOL Brackets = FALSE;
 
+	//add for compiler warnings/errors
+	pPtrEnd = NULL;
+
     // Build the searched token
     memset(Token,0x00,HTTP_CLIENT_MAX_TOKEN_NAME_LENGTH);
     strcpy(Token,pSearched);

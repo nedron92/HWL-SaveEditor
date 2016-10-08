@@ -3,12 +3,12 @@
 #include "CHTTP_Client.h"
 
 /**
- * The defined constructor.
- * It will initialize the needed data with the current values of the class.
- * If we have an given url, it will set it instead of the hardcoded one
- * 
- * @var string  s_url       the url as a string
- * 
+* The defined constructor.
+* It will initialize the needed data with the current values of the class.
+* If we have an given url, it will set it instead of the hardcoded one
+*
+* @var string  s_url       the url as a string
+*
 */
 HTTP_Client::HTTP_Client(string s_url)
 {
@@ -20,7 +20,7 @@ HTTP_Client::HTTP_Client(string s_url)
 }
 
 /**
- * Only the initialization of the normal-destructor
+* Only the initialization of the normal-destructor
 */
 HTTP_Client::~HTTP_Client()
 {
@@ -29,9 +29,9 @@ HTTP_Client::~HTTP_Client()
 
 
 /**
- * This method will initialize all needed data with the current class-values
- * and also do OS-specific call (WIN32) if needed
- * 
+* This method will initialize all needed data with the current class-values
+* and also do OS-specific call (WIN32) if needed
+*
 */
 void HTTP_Client::init()
 {
@@ -57,10 +57,10 @@ void HTTP_Client::init()
 
 
 /**
- * This method return the current url
- * 
- * @return string       the current url to send the http-request
- * 
+* This method return the current url
+*
+* @return string       the current url to send the http-request
+*
 */
 string HTTP_Client::get_current_url()
 {
@@ -68,11 +68,11 @@ string HTTP_Client::get_current_url()
 }
 
 /**
- * This method return the current output. At default the variable is empty, but after
- * an successfull request it has the output of the request itself.
- * 
- * @return string       the current output (after successfull sending)
- * 
+* This method return the current output. At default the variable is empty, but after
+* an successfull request it has the output of the request itself.
+*
+* @return string       the current output (after successfull sending)
+*
 */
 string HTTP_Client::get_current_output()
 {
@@ -82,25 +82,25 @@ string HTTP_Client::get_current_output()
 
 
 /**
- * This method set the current url for an http-request
- * 
- * @var string  s_url       the url as a string
- * 
+* This method set the current url for an http-request
+*
+* @var string  s_url       the url as a string
+*
 */
 void HTTP_Client::set_current_url(string s_url)
 {
 	this->s_current_url = s_url;
-        this->init();
+	this->init();
 }
 
 
 
 /**
- * This method send a http_request (GET-Method) and the returned 
- * output will send to the internal result-variable.
- * 
- * @todo add error handling
- * 
+* This method send a http_request (GET-Method) and the returned
+* output will send to the internal result-variable.
+*
+* @todo add error handling
+*
 */
 void HTTP_Client::send_http_request()
 {
@@ -151,7 +151,7 @@ void HTTP_Client::send_http_request()
 	this->s_http_result = this->c_http_buffer;
 	this->s_http_result.erase(remove(this->s_http_result.begin(), this->s_http_result.end(), '\n'), this->s_http_result.end());
 
-	//xlear buffer
+	//clear buffer
 	strcpy(this->c_http_buffer, "");
 
 }

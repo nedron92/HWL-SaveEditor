@@ -12,6 +12,9 @@
 #include "HWLFairy.h"
 #include "HWLWeapon.h"
 
+//including needed third-party libraries (HWL-Wrappers)
+#include "HWLHttp.h"
+
 //add the class to the project-namespace
 namespace HWLSaveEdit
 {
@@ -32,8 +35,8 @@ namespace HWLSaveEdit
 			/* @var i_error			for indicate specific errors */
 			int i_error = 0;
 
-			/* @var b_auto_trim		TRUE, if auto-trim for too large savefiles are enabled, FALSE if not 
-									Default: TRUE: */
+			/* @var b_auto_trim		TRUE, if auto-trim for too large savefiles are enabled, FALSE if not
+			Default: TRUE: */
 			static bool b_auto_trim;
 
 			//offset-const declaration
@@ -57,8 +60,8 @@ namespace HWLSaveEdit
 			static const int fairyOffsetBegin;
 
 			static const int weaponOffsetBegin;
-                        
-                        //other const declaration
+
+			//other const declaration
 			static shared_ptr<HWLHttp> http_request;
 
 			// member declarations
@@ -104,7 +107,7 @@ namespace HWLSaveEdit
 			//getter for errors, general things, players(with weapons), materials, fairyFoods, 
 			//am-items and fairies
 			int get_error();
-                        shared_ptr<HWLHttp> get_http_object();
+			shared_ptr<HWLHttp> get_http_object();
 			shared_ptr<HWLGeneral> get_general_things();
 			shared_ptr<HWLPlayer> get_player(int i_id);
 			shared_ptr<HWLPlayer> get_player(string s_name);

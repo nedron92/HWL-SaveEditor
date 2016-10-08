@@ -7,10 +7,6 @@
 #include <memory>
 //#include <thread> //for later usage with threads
 
-//including needed third-party libraries (HWL-Wrappers)
-#include "HWLHttp.h"
-
-
 //add the class to the project-namespace
 namespace HWLSaveEdit
 {
@@ -37,23 +33,23 @@ namespace HWLSaveEdit
 			//needed public static-constants
 			static const string version;
 
-			/* Constructor and pure-virtual Destructor 
-				(to make the class abstract)
+			/* Constructor and pure-virtual Destructor
+			(to make the class abstract)
 			*/
 			HWLSaveEditorCore();
 			virtual ~HWLSaveEditorCore() = 0;
 
 			/* Convertion for int to a HexString and the other
-			   way around with zero-adding. 
-			   Also Convertions between MultiByte- and WideStrings
-			   */
+			way around with zero-adding.
+			Also Convertions between MultiByte- and WideStrings
+			*/
 			string intToHexString(unsigned int i_value, bool is_file_content = true);
 			int HexStringToInt(string s_hexString);
 			string HexStringToByteString(string s_hexString);
 			string ByteStringToHexString(string s_byteString);
 			wstring ByteStringAsCharToWideString(const char* cp_multibyte_str);
 			string WideStringAsCharToByteString(const wchar_t* wcp_wide_str);
-			void addZeroToHexString(string &s_hexString, int i_max_length, bool b_to_end=false);
+			void addZeroToHexString(string &s_hexString, int i_max_length, bool b_to_end = false);
 
 			//Method to convert the current byteOrder of an hexString
 			void convertByteOrder(string &s_hexString);
@@ -63,5 +59,3 @@ namespace HWLSaveEdit
 			void   setHexStringToFileContent(string s_hexString, int i_offset, bool b_is_char = false);
 	};
 }
-
-

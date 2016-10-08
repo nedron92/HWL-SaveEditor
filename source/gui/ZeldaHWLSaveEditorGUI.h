@@ -11,6 +11,7 @@
 #include "resource.h"		// main symbols
 
 #include "ZeldaAboutDlg.h"
+#include "ZeldaCheckForUpdatesDlg.h"
 #include "ZeldaEditCharaStatsDlg.h"
 #include "ZeldaEditGeneralDlg.h"
 #include "ZeldaEditMaterials.h"

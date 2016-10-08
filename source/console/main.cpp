@@ -2089,70 +2089,9 @@ void get_check_update_menu()
 					  cout << "Latest stable Version: " << save->get_http_object()->get_current_version() << endl;
 					  cout << "URL: " << save->get_http_object()->latestURL << endl << endl;
 
+					  cout << save->get_http_object()->compare_with_current_version() << endl;
 
-					  const int maxLength = 10;
-
-					  string version = HWLSaveEdit::HWLSaveEditorCore::version;
-					  string version2 = save->get_http_object()->get_current_version();
-
-					  int i_length = maxLength - version.length();
-
-					  char c1 = ' ';
-					  char c2 = ' ';
-					  if (isalpha(version.back()))
-					  {
-						  c1 = version.back();
-						  version.back() = ' ';
-					  }
-
-					  if (isalpha(version2.back()))
-					  {
-						  c2 = version2.back();
-						  version2.back() = ' ';
-					  }
-
-					  for (int i = 0; i < i_length; i++) {
-						  version = version + " ";
-					  }
-
-					  i_length = maxLength - version2.length();
-					  for (int i = 0; i < i_length; i++) {
-						  version2 = version2 + " ";
-					  }
-
-					  //add addiotnal check
-					  bool b_add_check = true;
-
-					  if (version.compare(version2) == 0)
-						  b_add_check = false;
-
-					  if (c1 != ' ')
-						  version.back() = c1;
-
-					  if (c2 != ' ')
-						  version2.back() = c2;
-
-					  int compare = version.compare(version2);
-
-					  if (c1 != ' ' && !b_add_check)
-						  compare = 0;
-
-					  if (compare < 0)
-					  {
-						  cout << "There is a new stable version. \nPlease download it at the above URL! " << endl;
-					  }
-                                          
-                                          if (compare == 0)
-					  {
-						  cout << "You are on the newest stable version." << endl;
-					  }	
-                                          
-					  if (compare > 0)
-					  {
-						  cout << "You are on a nightly version which is newer then the stable release." << endl;
-					  }	
-                                          
-                                          cout<<endl;
+                      cout<<endl;
 					  break;
 				}
 
@@ -2164,71 +2103,9 @@ void get_check_update_menu()
 					  cout << "Latest nightly Version: " << save->get_http_object()->get_current_nightly_version() << endl;
 					  cout << "URL: " << save->get_http_object()->nightlyURL << endl << endl;
 
-					  const int maxLength = 10;
+					  cout << save->get_http_object()->compare_with_current_version(true) << endl;
 
-					  string version = HWLSaveEdit::HWLSaveEditorCore::version;
-					  string version2 = save->get_http_object()->get_current_nightly_version();
-
-					  int i_length = maxLength - version.length();
-
-					  char c1 = ' ';
-					  char c2 = ' ';
-					  if (isalpha(version.back()))
-					  {
-						  c1 = version.back();
-						  version.back() = ' ';
-					  }
-
-					  if (isalpha(version2.back()))
-					  {
-						  c2 = version2.back();
-						  version2.back() = ' ';
-					  }
-
-					  for (int i = 0; i < i_length; i++) {
-						  version = version + " ";
-					  }
-
-					  i_length = maxLength - version2.length();
-					  for (int i = 0; i < i_length; i++) {
-						  version2 = version2 + " ";
-					  }
-
-					  //add addiotnal check
-					  bool b_add_check = true;
-
-					  if (version.compare(version2) == 0)
-						  b_add_check = false;
-
-					  if (c1 != ' ')
-						  version.back() = c1;
-
-					  if (c2 != ' ')
-						  version2.back() = c2;
-
-					  int compare = version.compare(version2);
-
-					  if (c2 != ' ' && !b_add_check)
-						  compare = 0;
-
-					  if (compare < 0)
-					  {
-						  cout << "There is a new nightly Version, you can download at the above URL. \nBut always take "
-                                                          "care with those versions!" << endl;
-					  }
-                                          
-					  if (compare == 0)
-					  {
-						  cout << "You are on the newest nightly version." << endl;
-					  }	
-                                          
-					  if (compare > 0)
-					  {
-						  cout << "You are on a dev-version, which is newer and not released yet." << endl;
-					  }	
-
-
-                                          cout<<endl;
+                      cout<<endl;
 					  break;
 				}
 
@@ -2236,8 +2113,9 @@ void get_check_update_menu()
 					break;
 				}
                                 
-                                cout<<"Press any key to go back to the menu"<<endl;
-                                cin.clear();
+				cout << "Press any key to go back to the menu" << endl;
+				cin.clear();
+
 				getchar();
 				cin.get();
                                 

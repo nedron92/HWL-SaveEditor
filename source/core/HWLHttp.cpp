@@ -4,10 +4,10 @@
 //use the project-namespace
 using namespace HWLSaveEdit;
 
-/* @var sp_http_client		pointer for the http-client lib */
+/* @var o_http_client		object for the http-client lib */
 HTTP_Client HWLHttp::o_http_client = HTTP_Client();
 
-/* @var maxVersionLength		max length of a version-string (for comparison) */
+/* @var maxVersionLength	max length of a version-string (for comparison) */
 const int HWLHttp::maxVersionLength = 10;
 
 
@@ -62,86 +62,111 @@ string HWLHttp::get_current_nightly_version()
 
 /**
 * This methods compare the current program-version with the newest version of the stable or nightly
-* releases and return some information, if a download is needed or not.
+* releases and return some information + if a download is needed or not.
 *
 * @return string       a string with information based on the compare between editor-version and latest versions
 *
 */
 string HWLHttp::compare_with_current_version(bool b_compare_with_nightly)
 {
+	//get the current version and define a 'clean' compare-variable
 	string s_program_version = HWLSaveEditorCore::version;
 	string s_compare_version = "";
 
+	//check if we compare the current version with the nightly or stable-latest
 	if (b_compare_with_nightly)
 		s_compare_version = this->get_current_nightly_version();
 	else
 		s_compare_version = this->get_current_version();
 
-	int i_program_version_length = this->maxVersionLength - s_program_version.length();
-
-	char c_last_char_program_version = ' ';
-	char c_last_char_compare_version = ' ';
-
-	if (isalpha(s_program_version.back()))
+	//if we have a non-empty compare version: continue, else: return error-information
+	if (s_compare_version != "")
 	{
-		c_last_char_program_version = s_program_version.back();
-		s_program_version.back() = ' ';
-	}
+		//get the diff-length for string compare
+		int i_program_version_length = this->maxVersionLength - s_program_version.length();
 
-	if (isalpha(s_compare_version.back()))
+		//define variables to hold the last char (if it is really alphabetical char)
+		char c_last_char_program_version = ' ';
+		char c_last_char_compare_version = ' ';
+
+		//check if the last char (of current version) is an alphabetical one
+		//backup this char, and delete it from the orig string
+		if (isalpha(s_program_version.back()))
+		{
+			c_last_char_program_version = s_program_version.back();
+			s_program_version.back() = ' ';
+		}
+
+		//check if the last char (of compare version) is an alphabetical one
+		//backup this char, and delete it from the orig string
+		if (isalpha(s_compare_version.back()))
+		{
+			c_last_char_compare_version = s_compare_version.back();
+			s_compare_version.back() = ' ';
+		}
+
+		//fill up the string to the max-value
+		for (int i = 0; i < i_program_version_length; i++) {
+			s_program_version = s_program_version + " ";
+		}
+
+		//get the diff-length for string compare
+		i_program_version_length = this->maxVersionLength - s_compare_version.length();
+
+		//fill up the string to the max-value
+		for (int i = 0; i < i_program_version_length; i++) {
+			s_compare_version = s_compare_version + " ";
+		}
+
+		//if we had an backuped-last-char append it to the version-string now.
+		if (c_last_char_program_version != ' ')
+			s_program_version.back() = c_last_char_program_version;
+
+		//if we had an backuped-last-char append it to the version-string now.
+		if (c_last_char_compare_version != ' ')
+			s_compare_version.back() = c_last_char_compare_version;
+
+		//do a string-compare
+		int compare = s_program_version.compare(s_compare_version);
+
+		//define a 'clean' output variable
+		string s_current_output = "";
+
+		//check for the compare-value:
+		//compare  < 0 => There is a new nightly/stable version
+		//compare == 0 => Using the newest nightly/stable version
+		//compare  > 0 => Using a nightly-version(compare to stable) or using dev-version (compare to nightly)
+		//                  both is a true fact. 
+		if (compare < 0)
+		{
+			if (b_compare_with_nightly)
+				s_current_output = "There is a new nightly Version, you can download at the above URL. \nBut always take care with those versions!";
+			else
+				s_current_output = "There is a new stable version. \nPlease download it at the above URL!";
+		}
+		else if (compare == 0)
+		{
+			if (b_compare_with_nightly)
+				s_current_output = "You are using the newest nightly version.";
+			else
+				s_current_output = "You are using the newest stable version.";
+		}
+		else if (compare > 0)
+		{
+			if (b_compare_with_nightly)
+				s_current_output = "You are using a dev-version which is newer and not released yet. \nNo download needed";
+			else
+				s_current_output = "You are using a nightly version which is newer then the stable release. \nNo download needed!";
+		}
+
+		//return current-output
+		return s_current_output;
+	}
+	else
 	{
-		c_last_char_compare_version = s_compare_version.back();
-		s_compare_version.back() = ' ';
+		//return error-information
+		return "Sorry. Couldn't retrieve the newest version. \nPlease check your internet-connection or check manually. ";
 	}
-
-	for (int i = 0; i < i_program_version_length; i++) {
-		s_program_version = s_program_version + " ";
-	}
-
-	i_program_version_length = this->maxVersionLength - s_compare_version.length();
-	for (int i = 0; i < i_program_version_length; i++) {
-		s_compare_version = s_compare_version + " ";
-	}
-
-	//add addiotnal check
-	bool b_add_check = true;
-
-	if (s_program_version.compare(s_compare_version) == 0)
-		b_add_check = false;
-
-	if (c_last_char_program_version != ' ')
-		s_program_version.back() = c_last_char_program_version;
-
-	if (c_last_char_compare_version != ' ')
-		s_compare_version.back() = c_last_char_compare_version;
-
-	int compare = s_program_version.compare(s_compare_version);
-
-	string s_current_output = "";
-
-	if (compare < 0)
-	{
-		if (b_compare_with_nightly)
-			s_current_output = "There is a new nightly Version, you can download at the above URL. \nBut always take care with those versions!";
-		else
-			s_current_output = "There is a new stable version. \nPlease download it at the above URL!";
-	}
-	else if (compare == 0)
-	{
-		if (b_compare_with_nightly)
-			s_current_output = "You are on the newest nightly version.";
-		else
-			s_current_output = "You are on the newest stable version.";
-	}
-	else if (compare > 0)
-	{
-		if (b_compare_with_nightly)
-			s_current_output = "You are on a dev-version which is newer and not released yet. \nNo download needed";
-		else
-			s_current_output = "You are on a nightly version which is newer then the stable release. \nNo download needed!";
-	}
-
-	return s_current_output;
 
 }
 

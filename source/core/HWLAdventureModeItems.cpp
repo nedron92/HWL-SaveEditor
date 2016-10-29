@@ -75,7 +75,50 @@ const vector<string> HWLAdventureModeItems::vs_amItems =
 	"Zora Mask",
 	"Mask of Truth",
 	"Majora's Mask",
-	"Giants"  //Termina-Map Items End
+	"Giants",  //Termina-Map Items End
+
+	//only 1st DLC: Master Wind Waker DLC
+	"Compass", //MasterWindWaker-Map Items Begin
+	"Hookshot",
+	"Wind Waker",
+	"Cannon",
+	"Boomerang",
+	"Hero's Bow",
+	"Grappling Hook",
+	"Hyoi Pears",
+	"Deku Leaf",
+	"Sea Chart",
+	"Power Bracelet",
+	"Hammer",  //MasterWindWaker-Map Items End
+
+	////only 2nd DLC: Link's Awakening DLC
+	"Compass", //KoholintIsland-Map Items Begin
+	"Full Moon Cello",
+	"Conch Horn",
+	"Sea Lily Bell",
+	"Surf Harp",
+	"Wind Marimba",
+	"Coral Triangle",
+	"Organ of Evening Calm",
+	"Thunder Drum",
+	"Grandpa Ulrira",
+	"Power Bracelet",
+	"Magic Powder",  //KoholintIsland-Map Items End
+
+	////only 3rd DLC: Phantom Hourglass & Spirit Tracks DLC
+	"Compass", //GrandTravels-Map Items Begin
+	"Whirlwind",
+	"Fishing Rod",
+	"Cannon",
+	"Railway Track",
+	"Cyclone Slate",
+	"S.S. Linebeck",
+	"Iron Ship",
+	"Golden Ship",
+	"Spirit Train",
+	"Steel Train",
+	"Golden Train",  //GrandTravels-Map Items End
+
 };
 
 /* @var amItemValueMax		maximal-value of an AdventureMode-Item */
@@ -235,6 +278,18 @@ string HWLAdventureModeItems::get_type(bool b_get_string)
 	case 4:
 		return "Termina-Map Item ";
 		break;
+
+	case 5: //only 1st DLC: Master Wind Waker DLC
+		return "MasterWindWaker-Map Item ";
+		break;
+
+	case 6: //only 2nd DLC: Link's Awakening DLC
+		return "KoholintIsland-Map Item ";
+		break;
+
+	case 7: //only 3rd DLC: Phantom Hourglass & Spirit Tracks DLC
+		return "GrandTravels-Map Item ";
+		break; 
 
 	default:
 		return to_string(i_type);

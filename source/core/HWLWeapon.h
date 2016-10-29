@@ -25,7 +25,7 @@ namespace HWLSaveEdit
 			/* @var vi_lvl_hex					offset of the weapon */
 			vector<int> vi_lvl_hex;
 
-			/* @var i_damage_base				offset of the weapon */
+			/* @var i_damage_base                                   offset of the weapon */
 			int i_damage_base;
 
 			/* @var i_stars						offset of the weapon */
@@ -51,6 +51,12 @@ namespace HWLSaveEdit
 
 			/* @var b_is_unsued_weapon			offset of the weapon */
 			bool b_is_unsued_weapon;
+
+			/* @var b_is_multi_element_weapon	offset of the weapon */
+			bool b_is_multi_element_weapon;
+                        
+                        /* @var i_multi_element_weapon_hex	offset of the weapon */
+			int i_multi_element_weapon_hex;
 
 			//offset-const declaration
 			static const int weaponIDOffsetLength;
@@ -93,6 +99,7 @@ namespace HWLSaveEdit
 			static const vector<string> vs_playerWeaponTypeNames;
 			static const vector<int> vi_playerWeaponTypeHexValues;
 			static const vector<int> vi_playerWeaponTypeHexValuesLVL4;
+			static const vector<int> vi_playerWeaponTypeHexValuesMultiElement;
 
 			static const vector<int>    vi_damage_base_defaults;
 			static const vector<int>    weaponStateValuesHex;
@@ -124,6 +131,8 @@ namespace HWLSaveEdit
 			void set_character_id(int i_character_id);
 			void set_type(int i_type);
 			void set_IsUnused(bool b_is_unsued_weapon);
+			void set_IsMultiElement(bool b_is_multi_element_weapon);
+                        void set_multi_element_hex(int i_multi_element_weapon_hex);
 
 
 			string get_name();
@@ -141,6 +150,8 @@ namespace HWLSaveEdit
 			int get_character_id();
 			int get_type();
 			bool get_IsUnused();
+			bool get_IsMultiElement();
+                        int get_multi_element_hex();
 
 			//method to change the damage-base and re-calculate the damage
 			void change_damage_base(int i_damage_base);
@@ -151,7 +162,10 @@ namespace HWLSaveEdit
 
 			//method to change stars and re-calculate the damage
 			void change_stars(int i_stars);
-
+                        
+                        //method to change multi-element state and do needed re-calculation
+			void change_multi_element_state(bool b_is_multi_element_weapon);
+                        
 			//method to generate a default weapon 
 			void generate_default_weapon();
 

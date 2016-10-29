@@ -94,11 +94,12 @@ namespace HWLSaveEdit
 			void calc_general();
 			void calc_weapons();
 			void calc_players();
-			bool calc_players_weapons(int i_player_id, int i_weapon_id, string &s_weapon_name, int &i_weapon_type, int &i_weapon_lvl, vector<int> &vi_lvl_hexValues);
+			bool calc_players_weapons(int i_player_id, int i_weapon_id, string &s_weapon_name, int &i_weapon_type, int &i_weapon_lvl, vector<int> &vi_lvl_hexValues, bool &b_is_multi_element_weapon, int &i_multi_element_weapon_hex);
 			void calc_materials();
 			void calc_fairyFood();
 			void calc_amItems();
 			void calc_myFairies();
+			void calc_game_versions_restrictions();
 
 		public:
 			HWLSaveEditor(string s_filepathname = "zmha.bin");

@@ -1,5 +1,6 @@
 #pragma once
 
+//include needed standard-libraries
 #include <string>
 #include <memory>
 
@@ -9,6 +10,7 @@
 //including needed third-party library/c++ wrapper
 #include "../libs/HTTP_Client/CHTTP_Client.h"
 
+//set user-defined content or define hardcoded-standard instead
 #ifndef VERSION_CHECK_NIGHTLY_HTTP_URL
 #define VERSION_CHECK_NIGHTLY_HTTP_URL "http://nightly.nedron92.php-friends.de/hwl_save-editor/builds/version_nightly.txt"
 #endif
@@ -29,7 +31,7 @@ namespace HWLSaveEdit
 	{
 		private:
 
-			/* @var s_version_check_http_url				the url of the version-check-file */
+			/* @var s_version_check_http_url		the url of the version-check-file */
 			string s_version_check_http_url = "http://nightly.nedron92.php-friends.de/hwl_save-editor/builds/version.txt";
 
 			/* @var s_version_check_nightly_http_url        the url of the nightly-version-check-file, user defined */

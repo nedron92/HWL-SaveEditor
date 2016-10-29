@@ -99,39 +99,60 @@ const vector<string> HWLGeneral::vs_game_version_strings =
 	"1.4.0", //X5, offset D3
 	"1.4.0", //X6, offset D3
 	"1.4.0", //X7, offset D3
-	"Unknown", //X8, offset D3
-	"Unknown", //X9, offset D3
-	"Unknown", //XA, offset D3
-	"Unknown", //XB, offset D3
-	"Unknown", //XC, offset D3
-	"Unknown", //XD, offset D3
-	"Unknown", //XE, offset D3
-	"Unknown", //XF, offset D3
-
+	"1.5.0", //X8, offset D3
+	"1.5.0", //X9, offset D3
+	"1.5.0", //XA, offset D3
+	"1.5.0", //XB, offset D3
+	"1.5.0", //XC, offset D3
+	"1.5.0", //XD, offset D3
+	"1.5.0", //XE, offset D3
+	"1.5.0", //XF, offset D3
 };
 
+/* @var vi_game_dlc_identifier_offsets_begin		vector, which hold the offset-begins of the DLC-Content */
+const vector<int> HWLGeneral::vi_game_dlc_identifier_offsets_begin =
+{
+	0x25D5, //Check for 'Master Wind Waker DLC' BEGIN
+	0X2F11E, //Check for 'Link's Awakening DLC' BEGIN
+	0x2F14E, //Check for 'Phantom Hourglass and Spirit Tracks DLC' BEGIN
+	0x0, //Check for 'A Link Between Worlds DLC' BEGIN
+};
 
-/* @var vs_version_strings		vector, which hold the version strings for calculation  */
+/* @var vi_game_dlc_identifier_offsets_end		vector, which hold the offset-ends of the DLC-Content */
+const vector<int> HWLGeneral::vi_game_dlc_identifier_offsets_end =
+{
+	0x25DD, //Check for 'Master Wind Waker DLC' END
+	0x2F121, //Check for 'Link's Awakening DLC' END
+	0x2F151, //Check for 'Phantom Hourglass and Spirit Tracks DLC' END
+	0x0, //Check for 'A Link Between Worlds DLC' END
+};
+
+/* @var vs_game_dlc_hexstring_standard_values		vector, which hold the dlc-default-hexStrings (if they NOT installed) */
+const vector<string> HWLGeneral::vs_game_dlc_default_hexStrings =
+{
+	"ffffffffffffffffff", //Default-hexString if NOT 'Master Wind Waker DLC' installed
+	"ffff00ff", //Default-hexString if NOT 'Link's Awakening DLC' installed
+	"ffff00ff", //Default-hexString if NOT 'Phantom Hourglass and Spirit Tracks DLC' installed
+	"00000000", //Default-hexString if NOT 'A Link Between Worlds DLC installed
+};
+
+/* @var vs_game_dlc_strings		vector, which hold the dlc-strings  */
 const vector<string> HWLGeneral::vs_game_dlc_strings =
 {
 	"Master Wind Waker DLC",
-	//"Link's Awakening DLC", 
-	//"Phantom Hourglass and Spirit Tracks DLC",
-	//"A Link Between Worlds DLC",
+	"Link's Awakening DLC",
+	"Phantom Hourglass and Spirit Tracks DLC",
+	"A Link Between Worlds DLC",
 };
 
-/* @var vs_version_strings		vector, which hold the version strings for calculation  */
-const vector<int> HWLGeneral::vi_game_dlc_identifier_offsets =
-{
-	0x2536, //Check for 'Master Wind Waker DLC'
-};
+
 
 //public members
 /* @var rubyMax			max value for rubies */
 const int HWLGeneral::rubyMax = 9999999;
 
 /* @var fairiesMax		maximal count of fairies*/
-const int HWLGeneral::fairiesMax = 12;
+const int HWLGeneral::fairiesMax = 14;
 
 
 
@@ -141,12 +162,15 @@ const int HWLGeneral::fairiesMax = 12;
 HWLGeneral::HWLGeneral()
 {
 	//set or calculate all needed members
+	s_savefile_game_version = this->calc_current_savefile_game_version();
+
+	vb_game_dlc_installed = this->calc_installed_dlcs();
+
 	this->i_rubies = this->calc_rubies();
 	this->b_unlocked_smithy = this->calc_unlocked_smithy_state();
 	this->b_unlocked_all_normal_weapons = this->calc_unlocked_normal_weapons_state();
 	this->b_unlocked_all_plus_weapons = this->calc_unlocked_plus_weapons_state();
 	this->b_unlocked_all_materials = this->calc_unlock_all_materials_state();
-	this->s_savefile_game_version = this->calc_current_savefile_game_version();
 }
 
 /**
@@ -168,16 +192,54 @@ string HWLGeneral::calc_current_savefile_game_version()
 {
 	//declare needed variables
 	string s_savefile_game_version, s_savefile_game_version_tmp;
-	int i_savefile_game_version = this->savefileGameVersionOffset;
+	int i_savefile_game_version_offset = this->savefileGameVersionOffset;
 
 	//get the current savefile-version as an hexString
-	s_savefile_game_version = this->getHexStringFromFileContent(i_savefile_game_version, this->savefileGameVersionOffsetLength);
+	s_savefile_game_version = this->getHexStringFromFileContent(i_savefile_game_version_offset, this->savefileGameVersionOffsetLength);
 
 	//we need only one part of the offset, get it here
 	s_savefile_game_version_tmp = s_savefile_game_version[this->savefileGameVersionOffsetPart - 1];
 
 	//return the current version based on the value and the vector-index
 	return (this->vs_game_version_strings[this->HexStringToInt(s_savefile_game_version_tmp)]);
+}
+
+/**
+* This method calculate the current installed DLCs
+*
+*	@return vector<bool>		the installed-state of each known DLC
+*
+*/
+vector<bool> HWLGeneral::calc_installed_dlcs()
+{
+
+	//declare needed variables, fucntion-global-scope
+	vector<bool> vb_savefile_installed_dlcs;
+
+	//define a standard-FALSE-state of each known DLC
+	for (int i = 0; i < this->vs_game_dlc_strings.size(); i++)
+		vb_savefile_installed_dlcs.push_back(false);
+
+	for (int i = 0; i < this->vs_game_dlc_strings.size(); i++)
+	{
+		string s_savefile_installed_dlc;
+		int i_savefile_installed_dlc_offset_begin = this->vi_game_dlc_identifier_offsets_begin[i];
+		int i_savefile_installed_dlc_offset_end = this->vi_game_dlc_identifier_offsets_end[i];
+		int i_savefile_installed_dlc_offset_length = (i_savefile_installed_dlc_offset_end - i_savefile_installed_dlc_offset_begin) + 1;
+
+		if (i_savefile_installed_dlc_offset_begin == 0x0)
+			continue;
+
+		s_savefile_installed_dlc = this->getHexStringFromFileContent(i_savefile_installed_dlc_offset_begin, i_savefile_installed_dlc_offset_length,true);
+
+		if (s_savefile_installed_dlc != this->vs_game_dlc_default_hexStrings[i])
+			vb_savefile_installed_dlcs[i] = true;
+		else
+			continue;
+	}
+
+	//return the current version based on the value and the vector-index
+	return vb_savefile_installed_dlcs;
 }
 
 /**
@@ -229,7 +291,7 @@ bool HWLGeneral::calc_unlocked_smithy_state()
 * This method calculate the current state, if
 *  all normal weapons are unlocked (only the state itself)
 *
-*	@return bool		the unlock-state 
+*	@return bool		the unlock-state
 *
 */
 bool HWLGeneral::calc_unlocked_normal_weapons_state()
@@ -419,7 +481,7 @@ void HWLGeneral::save_unlocked_plus_weapons_state()
 	if (this->b_unlocked_all_plus_weapons)
 		i_unlock_state = this->unlockAllPlusWeaponsValue;
 	else
-		i_unlock_state = (this->unlockAllPlusWeaponsValueMin-1);
+		i_unlock_state = (this->unlockAllPlusWeaponsValueMin - 1);
 
 	//get the old/current hexValue of the unlock-offset, to only change the
 	//correct part of it and not the hole offset itself
@@ -465,7 +527,8 @@ void HWLGeneral::save_unlock_all_materials_state()
 			{
 				i_unlock_state = this->unlockAllMaterialsMaxValueLastOffset;
 			}
-		}else
+		}
+		else
 		{
 			//if we have not the last flag-offset, then set i_unlock_state to MinValue, else set
 			//i_unlock_state to MinValue for the last Offset
@@ -500,6 +563,57 @@ void HWLGeneral::save_unlock_all_materials_state()
 string HWLGeneral::get_current_savefile_game_version()
 {
 	return this->s_savefile_game_version;
+}
+
+/**
+* Getter for max-Value of available DLCs
+*
+*	@return int		max-Value of known DLCs
++
+*/
+int HWLGeneral::get_dlc_max_available_dlcs()
+{
+	return (this->vs_game_dlc_strings.size());
+}
+
+/**
+* Getter for a int-Value of installed DLCs
+*
+*	@return int		Value of installed DLCs
+*  
+*/
+int HWLGeneral::get_dlc_installed_dlcs_value()
+{
+	int i_dlc_installed_counter = 0;
+	for (int i = 0; i < this->vs_game_dlc_strings.size(); i++)
+	{
+		if (this->vb_game_dlc_installed[i])
+			i_dlc_installed_counter++;
+	}
+
+	return i_dlc_installed_counter;
+}
+
+/**
+* Getter for install-state of given DLC-ID
+*
+*	@return bool		state, if given DLC is installed
++
+*/
+bool HWLGeneral::get_dlc_installed_state(int i_dlc_id)
+{
+	return (this->vb_game_dlc_installed[i_dlc_id]);
+}
+
+/**
+* Getter for print-name of given DLC-ID
+*
+*	@return string		print-name of given DLC
++
+*/
+string HWLGeneral::get_dlc_name(int i_dlc_id)
+{
+	return (this->vs_game_dlc_strings[i_dlc_id]);
 }
 
 /**
@@ -622,6 +736,30 @@ void HWLGeneral::set_unlocked_all_materials_state(bool b_unlocked_all_materials)
 
 
 /**
+* This method returns an formatted string, which contain a listing of installed DLCs
+*
+*	@return string		formatted output with installed DLCs
+*
+*/
+string HWLGeneral::get_DLCsForOutput()
+{
+	string s_output = "\n";
+
+	for (int i = 0; i < this->vs_game_dlc_strings.size(); i++)
+	{
+		if (!this->vb_game_dlc_installed[i])
+			continue;
+		else
+			s_output = s_output + "  " + this->vs_game_dlc_strings[i] + "\n";
+	}
+
+	if (s_output == "\n")
+		s_output = "None DLC installed";
+
+	return s_output;
+}
+
+/**
 * This method returns an formatted string, which contain all needed member-values
 *
 *	@return string		formatted output with all needed member-values
@@ -633,6 +771,7 @@ string HWLGeneral::get_GeneralThingsForOutput()
 
 	string s_output = s_begin
 		+ " Savefile-Game-Version: " + this->s_savefile_game_version + "\n"
+		+ " Installed DLCs: " + this->get_DLCsForOutput() + "\n"
 		+ " Unlock-State: Ingame-Smithy: " + to_string(this->b_unlocked_smithy) + "\n"
 		+ " Unlock-State: All normal weapons found  : " + to_string(this->b_unlocked_all_normal_weapons) + "\n"
 		+ " Unlock-State: All 'plus' weapons found  : " + to_string(this->b_unlocked_all_plus_weapons) + "\n"

@@ -34,9 +34,15 @@ const int HWLSaveEditorCore::weaponOffsetLength = 0x1F;
 /* @var weaponOffsetLengthComplete		length for all weapon Offsets (with fill-data) */
 const int HWLSaveEditorCore::weaponOffsetLengthComplete = 0x28;
 
+/* @var s_savefile_game_version		hold the current game-version of the savefile */
+string HWLSaveEditorCore::s_savefile_game_version = "";
+
+/* @var vb_game_dlc_installed			hold state if a DLC is installed */
+vector<bool> HWLSaveEditorCore::vb_game_dlc_installed;
+
 //public members
 /* @var version  hold the current version-number as string */
-const string HWLSaveEditorCore::version = "2.5.0.2a";
+const string HWLSaveEditorCore::version = "2.7.0.0b";
 
 
 

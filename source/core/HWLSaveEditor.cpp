@@ -12,6 +12,7 @@
 //use the project-namespace
 using namespace HWLSaveEdit;
 
+//activate auto-trim on default
 bool HWLSaveEditor::b_auto_trim = true;
 
 //offsets definitions
@@ -56,11 +57,14 @@ const vector<int> HWLSaveEditor::amItemOffsetBegin =
 	0xEB73,  //Start of GreatSea-Map Items (WindWaker and so on)
 	0x7A52,  //Start of MasterQuest-Map Items
 	0xA00A,  //Start of Twilight-Map Items (Lantern and so on)
-	0xC5BE	 //Start of Termina-Map Items (Song of Time and so on)
-
+	0xC5BE,	 //Start of Termina-Map Items (Song of Time and so on)
+	0x11120,  //Start of MasterWindWaker-Map Items (Cannon and so on), only 1st DLC: Master Wind Waker DLC
+	0x136D5,  //Start of KoholintIsland-Map Items (Full Moon Cello and so on), only 2nd DLC: Link's Awakening DLC
+	0x15C8D,  //Start of GrandTravels-Map Items (Railway Track and so on), only 3rd DLC: Phantom Hourglass & Spirit Tracks DLC
+	
 };
 
-/* @var amItemOffsetBegin	vector for holding the offsets-begin for AdventureMode items */
+/* @var amItemOffsetBeginSpecial	vector for holding the offsets-begin for AdventureMode items */
 const vector<int> HWLSaveEditor::amItemOffsetBeginSpecial =
 {
 	0xEB56,  //Compass of GreatSea-Map
@@ -71,6 +75,21 @@ const vector<int> HWLSaveEditor::amItemOffsetBeginSpecial =
 
 	0xC5AA, //Compass of Termina-Map (+1 = Bombs)
 	0xC5B1, //Ice Arrow of Termina-Map
+
+	//only 1st DLC: Master Wind Waker DLC
+	0x11102, //Compass of MasterWindWaker-Map
+	0x1110B, //Hookshot of MasterWindWaker-Map
+	0x1111F, //WindWaker of MasterWindWaker-Map
+
+	//only 2nd DLC: Link's Awakening DLC
+	0x136AE, //Compass of KoholintIsland-Map
+
+	//only 3rd DLC: Phantom Hourglass & Spirit Tracks DLC
+	0x15C5A, //Compass of GrandTravels-Map
+	0x15C8C, //Whirlwind of GrandTravels-Map
+	0x15C68, //Fishing Rod of GrandTravels-Map
+	0x15C78, //Cannon of GrandTravels-Map
+
 
 };
 
@@ -131,6 +150,7 @@ HWLSaveEditor::HWLSaveEditor(string s_filepathname)
 				this->calc_amItems();
 				this->calc_myFairies();
 				this->calc_players();
+				this->calc_game_versions_restrictions();
 			}
 			else
 			{
@@ -263,7 +283,7 @@ void HWLSaveEditor::calc_players()
 	for (int i = 0; i < (signed)HWLPlayer::vs_players.size(); i++)
 	{
 		//create an new player-object, based on current name and offset
-		shared_ptr<HWLPlayer> hwlp_tmp = make_shared<HWLPlayer>(i, HWLPlayer::vs_players[i], i_offset);
+		shared_ptr<HWLPlayer> hwlp_tmp = make_shared<HWLPlayer>(i, HWLPlayer::vs_players[i], i_offset, HWLWeapon::vi_playerWeaponTypeCount[i]);
 
 		//declare a counter for chara-specific weapon-types (eq. Link can have seven different weapon-types)
 		vector<int> i_count_weapon_slots;
@@ -281,13 +301,15 @@ void HWLSaveEditor::calc_players()
 			string s_weapon_name;
 			int i_weapon_type, i_weapon_lvl;
 			vector<int> vi_lvl_hexValues(HWLWeapon::weaponLVLMax); //create an vector, which hold the lvl offsets later (of current weapon)
+			bool b_is_multi_element_weapon = false;
+                        int i_multi_element_weapon_hex = 0x00;
 		
 			//due to security reasons set all integer-values within the vector to zero
 			for (int k = 0; k < (signed)vi_lvl_hexValues.size(); k++)
 				vi_lvl_hexValues[k] = 0;
 
 			//calculate weapons and check if its belong to the current chara, if yes, bind the new values
-			if (this->calc_players_weapons(i, i_weapon_id, s_weapon_name, i_weapon_type, i_weapon_lvl, vi_lvl_hexValues))
+			if (this->calc_players_weapons(i, i_weapon_id, s_weapon_name, i_weapon_type, i_weapon_lvl, vi_lvl_hexValues, b_is_multi_element_weapon, i_multi_element_weapon_hex))
 			{
 				//set the current weapon-values to the belonging object itself
 				this->v_weapon[j]->set_name(s_weapon_name);
@@ -295,7 +317,19 @@ void HWLSaveEditor::calc_players()
 				this->v_weapon[j]->set_lvl(i_weapon_lvl);
 				this->v_weapon[j]->set_character_id(i);
 				this->v_weapon[j]->set_lvl_hex(vi_lvl_hexValues);
-
+				this->v_weapon[j]->set_IsMultiElement(b_is_multi_element_weapon);
+                                this->v_weapon[j]->set_multi_element_hex(i_multi_element_weapon_hex);
+                                
+                                //do a check, if Multi-Element Weapons are unknown by the game-version
+                                // of the savefile. If TRUE: generate a default Weapon instead
+                                if( (this->s_savefile_game_version == "1.0.0" || this->s_savefile_game_version == "1.2.0" 
+                                    || this->s_savefile_game_version == "1.3.0") 
+                                    || (!this->vb_game_dlc_installed[1] || !this->vb_game_dlc_installed[2] )
+                                    && (b_is_multi_element_weapon) ) 
+                                {
+                                    this->v_weapon[j]->generate_default_weapon();
+                                }
+                                
 				//bind this weapon to to current chara
 				hwlp_tmp->set_weapon_slot(i_weapon_type, this->v_weapon[j]);
 
@@ -352,18 +386,19 @@ void HWLSaveEditor::calc_players()
 * This method checks if a specific weapon belongs to the specific character and also calculate
 * some needed things for that weapon with given parameters (some as reference)
 *
-*	@var int			 i_player_id			id of the specific character
-*	@var int			 i_weapon_id			id of the specific weapon
-*	@var string			 s_weapon_name			hold the name of an weapon (as a reference, calculate within the method)
-*	@var int			 i_weapon_type			hold the type of an weapon (as a reference, calculate within the method)
-*	@var int			 i_weapon_lvl			hold the level of an weapon (as a reference, calculate within the method)
-*	@var vector<int>	 vi_lvl_hexValues		hold the level-hex of all levels of a weapon
-*												(as a reference, calculate within the method)
+*	@var int			 i_player_id				id of the specific character
+*	@var int			 i_weapon_id				id of the specific weapon
+*	@var string			 s_weapon_name				hold the name of an weapon (as a reference, calculate within the method)
+*	@var int			 i_weapon_type				hold the type of an weapon (as a reference, calculate within the method)
+*	@var int			 i_weapon_lvl				hold the level of an weapon (as a reference, calculate within the method)
+*	@var vector<int>                vi_lvl_hexValues			hold the level-hex of all levels of a weapon
+*													(as a reference, calculate within the method)
+*	@var bool			b_is_multi_element_weapon	hold, if current weapon is a multi-element special weapon or not
 *
 *	@return bool		TRUE if weapon belongs to the given character and FALSE if not
 *
 */
-bool HWLSaveEditor::calc_players_weapons(int i_player_id, int i_weapon_id, string &s_weapon_name, int &i_weapon_type, int &i_weapon_lvl, vector<int> &vi_lvl_hexValues)
+bool HWLSaveEditor::calc_players_weapons(int i_player_id, int i_weapon_id, string &s_weapon_name, int &i_weapon_type, int &i_weapon_lvl, vector<int> &vi_lvl_hexValues, bool &b_is_multi_element_weapon, int &i_multi_element_weapon_hex)
 {
 	//define an weapon-counter, and calculate all used weapon-types
 	int i_weapon_count = 0;
@@ -379,7 +414,7 @@ bool HWLSaveEditor::calc_players_weapons(int i_player_id, int i_weapon_id, strin
 	for (int j = 0; j < HWLWeapon::vi_playerWeaponTypeCount[i_player_id]; j++)
 	{
 		//declare all needed lvl-variables
-		int i_current_lvl_2, i_current_lvl_3, i_current_lvl_4;
+		int i_current_lvl_2, i_current_lvl_3, i_current_lvl_4, i_current_multi_element_weapon_hex;
 
 		//check if we have Links Master-Sword and if yes, set lvl2-4 to zero, because there is 
 		//only one level of it, if not then calculate the level-offsets
@@ -393,10 +428,13 @@ bool HWLSaveEditor::calc_players_weapons(int i_player_id, int i_weapon_id, strin
 			i_current_lvl_3 = HWLWeapon::vi_playerWeaponTypeHexValues[i_weapon_count + j] + 2;
 			i_current_lvl_4 = HWLWeapon::vi_playerWeaponTypeHexValuesLVL4[i_weapon_count + j];
 
+			//calculate the current hex for the multi-element weapon of this type (available from 2nd DLC on)
+			i_current_multi_element_weapon_hex = HWLWeapon::vi_playerWeaponTypeHexValuesMultiElement[i_weapon_count + j];
+
 		}
 		else{
-			//we have the master-sword, so set all other level-hex to zero
-			i_current_lvl_2 = i_current_lvl_3 = i_current_lvl_4 = 0;
+			//we have the master-sword, so set all other level-hex and multi-element-hex to zero
+			i_current_lvl_2 = i_current_lvl_3 = i_current_lvl_4 = i_current_multi_element_weapon_hex = 0;
 		}
 
 		//bind the calculated weapon-ids (levels) to the given vector (as reference-variable)
@@ -404,6 +442,7 @@ bool HWLSaveEditor::calc_players_weapons(int i_player_id, int i_weapon_id, strin
 		vi_lvl_hexValues[1] = i_current_lvl_2;
 		vi_lvl_hexValues[2] = i_current_lvl_3;
 		vi_lvl_hexValues[3] = i_current_lvl_4;
+                i_multi_element_weapon_hex = i_current_multi_element_weapon_hex;
 
 		//Now checks the given weapon-id, if we have Level-1,2,3 or 4 of the weapon-type and set 
 		//the needed things correctly. And return true if all things went fine
@@ -433,6 +472,14 @@ bool HWLSaveEditor::calc_players_weapons(int i_player_id, int i_weapon_id, strin
 			s_weapon_name = HWLWeapon::vs_playerWeaponTypeNames[i_weapon_count + j];
 			i_weapon_type = j;
 			i_weapon_lvl = 4;
+			return true;
+		}
+		else if (i_weapon_id == i_current_multi_element_weapon_hex)
+		{
+			s_weapon_name = HWLWeapon::vs_playerWeaponTypeNames[i_weapon_count + j];
+			i_weapon_type = j;
+			i_weapon_lvl = 4;
+			b_is_multi_element_weapon = true;
 			return true;
 		}
 	}
@@ -570,6 +617,18 @@ void HWLSaveEditor::calc_amItems()
 				i_offset = this->amItemOffsetBeginSpecial[4];
 				break;
 
+			case 60: ////Compass, MasterWindWaker Map, only 1st DLC: Master Wind Waker DLC
+				i_offset = this->amItemOffsetBeginSpecial[6];
+				break;
+
+			case 72: ////Compass, KoholintIsland Map, only 2nd DLC: Link's Awakening DLC
+				i_offset = this->amItemOffsetBeginSpecial[9];
+				break;
+
+			case 84: ////Compass, GrandTravels Map, only 3rd DLC: Phantom Hourglass & Spirit Tracks DLC
+				i_offset = this->amItemOffsetBeginSpecial[10];
+				break;
+
 			default: //normal
 				i_offset = this->amItemOffsetBegin[i_type];
 				break;
@@ -585,7 +644,10 @@ void HWLSaveEditor::calc_amItems()
 
 		case 14: //Wind Waker, Great-Sea map
 		case 40: //Lantern, Twilight Map
-		case 51://Song of Time, Termina Map
+		case 51: //Song of Time, Termina Map
+		case 63: //Cannon, MasterWindWaker Map, only 1st DLC: Master Wind Waker DLC
+		case 73: //Full Moon Cello, KoholintIsland Map, only 2nd DLC: Link's Awakening DLC
+		case 88: //Railway Track, KoholintIsland Map, only 3rd DLC: Phantom Hourglass & Spirit Tracks DLC
 			i_offset = this->amItemOffsetBegin[i_type];
 			break;
 
@@ -595,6 +657,26 @@ void HWLSaveEditor::calc_amItems()
 
 		case 50: //Ice Arrow, Termina Map
 			i_offset = this->amItemOffsetBeginSpecial[5];
+			break;
+
+		case 61: //Hookshot, MasterWindWaker Map, only 1st DLC: Master Wind Waker DLC
+			i_offset = this->amItemOffsetBeginSpecial[7];
+			break;
+
+		case 62: //Wind Waker, MasterWindWaker Map, only 1st DLC: Master Wind Waker DLC
+			i_offset = this->amItemOffsetBeginSpecial[8];
+			break;
+
+		case 85: //Whirlwind, GrandTravels Map, only 3rd DLC: Phantom Hourglass & Spirit Tracks DLC
+			i_offset = this->amItemOffsetBeginSpecial[8];
+			break;
+
+		case 86: //Fishing Rod, GrandTravels Map, only 3rd DLC: Phantom Hourglass & Spirit Tracks DLC
+			i_offset = this->amItemOffsetBeginSpecial[8];
+			break;
+
+		case 87: //Cannon, GrandTravels Map, only 3rd DLC: Phantom Hourglass & Spirit Tracks DLC
+			i_offset = this->amItemOffsetBeginSpecial[8];
 			break;
 
 		}
@@ -632,6 +714,38 @@ void HWLSaveEditor::calc_myFairies()
 		//calculate the next offset
 		i_offset = i_offset + this->fairyOffsetLength;
 	}
+}
+
+/**
+* This method calculate the restrictions for all objects due to the current game-version and DLCs
+*
+*/
+void HWLSaveEditor::calc_game_versions_restrictions()
+{
+	//calc characters restrictions - disabled state -> BEGIN
+	this->get_player("???")->set_isDisabled(true);
+
+	if (this->s_savefile_game_version == "1.0.0" || this->s_savefile_game_version == "1.2.0") 
+			this->get_player("Medli")->set_isDisabled(true);
+
+	if (this->s_savefile_game_version == "1.0.0" || this->s_savefile_game_version == "1.2.0" 
+		|| this->s_savefile_game_version == "1.3.0" || !this->vb_game_dlc_installed[1])
+			this->get_player("Marin")->set_isDisabled(true);
+
+	if (this->s_savefile_game_version == "1.0.0" || this->s_savefile_game_version == "1.2.0"
+		|| this->s_savefile_game_version == "1.3.0" || this->s_savefile_game_version == "1.4.0" || !this->vb_game_dlc_installed[2])
+		this->get_player("Toon Zelda")->set_isDisabled(true);
+	//calc characters restrictions - disabled state -> END
+
+	//calc characters restrictions - weapon-types-disabled state -> BEGIN
+	if (!this->vb_game_dlc_installed[1])
+		this->get_player("Linkle")->set_disabled_weaponTypeID(1);
+
+	if (!this->vb_game_dlc_installed[2])
+		this->get_player("Toon Link")->set_disabled_weaponTypeID(1);
+
+	//calc characters restrictions - weapon-types-disabled state -> END
+
 }
 
 

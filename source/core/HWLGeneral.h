@@ -25,9 +25,6 @@ namespace HWLSaveEdit
 			/* @var b_unlocked_all_materials			state, if all materials where found */
 			bool b_unlocked_all_materials = false;
 
-			/* @var s_savefile_game_version		hold the current game-version of the savefile */
-			string s_savefile_game_version = "";
-
 			//offset-const declaration
 			static const int rubyOffset;
 			static const int rubyOffsetLength;
@@ -60,11 +57,14 @@ namespace HWLSaveEdit
 			static const int savefileGameVersionOffsetPart;
 			static const vector<string> vs_game_version_strings;
 
+			static const vector<int> vi_game_dlc_identifier_offsets_begin;
+			static const vector<int> vi_game_dlc_identifier_offsets_end;
+			static const vector<string> vs_game_dlc_default_hexStrings;
 			static const vector<string> vs_game_dlc_strings;
-			static const vector<int> vi_game_dlc_identifier_offsets;
 
 			//methods for calculation of all (known) general-things
 			string calc_current_savefile_game_version();
+			vector<bool> calc_installed_dlcs();
 			int  calc_rubies();
 			bool calc_unlocked_smithy_state();
 			bool calc_unlocked_normal_weapons_state();
@@ -89,6 +89,10 @@ namespace HWLSaveEdit
 
 			//methods to set and get all (known) general-things
 			string get_current_savefile_game_version();
+			int get_dlc_max_available_dlcs();
+			int get_dlc_installed_dlcs_value();
+			bool get_dlc_installed_state(int i_dlc_id);
+			string get_dlc_name(int i_dlc_id);
 			int get_rubies();
 			bool get_unlocked_smithy_state();
 			bool get_unlocked_normal_weapons_state();
@@ -102,6 +106,7 @@ namespace HWLSaveEdit
 			void set_unlocked_all_materials_state(bool b_unlocked_all_materials);
 
 			//method to get a formatted output (for console)
+			string get_DLCsForOutput();
 			string get_GeneralThingsForOutput();
 
 			//saving method

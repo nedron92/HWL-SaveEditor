@@ -59,11 +59,11 @@ const int HWLWeapon::weaponSkillSlotsLength = 0x1;
 /* @var vi_playerWeaponTypeCount	vector for holding information about how many weapon types a chara have */
 const vector<int> HWLWeapon::vi_playerWeaponTypeCount =
 {
-	7, 3, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1
+	7, 3, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 0, 0, 2, 1, 2, 1, 1, 1, 1, 1
 	// 0.Link, 1.Zelda, 2.Shiek, 3.Impa, 4.Ganondorf, 5.Darunia, 6.Ruto, 7.Agitha, 8.Imp Midna, 
 	// 9.Fi, 10.Ghirahim, 11.Zant, 12.Lana, 13.Cia, 14.Volga, 15.Wizzro, 16.Twili Midna, 17.Young Link, 
 	// 18.Tingle, 19.??? 20.???, 21.Linkle, 22.Skull Kid, 23.Toon Link, 24.Tetra, 25.King Daphnes, 26.Medli
-        // 27.Marin
+	// 27.Marin, 28.Toon Zelda
 };
 
 /* @var vs_playerWeaponTypeNames	vector for holding all weapon-type names */
@@ -142,12 +142,14 @@ const vector<string> HWLWeapon::vs_playerWeaponTypeNames =
 
 	//Linkle - Weapon Types
 	"Crossbows",
+	"Boots", //only 2nd DLC: Link's Awakening DLC
 
 	//Skull Kid - Weapon Types
 	"Ocarina",
 
 	//Toon Link - Weapon Types
 	"Light Sword",
+	"Sand Wand",
 
 	//Tetra - Weapon Types
 	"Cutlass",
@@ -156,11 +158,13 @@ const vector<string> HWLWeapon::vs_playerWeaponTypeNames =
 	"Sail",
 
 	//Medli - Weapon Types
-	"Rito Harp",
-        
-        //Marin - Weapon Types
-        "Bell",
-      
+	"Rito Harp", //Update 1.3.0 (no LVL4-Weapon without any DLC)
+
+	//Marin - Weapon Types
+	"Bell", //only 2nd DLC: Link's Awakening DLC
+
+	//Toon Zelda - Weapon Types
+	"Phantom Arms", //only 3rd DLC: Phantom Hourglass and Spirit Tracks DLC
 };
 
 /* @var vi_playerWeaponTypeHexValues	vector for holding information about all weapon-type offsets-begin */
@@ -239,12 +243,14 @@ const vector<int> HWLWeapon::vi_playerWeaponTypeHexValues =
 
 	//Linkle - Weapon Types Hex
 	0x71,
+	0x97,
 
 	//Skull Kid - Weapon Types Hex
 	0x74,
 
 	//Toon Link - Weapon Types Hex
 	0x77,
+	0xAB,
 
 	//Tetra - Weapon Types Hex
 	0x7A,
@@ -253,10 +259,13 @@ const vector<int> HWLWeapon::vi_playerWeaponTypeHexValues =
 	0x7D,
 
 	//Medli - Weapon Types Hex
-	0x8F,
-        
-        //Mrin - Weapon Types Hex
-	0x93,
+	0x8F, //Update 1.3.0 (no LVL4-Weapon without any DLC)
+
+	//Marin - Weapon Types Hex
+	0x93, //only 2nd DLC: Link's Awakening DLC
+
+	//Toon Zelda - Weapon Hex
+	0xA7, //only 3rd DLC: Phantom Hourglass and Spirit Tracks DLC
 };
 
 /* @var vi_playerWeaponTypeHexValuesLVL4	vector for holding information about all weapon-type offsets, LVL 4*/
@@ -335,12 +344,14 @@ const vector<int> HWLWeapon::vi_playerWeaponTypeHexValuesLVL4 =
 
 	//Linkle - Weapon Types Hex  LVL 4
 	0x8A,
+	0x9A,
 
 	//Skull Kid - Weapon Types Hex  LVL 4
 	0x8B,
 
 	//Toon Link - Weapon Types Hex LVL 4
 	0x8C,
+	0xAE,
 
 	//Tetra - Weapon Types Hex LVL 4
 	0x8D,
@@ -349,10 +360,115 @@ const vector<int> HWLWeapon::vi_playerWeaponTypeHexValuesLVL4 =
 	0x8E,
 
 	//Medli - Weapon Types Hex LVL 4
-	0x92,
-        
+	0x92, //Update 1.3.0 (no LVL4-Weapon without any DLC)
+
 	//Marin - Weapon Types Hex LVL 4
-	0x96,        
+	0x96, //only 2nd DLC: Link's Awakening DLC        
+
+	//Toon Zelda - Weapon Hex LVL 4
+	0xAA, //only 3rd DLC: Phantom Hourglass and Spirit Tracks DLC
+};
+
+//only from 2nd DLC on. 0x00 => no Multi-Element Weapon for that type
+/* @var vi_playerWeaponTypeHexValuesMultiElement	vector for holding information about all weapon-type offsets, Multi-Element Weapons */
+const vector<int> HWLWeapon::vi_playerWeaponTypeHexValuesMultiElement =
+{
+	//Link - Weapon Types Hex Multi-Element
+	0x00, //Hylian Sword - Multi
+	0xAF, //Magic Rod - Multi
+	0x00, //Great Fairy - Multi
+	0x9B, //Gauntlets - Multi
+	0x00, //Master Sword - Multi, not possible :D 
+	0x00, //Horse (Epona) - Multi
+	0x00, //Spinner - Multi
+
+	//Zelda - Weapon Types Hex Multi-Element
+	0x00, //Rapier - Multi
+	0xB2, //Baton - Multi
+	0x00, //Dominion Rod - Multi
+
+	//Shiek - Weapon Types Hex Multi-Element
+	0x9C, //Harp - Multi
+
+	//Impa - Weapon Types Hex Multi-Element
+	0x00, //Giant Blade - Multi
+	0xB0, //Naginata - Multi
+
+	//Ganondorf - Weapon Types Hex Multi-Element
+	0x00, //Great Swords - Multi
+	0xB3, //Trident - Multi
+
+	//Darunia - Weapon Types Hex Multi-Element
+	0x9E, //Hammer - Multi
+
+	//Ruto - Weapon Types Hex Multi-Element
+	0x9F, //Zora Scale - Multi
+
+	//Agitha - Weapon Types Hex Multi-Element
+	0xA0, //Parasol - Multi
+
+	//Imp Midna - Weapon Types Hex Multi-Element
+	0xA1, //Shackle - Multi
+
+	//Fi - Weapon Types Hex Multi-Element
+	0xA2, //Goddess Blade - Multi
+
+	//Ghirahim - Weapon Types Hex Multi-Element
+	0xB5, //Demon Blade - Multi
+
+	//Zant - Weapon Types Hex Multi-Element
+	0xB4, //Scimitars - Multi
+
+	//Lana - Weapon Types Hex Multi-Element
+	0x00, //Book of Sorcery - Multi
+	0xB1, //Spear - Multi
+	0x9D, //Summoning Gate - Multi
+
+	//Cia - Weapon Types Hex Multi-Element
+	0xB6, //Scepter - Multi
+
+	//Volga - Weapon Types Hex Multi-Element
+	0xB7, //Dragon Spear - Multi
+
+	//Wizzro - Weapon Types Hex Multi-Element
+	0xB8, //Ring - Multi
+
+	//Twili Midna - Weapon Types Hex Multi-Element
+	0xB9, //Mirror - Multi
+
+	//Young Link - Weapon Types Hex Multi-Element
+	0xA3, //Mask - Multi
+
+	//Tingle - Weapon Types Hex Multi-Element
+	0xBA, //Balloon - Multi
+
+	//??? - Weapon Types Hex  Multi-Element, 2 times, without any weapon-type hex for Multi-Element
+
+	//Linkle - Weapon Types Hex  Multi-Element
+	0x00, //Crossbows - Multi
+	0x00, //Boots (only 2nd DLC: Link's Awakening DLC) - Multi
+
+	//Skull Kid - Weapon Types Hex  Multi-Element
+	0xA4, //Ocarina - Multi
+
+	//Toon Link - Weapon Types Hex Multi-Element
+	0x00, //Light Sword - Multi
+	0x00, //Sand Wand - Multi
+
+	//Tetra - Weapon Types Hex Multi-Element
+	0xA5, //Cutlass - Multi
+
+	//King Daphnes - Weapon Types Hex Multi-Element
+	0xA6, //Sail - Multi
+
+	//Medli - Weapon Types Hex Multi-Element
+	0x00, //Rito Harp (Update 1.3.0 (no LVL4-Weapon without any DLC) ) - Multi
+
+	//Marin - Weapon Types Hex Multi-Element
+	0x00, //Bell (only 2nd DLC: Link's Awakening DLC) - Multi     
+
+	//Toon Zelda - Weapon Hex Multi-Element
+	0x00, //Phantom Arms (only 3rd DLC: Phantom Hourglass and Spirit Tracks DLC) - Multi
 };
 
 
@@ -386,7 +502,7 @@ const vector<string> HWLWeapon::weaponStateValuesNames =
 /* @var weaponSkillNames			vector for holding skill-names, index as hex = Weapon-ID*/
 const vector<string> HWLWeapon::weaponSkillNames =
 {
-	"Open Slot",
+	"Free Slot",
 	"Str Attack I+",
 	"Str Attack II +",
 	"Str Attack III + ",
@@ -615,7 +731,7 @@ vector<int> HWLWeapon::calc_skill_slot_kills()
 		// "normal-order" of the hole hex-string before
 		string s_skill_slot_kill = s_skill_slot_kills.substr(i, (this->weaponSkillSlotKillsLength * 2));
 		this->convertByteOrder(s_skill_slot_kill);
-		
+
 		//Add the hex-value, converted to int, to the temp-vector
 		vi_temp.push_back(this->HexStringToInt(s_skill_slot_kill));
 	}
@@ -754,7 +870,7 @@ void HWLWeapon::save_skill_slot_kills()
 	//declare/define needed variables
 	string s_skill_slot_kills; //hold the kills of all skill-slots (as hex)
 	int i_skill_slot_kills_offset = this->i_offset + this->weaponSkillSlotKillsOffsetDiff; //offset-begin
-	
+
 	//iterate over all skill-slots to get the current needed kills of them
 	for (int i = 0; i < (signed)this->vi_skill_slot_kills.size(); i++)
 	{
@@ -763,11 +879,11 @@ void HWLWeapon::save_skill_slot_kills()
 		//complete length (calculate with offset-length multiplied by 2)
 		string s_skill_slot_kill = this->intToHexString(vi_skill_slot_kills[i], false);
 		this->addZeroToHexString(s_skill_slot_kill, (this->weaponSkillSlotKillsLength * 2));
-		
+
 		//convert the ByteOrder to BigEndian, because we need the real-order of the
 		//hex-string, how it's save in the savefile
 		this->convertByteOrder(s_skill_slot_kill);
-		
+
 		//add the hex-representation of the current needed Kills of the current Skill-Slot
 		//to the hex-string (to the end)
 		s_skill_slot_kills.append(s_skill_slot_kill);
@@ -799,7 +915,7 @@ void HWLWeapon::save_skill_slots()
 		//complete length (calculate with offset-length multiplied by 2)
 		string s_skill_slot = this->intToHexString(vi_skill_slots[i], false);
 		this->addZeroToHexString(s_skill_slot, (this->weaponSkillSlotsLength * 2));
-		
+
 		//convert the ByteOrder to BigEndian, because we need the real-order of the
 		//hex-string, how it's save in the savefile
 		this->convertByteOrder(s_skill_slot);
@@ -848,10 +964,11 @@ void HWLWeapon::set_id(int i_id)
 */
 void HWLWeapon::set_lvl(int i_lvl)
 {
-	//check if lvl-value smaller then 1, then set it directly to 1
-	//also check for the maximal-value
-	if (i_lvl != this->i_lvl)
+        //only change lvl, if we have not the same as before
+	if ( (i_lvl != this->i_lvl) )
 	{
+            	//check if lvl-value smaller then 1, then set it directly to 1
+                //also check for the maximal-value
 		if (i_lvl > this->weaponLVLMax)
 			i_lvl = this->weaponLVLMax;
 		else if (i_lvl <= 1)
@@ -996,6 +1113,28 @@ void HWLWeapon::set_type(int i_type)
 void HWLWeapon::set_IsUnused(bool b_is_unsued_weapon)
 {
 	this->b_is_unsued_weapon = b_is_unsued_weapon;
+}
+
+/**
+* Setter for the weapons Multi-Elements-State
+*
+*	@var bool	b_is_multi_element_weapon		Multi-Elements-State to set
+*
+*/
+void HWLWeapon::set_IsMultiElement(bool b_is_multi_element_weapon)
+{
+	this->b_is_multi_element_weapon = b_is_multi_element_weapon;
+}
+
+/**
+* Setter for the weapons Multi-Element-Hex
+*
+*	@var int	i_multi_element_weapon_hex		Multi-Element-Hex to set
+*
+*/
+void HWLWeapon::set_multi_element_hex(int i_multi_element_weapon_hex)
+{
+	this->i_multi_element_weapon_hex = i_multi_element_weapon_hex;
 }
 
 
@@ -1196,7 +1335,7 @@ string HWLWeapon::get_skill_slot(int i_slot_id, bool b_get_string)
 	{
 		//get the current skill-ID of the given Skill-Slot
 		int i_skill_value = this->vi_skill_slots[i_slot_id];
-		
+
 		//check if we have the "No-Skill" ID (0xFF), then set the
 		//name to the last entry of the name-vector, if not
 		//skill-ID = name-vector index
@@ -1246,6 +1385,28 @@ bool HWLWeapon::get_IsUnused()
 	return this->b_is_unsued_weapon;
 }
 
+/**
+* Getter for the weapons Multi-Elements-State
+*
+*	@return bool		the Multi-Elements-State of the weapon
+*
+*/
+bool HWLWeapon::get_IsMultiElement()
+{
+	return this->b_is_multi_element_weapon;
+}
+
+/**
+* Getter for the weapons Multi-Element-Hex
+*
+*	@return int		the Multi-Element-Hex of the weapon
+*
+*/
+int HWLWeapon::get_multi_element_hex()
+{
+	return this->i_multi_element_weapon_hex;
+}
+
 
 
 /**
@@ -1269,7 +1430,7 @@ void HWLWeapon::change_damage_base(int i_damage_base)
 
 /**
 * This method change the current weapon-lvl and re-calculate
-*  the damage-base and real damage (also set the enw weapon-id,
+*  the damage-base and real damage (also set the new weapon-id,
 *  based on the given lvl)
 *
 *	@var int	i_lvl		the new lvl-value to set
@@ -1277,6 +1438,27 @@ void HWLWeapon::change_damage_base(int i_damage_base)
 */
 void HWLWeapon::change_lvl(int i_lvl)
 {
+    //only do a lvl-change if we don't have a multi-element weapon, cause there are only LVL-4 Weapons
+    //with a second element, nth more. So no LVL-Change with it.
+    if(!this->b_is_multi_element_weapon)
+    {
+        //check if we have "MedlI" as character (ID: 26) and if we have no DLCs installed
+        //If TRUE and if we want to set the Max-LVL (4) set it to 3. Cause game will freeze otherwise.
+	if (i_lvl == this->weaponLVLMax && this->i_character_id == 26 && this->i_type == 0
+		&& this->s_savefile_game_version != "1.0.0" && this->s_savefile_game_version != "1.2.0")
+	{
+		int i_dlcs_installed = 0;
+		for (int i = 0; i < this->vb_game_dlc_installed.size(); i++)
+		{
+			if (this->vb_game_dlc_installed[i])
+				i_dlcs_installed++;
+		}
+
+		if (i_dlcs_installed == 0)
+			i_lvl--;
+	}
+
+
 	//change only, if we have not the same lvl-value
 	if (this->i_lvl != i_lvl)
 	{
@@ -1288,10 +1470,12 @@ void HWLWeapon::change_lvl(int i_lvl)
 		//because the entries begins with zero. (check the lvl-hex-
 		//vector for that
 		this->set_id(this->vi_lvl_hex[i_lvl - 1]);
-		
+
 		//re-calculate the damage itself
 		this->i_damage = this->calc_damage();
 	}
+    }
+
 }
 
 
@@ -1313,11 +1497,48 @@ void HWLWeapon::change_stars(int i_stars)
 	}
 }
 
+/**
+* This method change the current Multi-Element state and re-calculate
+*  lvl and implicit others.
+*
+*	@var int	b_is_multi_element_weapon       the multi-element-state to set
+*
+*/
+void HWLWeapon::change_multi_element_state(bool b_is_multi_element_weapon)
+{
+    
+   //do it only if we have a right game-version and one of the needed DLCs is installed 
+    if(this->s_savefile_game_version != "1.0.0" && this->s_savefile_game_version != "1.2.0"
+        && this->s_savefile_game_version != "1.3.0" && (this->vb_game_dlc_installed[1] || this->vb_game_dlc_installed[2] )
+       )
+    {
+        //change only, if we have not the same multi-element-state and if we have a valid-hex for that type
+	if ( (this->b_is_multi_element_weapon != b_is_multi_element_weapon ) 
+              && this->i_multi_element_weapon_hex != 0x00)
+	{
+            //set multi-element-state  and re-calculate the LVL itself
+            //First: Set to false and LVL to 1 to re-calculate Weapons LVL to MAX.
+            this->set_IsMultiElement(false);
+            this->set_lvl(1);
+            this->change_lvl(this->weaponLVLMax);
+            
+            //if the state change to TRUE, set the new ID
+            if(b_is_multi_element_weapon)
+                 this->set_id(this->i_multi_element_weapon_hex);
+                   
+            //finally, set the new state
+            this->set_IsMultiElement(b_is_multi_element_weapon);
+	}
+    }
+    
+
+}
+
 
 
 /**
 * This method create a new default-weapon on the current object, based on the current
-*  character and weapon-type. 
+*  character and weapon-type.
 * All needed member-variables are setting to their default values
 *  (also a special-check for the unique Master-Sword)
 *
@@ -1338,10 +1559,11 @@ void HWLWeapon::generate_default_weapon()
 	//and the current-type
 	int i_default_weapon_id = this->vi_playerWeaponTypeHexValues[i_weapon_count + this->i_type];
 
-	//set the id, lvl and also the Unused-State (to false)
+	//set the id, lvl and also the Unused-State and Multi-Element-State (to false)
 	this->set_id(i_default_weapon_id);
 	this->set_lvl(1);
 	this->set_IsUnused(false);
+	this->set_IsMultiElement(false);
 
 	//Check if we have the Master Sword and set the Damage base to the correct defaults
 	if (i_default_weapon_id == this->vi_playerWeaponTypeHexValues[4])
@@ -1382,14 +1604,19 @@ void HWLWeapon::generate_default_weapon()
 	vi_lvl_hexValues[1] = (i_default_weapon_id + 1);
 	vi_lvl_hexValues[2] = (i_default_weapon_id + 2);
 	vi_lvl_hexValues[3] = (HWLWeapon::vi_playerWeaponTypeHexValuesLVL4[i_weapon_count + this->i_type]);
-
-	//set the new lvl-hex-values and then we're done with a new default-weapon
+        
+	//set the new lvl-hex-values
 	this->set_lvl_hex(vi_lvl_hexValues);
+        
+        //re-calculate and set the hex-value of the multi-element-type of this weapon 
+        //and then we're done with a new default-weapon
+        this->set_multi_element_hex((HWLWeapon::vi_playerWeaponTypeHexValuesMultiElement[i_weapon_count + this->i_type]));
+        
 }
 
 
 /**
-* This method delete the current weapon and set it an unused one.
+* This method delete the current weapon and set it to an unused one.
 * Also re-calculate all needed members, based on the new unused-weapon
 *
 */
@@ -1407,6 +1634,7 @@ void HWLWeapon::delete_weapon()
 	this->vi_skill_slots = this->calc_skill_slots();
 	this->i_state = this->calc_state();
 	this->b_is_unsued_weapon = true;
+	this->b_is_multi_element_weapon = false;
 
 	//set type-to zero and lvl to 1
 	this->i_type = 0;
@@ -1449,6 +1677,7 @@ string HWLWeapon::get_WeaponsForOutput()
 		+ "  Damage Base: " + to_string(this->i_damage_base) + "\n"
 		+ "  Stars: " + to_string(this->i_stars) + "\n"
 		+ "  Lvl: " + to_string(this->i_lvl) + "\n"
+		+ "  Is Multi-Element Weapon: " + to_string(this->b_is_multi_element_weapon) + "\n"
 		+ "  Skills: " + this->get_WeaponsSkillsForOutput() + "\n"
 		+ "  Weapon State: " + this->get_state(true) + "\n";
 

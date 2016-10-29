@@ -20,6 +20,9 @@ namespace HWLSaveEdit
 			/* @var i_offset			offset of the character */
 			int i_offset;
 
+			/* @var i_weapon_type_count		number of weapon-types of the character */
+			int i_weapon_type_count;
+
 			/* @var i_lvl				lvl of the character */
 			int i_lvl;
 
@@ -37,6 +40,12 @@ namespace HWLSaveEdit
 
 			/* @var b_canUseAttackBadges		state, if character can use Attack-Badges */
 			bool b_canUseAttackBadges;
+
+			/* @var b_isDisabled		state, if character is complety disabled (not editable) */
+			bool b_isDisabled;
+
+			/* @var b_isDisabled		vector, which hold weapon-type-IDs of chara, whcih complety disabled (not editable) */
+			vector<int> vi_weapon_disabled_ids;
 
 			/* @var m_player_weapon		holding all weapons of that character */
 			map<int, vector<shared_ptr<HWLWeapon>> > m_player_weapon;
@@ -58,6 +67,12 @@ namespace HWLSaveEdit
 			static const int playerIsUnlockOffsetDiff;
 			static const int playerCanUseAttackBadgesOffsetDiff;
 
+			//max const declaration for stati
+			static const vector<int> playerLVLMax;
+			static const vector<int> playerEXPMax;
+			static const vector<int> playerATKMax;
+			static const vector<int> playerHeartsMax;
+
 			//methods for calculation of all (known) stati-values
 			int calc_players_lvl();
 			int calc_players_exp();
@@ -77,15 +92,11 @@ namespace HWLSaveEdit
 		public:
 			//needed public members/constans
 			static const vector<string> vs_players;
-			static const int playerLVLMax;
-			static const int playerEXPMax;
-			static const int playerATKMax;
-			static const int playerHeartsMax;
 			static const int playerIsUnlockMax;
 			static const int playerWeaponSlotsMax;
 
 			//constructor and destructor
-			HWLPlayer(int i_id, string s_name, int i_offset);
+			HWLPlayer(int i_id, string s_name, int i_offset, int i_weapon_type_count);
 			~HWLPlayer();
 
 			//methods to set and get all stati-values and also weapons
@@ -94,22 +105,31 @@ namespace HWLSaveEdit
 			void set_atk(int i_atk);
 			void set_hearts(int i_hearts);
 			void set_isUnlock(bool b_isUnlock);
+			void set_isDisabled(bool b_isDisabled);
+			void set_disabled_weaponTypeID(int i_weapon_type);
 			void set_weapon_slot(int i_weapon_type, shared_ptr<HWLWeapon> hwlw_weapon);
 			void set_weapon_slot(int i_weapon_type, int i_weapon_slot, shared_ptr<HWLWeapon> hwlw_weapon);
 
 			int get_id();
 			string get_name();
 			int get_offset();
+			int get_weapon_type_count();
 			int get_lvl();
 			int get_exp();
 			int get_atk();
 			int get_hearts();
 			bool get_isUnlock();
+			bool get_isDisabled();
+			bool get_isWeaponTypeDisabled(int i_weapon_type);
 			shared_ptr<HWLWeapon> get_weapon_slot(int i_weapon_type, int i_weapon_slot);
 
 			//methods to get current weapon-count and a formatted output (for console)
 			int get_weapon_count(int i_weapon_type);
 			string get_playersStatiForOutput();
+
+			//methods to get the current max-values for stati
+			static int get_max_stati_value(int i_stati_id);
+			static int get_max_stati_value(string s_stati_id);
 
 			//saving method
 			void save_Player();

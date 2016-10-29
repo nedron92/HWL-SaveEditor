@@ -28,6 +28,10 @@ namespace HWLSaveEdit
 			static const int fairyOffsetLength;
 			static const int weaponOffsetLength;
 			static const int weaponOffsetLengthComplete;
+                        
+                        //needed non-const members for subclasses
+			static string s_savefile_game_version;
+                        static vector<bool> vb_game_dlc_installed;
 
 		public:
 			//needed public static-constants

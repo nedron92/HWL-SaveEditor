@@ -5,6 +5,7 @@
 
 //include the correct header-file
 #include "HWLPlayer.h"
+#include "HWLGeneral.h"
 
 //use the project-namespace
 using namespace HWLSaveEdit;
@@ -76,21 +77,42 @@ const vector<string> HWLPlayer::vs_players =
 	"Toon Link",
 	"Tetra",
 	"King Daphnes",
-	"Medli",
-        "Marin"
+	"Medli", //Update 1.3.0 (no LVL4-Weapon without any DLC)
+	"Marin", //only 2nd DLC: Link's Awakening DLC
+	"Toon Zelda" //only 3rd DLC: Phantom Hourglass and Spirit Tracks DLC
 };
 
-/* @var playerLVLMax				maximal-value of the characters LVL */
-const int HWLPlayer::playerLVLMax = 99;
+/* @var playerLVLMax				maximal-values of the characters LVL */
+const vector<int> HWLPlayer::playerLVLMax =
+{
+	99,  //till Update 1.3.0
+	150, //Update 1.4.0
+	200  //Update 1.5.0 
+};
 
-/* @var playerEXPMax				maximal-value of the characters EXP */
-const int HWLPlayer::playerEXPMax = 3178257;
+/* @var playerEXPMax				maximal-values of the characters EXP */
+const vector<int> HWLPlayer::playerEXPMax =
+{
+	3178257, //till Update 1.3.0
+	6337707, //Update 1.4.0
+	9435207  //Update 1.5.0 
+};
 
-/* @var playerATKMax				maximal-value of the characters ATK */
-const int HWLPlayer::playerATKMax = 999;
+/* @var playerATKMax				maximal-values of the characters ATK */
+const vector<int> HWLPlayer::playerATKMax =
+{
+	999, //till Update 1.4.0
+	1300 //Update 1.5.0
+};
 
-/* @var playerHeartsMax				maximal-value of the characters hearts*/
-const int HWLPlayer::playerHeartsMax = 18;
+/* @var playerHeartsMax				maximal-values of the characters hearts*/
+const vector<int> HWLPlayer::playerHeartsMax =
+{
+	18, //till Update 1.3.0
+	23, //Update 1.4.0
+	25  //Update 1.5.0
+};
+
 
 /* @var playerIsUnlockMax			maximal-value of the characters isUnlock-State*/
 const int HWLPlayer::playerIsUnlockMax = 0xF;
@@ -103,18 +125,21 @@ const int HWLPlayer::playerWeaponSlotsMax = 10;
 /**
 * Only the initialization of the normal-constructor
 */
-HWLPlayer::HWLPlayer(int i_id, string s_name, int i_offset)
+HWLPlayer::HWLPlayer(int i_id, string s_name, int i_offset, int i_weapon_type_count)
 {
 	//set or calculate all needed members
 	this->i_id = i_id;
 	this->s_name = s_name;
 	this->i_offset = i_offset;
+	this->i_weapon_type_count = i_weapon_type_count;
 	this->i_lvl = this->calc_players_lvl();
 	this->i_exp = this->calc_players_exp();
 	this->i_atk = this->calc_players_atk();
-  	this->i_hearts = this->calc_players_hearts();      
+	this->i_hearts = this->calc_players_hearts();
 	this->b_isUnlock = this->calc_players_isUnlockState();
 	this->b_canUseAttackBadges = this->calc_players_canUseAttackBadgesState();
+	this->b_isDisabled = false;
+	this->vi_weapon_disabled_ids;
 }
 
 /**
@@ -137,7 +162,7 @@ int HWLPlayer::calc_players_lvl()
 	//declare/define needed variables
 	string s_playerLVL;
 	int i_player_lvl_offset = this->i_offset + this->playerLVLOffsetDiff;
-	
+
 	//get hex-value from the file-content holder and convert it to int
 	//increment players-Level value, because it is save as LVL-Shown  - 1
 	s_playerLVL = this->getHexStringFromFileContent(i_player_lvl_offset, this->playerLVLOffsetLength);
@@ -394,8 +419,8 @@ void HWLPlayer::set_lvl(int i_lvl)
 	//also check for the maximal-value
 	if (i_lvl < 1)
 		i_lvl = 1;
-	else if (i_lvl > this->playerLVLMax)
-		i_lvl = playerLVLMax;
+	else if (i_lvl > this->get_max_stati_value(0))
+		i_lvl = this->get_max_stati_value(0);
 
 	this->i_lvl = i_lvl;
 }
@@ -412,8 +437,8 @@ void HWLPlayer::set_exp(int i_exp)
 	//also check for the maximal-value
 	if (i_exp < 100)
 		i_exp = 100;
-	else if (i_exp > this->playerEXPMax)
-		i_exp = playerEXPMax;
+	else if (i_exp > this->get_max_stati_value(1))
+		i_exp = this->get_max_stati_value(1);
 
 	this->i_exp = i_exp;
 
@@ -431,8 +456,8 @@ void HWLPlayer::set_atk(int i_atk)
 	//also check for the maximal-value
 	if (i_atk < 50)
 		i_atk = 50;
-	else if (i_atk > this->playerATKMax)
-		i_atk = playerATKMax;
+	else if (i_atk > this->get_max_stati_value(2))
+		i_atk = this->get_max_stati_value(2);
 
 	this->i_atk = i_atk;
 
@@ -450,8 +475,8 @@ void HWLPlayer::set_hearts(int i_hearts)
 	//also check for the maximal-value
 	if (i_hearts < 5)
 		i_hearts = 5;
-	else if (i_hearts > this->playerHeartsMax)
-		i_hearts = this->playerHeartsMax;
+	else if (i_hearts > this->get_max_stati_value(3))
+		i_hearts = this->get_max_stati_value(3);
 
 	this->i_hearts = i_hearts;
 
@@ -466,11 +491,33 @@ void HWLPlayer::set_hearts(int i_hearts)
 void HWLPlayer::set_isUnlock(bool b_isUnlock)
 {
 	this->b_isUnlock = b_isUnlock;
-        
-        //check if character will be unlock and due to a security-reason ingame, we have
-        //to set, that the character can use his Attack-Badges then
-        if(b_isUnlock)
-            this->b_canUseAttackBadges = true;
+
+	//check if character will be unlock and due to a security-reason ingame, we have
+	//to set, that the character can use his Attack-Badges then
+	if (b_isUnlock)
+		this->b_canUseAttackBadges = true;
+}
+
+/**
+* Setter for the characters Disabled-State
+*
+*	@var bool	b_isDisabled		disabled-state to set
+*
+*/
+void HWLPlayer::set_isDisabled(bool b_isDisabled)
+{
+	this->b_isDisabled = b_isDisabled;
+}
+
+/**
+* Setter for the characters disabled Weapon-Type IDs
+*
+*	@var bool	i_weapon_type		id of weapon-type to add to disable-list
+*
+*/
+void HWLPlayer::set_disabled_weaponTypeID(int i_weapon_type)
+{
+	this->vi_weapon_disabled_ids.push_back(i_weapon_type);
 }
 
 /**
@@ -536,6 +583,17 @@ int HWLPlayer::get_offset()
 }
 
 /**
+* Getter for the number of weapon-types of the character
+*
+*	@return int		the number of weapon-types of the character
+*
+*/
+int HWLPlayer::get_weapon_type_count()
+{
+	return this->i_weapon_type_count;
+}
+
+/**
 * Getter for the characters-LVL
 *
 *	@return int		the current characters-lvl
@@ -579,7 +637,6 @@ int HWLPlayer::get_hearts()
 	return this->i_hearts;
 }
 
-
 /**
 * Getter for the characters Unlock-State
 *
@@ -589,6 +646,35 @@ int HWLPlayer::get_hearts()
 bool HWLPlayer::get_isUnlock()
 {
 	return this->b_isUnlock;
+}
+
+/**
+* Getter for the characters Disabled-State
+*
+*	@return bool	the current characters Disabled-State
+*
+*/
+bool HWLPlayer::get_isDisabled()
+{
+	return this->b_isDisabled;
+}
+
+/**
+* Getter for the characters disabled Weapon-Type IDs
+* Return bool, if given weapon-type-id is within the vector
+*
+*	@var bool	i_weapon_type		id of weapon-type to check
+*
+*/
+bool HWLPlayer::get_isWeaponTypeDisabled(int i_weapon_type)
+{
+	for (int i = 0; i < this->vi_weapon_disabled_ids.size(); i++)
+	{
+		if (this->vi_weapon_disabled_ids[i] == i_weapon_type)
+			return true;
+	}
+
+	return false;
 }
 
 /**
@@ -606,11 +692,11 @@ shared_ptr<HWLWeapon> HWLPlayer::get_weapon_slot(int i_weapon_type, int i_weapon
 
 /**
 * This method return the value how many used weapons of an type
-* the charachter has
+* the character has
 *
 *	@var int	i_weapon_type		identify the weapon-type for the counter
 *
-*	@return int		value, how many weapons, of the given type, are used
+*	@return int		value, how many weapons of the given type are used
 *
 */
 int HWLPlayer::get_weapon_count(int i_weapon_type)
@@ -648,18 +734,111 @@ int HWLPlayer::get_weapon_count(int i_weapon_type)
 string HWLPlayer::get_playersStatiForOutput()
 {
 	string s_output = "Name: " + this->s_name + "\n"
-		//+ "  Offset: " + this->intToHexString(this->i_offset,false) + "\n" //offset for testing purpose
+		//+ "  Offset: " + this->intToHexString(this->i_offset, false) + "\n" //offset for testing purpose
 		+ "  Unlock?: " + to_string(this->b_isUnlock) + "\n"
 		//+ "  Can Use Attack-Badges?: " + to_string(this->b_canUseAttackBadges) + "\n" //for testing purpose
 		+ "  Level: " + to_string(this->i_lvl) + "\n"
 		+ "  EXP: " + to_string(this->i_exp) + "\n"
 		+ "  ATK: " + to_string(this->i_atk) + "\n"
-                + "  Hearts: " + to_string(this->i_hearts) + "\n";
+		+ "  Hearts: " + to_string(this->i_hearts) + "\n";
 
 	return s_output;
 }
 
 
+/**
+* This method return the max-value of an given-stati-id
+*
+*	@var int        i_stati_id		id of the stati that you want
+*
+*	@return int		maximal-value of the given stati
+*
+*/
+int HWLPlayer::get_max_stati_value(int i_stati_id)
+{
+	//switch-case of the given stati-id
+	//do a check which version the savefile is and return the corressponding max-value
+	switch (i_stati_id)
+	{
+		//case 0: max LVL-Value
+	case 0:
+	{
+			  if (s_savefile_game_version == "1.5.0")
+				  return playerLVLMax[2];
+			  else
+			  if (s_savefile_game_version == "1.4.0")
+				  return playerLVLMax[1];
+			  else
+				  return playerLVLMax[0];
+			  break;
+	}
+
+		//case 1: max EXP-Value
+	case 1:
+	{
+			  if (s_savefile_game_version == "1.5.0")
+				  return playerEXPMax[2];
+			  else
+			  if (s_savefile_game_version == "1.4.0")
+				  return playerEXPMax[1];
+			  else
+				  return playerEXPMax[0];
+			  break;
+	}
+
+		//case 2: max ATK-Value
+	case 2:
+	{
+			  if (s_savefile_game_version == "1.5.0")
+				  return playerATKMax[1];
+			  else
+				  return playerATKMax[0];
+			  break;
+	}
+
+		//case 3: max Hearts-Value
+	case 3:
+	{
+			  if (s_savefile_game_version == "1.5.0")
+				  return playerHeartsMax[2];
+			  else
+			  if (s_savefile_game_version == "1.4.0")
+				  return playerHeartsMax[1];
+			  else
+				  return playerHeartsMax[0];
+			  break;
+	}
+
+		//default, if no case matches: -1 
+	default:
+		return -1;
+	}
+}
+
+/**
+* This method return the max-value of an given-stati-name
+*
+*	@var string         s_stati_id		name of the stati that you want
+*
+*	@return int		maximal-value of the given stati
+*
+*/
+int HWLPlayer::get_max_stati_value(string s_stati_id)
+{
+	//check for an empty-string, true: return -1, false: check what kind of
+	//stati was given and return the corressponding value (or also -1)
+	if (s_stati_id != "")
+	{
+		if (s_stati_id == "LVL") return get_max_stati_value(0);
+		if (s_stati_id == "EXP") return get_max_stati_value(1);
+		if (s_stati_id == "ATK") return get_max_stati_value(2);
+		if (s_stati_id == "Hearts") return get_max_stati_value(3);
+		else
+			return -1;
+	}
+	else
+		return -1;
+}
 
 /**
 * This method is a wrapper for all known save-methods of the class
@@ -679,16 +858,16 @@ void HWLPlayer::save_Player()
 
 string HWLPlayer::get_sizes()
 {
-	string s_map_size = "Map Size: " + to_string(this->m_player_weapon.size()) + "\n";
-	string s_vector_size = "";
+string s_map_size = "Map Size: " + to_string(this->m_player_weapon.size()) + "\n";
+string s_vector_size = "";
 
-	for (int i = 0; i < this->m_player_weapon.size(); i++)
-	{
-		s_vector_size = s_vector_size + "  Vector Size [" + to_string(i) + "]: "
-			+ to_string(this->m_player_weapon[i].size()) + "\n";
-	}
+for (int i = 0; i < this->m_player_weapon.size(); i++)
+{
+s_vector_size = s_vector_size + "  Vector Size [" + to_string(i) + "]: "
++ to_string(this->m_player_weapon[i].size()) + "\n";
+}
 
-	return s_map_size + s_vector_size;
-	
+return s_map_size + s_vector_size;
+
 }
 */

@@ -65,7 +65,7 @@ namespace HWLSaveEdit
 			static shared_ptr<HWLHttp> http_request;
 
 			// member declarations
-			/* @var sp_general		pointer for holding all general thnings */
+			/* @var sp_general		pointer for holding all general things */
 			shared_ptr<HWLGeneral> sp_general;
 
 			/* @var m_players		map for holding all playable characters */

@@ -197,7 +197,7 @@ void HWLFairy::save_fairy_name()
 	//we have to add the zero to the end, this time, because a 00 is
 	//the end of the fairy-name
 	shex_fairyName = this->ByteStringToHexString(s_fairyName);
-	this->addZeroToHexString(shex_fairyName, this->fairyNameOffsetLength * 2,true);
+	this->addZeroToHexString(shex_fairyName, this->fairyNameOffsetLength * 2, true);
 
 	//set converted hex-value to the file-content holder and because we
 	//set directly single-characters, we need the last parameter = true
@@ -302,7 +302,8 @@ void HWLFairy::set_name(string s_name)
 	if (s_name.size() <= this->fairyNameLength)
 	{
 		this->s_name = s_name;
-	}else
+	}
+	else
 	{
 		int i_size = s_name.size();
 		int i_diff = i_size - this->fairyNameLength;
@@ -310,7 +311,7 @@ void HWLFairy::set_name(string s_name)
 
 		for (int i = 1; i <= i_diff; i++)
 		{
-			s_name.erase(i_size-i);
+			s_name.erase(i_size - i);
 		}
 
 		this->s_name = s_name;

@@ -46,7 +46,7 @@ const string HWLSaveEditorCore::version = "2.7.0.0b";
 
 
 
-/** 
+/**
 * Only the initialization of the normal-constructor
 */
 HWLSaveEditorCore::HWLSaveEditorCore()
@@ -62,7 +62,7 @@ HWLSaveEditorCore::~HWLSaveEditorCore()
 
 /**
 * This method convert an integer value to an string with the
-*	hex-content of the orignal value. 
+*	hex-content of the orignal value.
 * Also get the Hex-representation of a specific point
 *	from the file-content
 *
@@ -118,7 +118,7 @@ string HWLSaveEditorCore::intToHexString(unsigned int i_value, bool is_file_cont
 }
 
 /**
-* This method convert an HexString to the correct 
+* This method convert an HexString to the correct
 *	integer-value
 *
 *	@var string  s_hexString	the string to convert
@@ -158,11 +158,11 @@ string HWLSaveEditorCore::HexStringToByteString(string s_hexString)
 	//not an character, that will be something other)
 	int i_pos = s_hexString.find("00");
 	if (i_pos != string::npos)
-		s_hexString.erase(s_hexString.begin()+i_pos, s_hexString.end());
+		s_hexString.erase(s_hexString.begin() + i_pos, s_hexString.end());
 
 	//make a temporary copy of the input-hex-string
 	s_hex_tmp = s_hexString;
-	
+
 	// iterate over the hex-string and make sub-strings of the form
 	// XX. Convert each sub-string to its Integer-Value and used
 	// it for an unsgined char. Pusch it to the new string
@@ -178,7 +178,7 @@ string HWLSaveEditorCore::HexStringToByteString(string s_hexString)
 }
 
 /**
-* This method will convert an Byte-String to an HexString 
+* This method will convert an Byte-String to an HexString
 *
 *	@var string  s_byteString		the string to convert
 *
@@ -204,7 +204,7 @@ string HWLSaveEditorCore::ByteStringToHexString(string s_byteString)
 }
 
 /**
-* This method will convert an Byte-String as CharPointer 
+* This method will convert an Byte-String as CharPointer
 * to an WideString
 *
 *	@var char*  cp_multibyte_str	the string to convert as char-pointer
@@ -312,7 +312,7 @@ void HWLSaveEditorCore::convertByteOrder(string &s_hexString)
 }
 
 /**
-* This method get an HexString from a specifc offset 
+* This method get an HexString from a specifc offset
 *	within the file-content
 *
 *	@var int	i_offset			the file-offset-begin
@@ -323,7 +323,7 @@ void HWLSaveEditorCore::convertByteOrder(string &s_hexString)
 *									single characters and need
 *									Big-Endian-Order. Default: FALSE
 *
-*	@return string					the HexString 
+*	@return string					the HexString
 *
 */
 string HWLSaveEditorCore::getHexStringFromFileContent(int i_offset, int i_offset_length, bool b_is_char)
@@ -344,7 +344,8 @@ string HWLSaveEditorCore::getHexStringFromFileContent(int i_offset, int i_offset
 			{
 				s_hexString = s_hexString + this->intToHexString(i);
 			}
-		}else
+		}
+		else
 		{
 			//Iterate from offset-begin to offset-end, because
 			//we have directly single characters and they are
@@ -355,7 +356,8 @@ string HWLSaveEditorCore::getHexStringFromFileContent(int i_offset, int i_offset
 			}
 		}
 
-	}else
+	}
+	else
 	{
 		//convert the offset-content to the hexString
 		s_hexString = this->intToHexString(i_offset);
@@ -369,7 +371,7 @@ string HWLSaveEditorCore::getHexStringFromFileContent(int i_offset, int i_offset
 * This method set an HexString to a specifc offset
 *	within the file-content
 *
-*	@var string	s_hexString		the HexString for setting 
+*	@var string	s_hexString		the HexString for setting
 *								to file-content
 *
 *	@var int	i_offset		the file-offset-begin
@@ -408,7 +410,7 @@ void HWLSaveEditorCore::setHexStringToFileContent(string s_hexString, int i_offs
 		//Decrement the offset after that (or increment, if we have an char-string)
 		cp_filecontent[i_offset] = (unsigned char)i_tmp;
 
-		if(!b_is_char) i_offset--;
+		if (!b_is_char) i_offset--;
 		else i_offset++;
 	}
 }

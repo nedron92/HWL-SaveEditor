@@ -10,9 +10,9 @@
 using namespace HWLSaveEdit;
 
 /**
-* Only the initialization of the normal-constructor, 
+* Only the initialization of the normal-constructor,
 * set the code and message
-* 
+*
 */
 HWLException::HWLException(const char* const& c_desc, int i_code)
 {
@@ -28,7 +28,7 @@ HWLException::~HWLException()
 }
 
 /**
-* This method return the current error-message 
+* This method return the current error-message
 *
 */
 const char *HWLException::what()

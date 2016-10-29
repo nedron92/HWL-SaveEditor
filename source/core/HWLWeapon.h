@@ -16,46 +16,46 @@ namespace HWLSaveEdit
 			/* @var i_offset					offset of the weapon */
 			int i_offset;
 
-			/* @var i_id						offset of the weapon */
+			/* @var i_id						id of the weapon */
 			int i_id;
 
-			/* @var i_lvl						offset of the weapon */
+			/* @var i_lvl						lvl of the weapon */
 			int i_lvl;
 
-			/* @var vi_lvl_hex					offset of the weapon */
+			/* @var vi_lvl_hex					lvl-hex of all lvl of the weapon */
 			vector<int> vi_lvl_hex;
 
-			/* @var i_damage_base                                   offset of the weapon */
+			/* @var i_damage_base				damage-base of the weapon */
 			int i_damage_base;
 
-			/* @var i_stars						offset of the weapon */
+			/* @var i_stars						stars of the weapon */
 			int i_stars;
 
-			/* @var i_damage					offset of the weapon */
+			/* @var i_damage					real-damage of the weapon */
 			int i_damage;
 
-			/* @var i_state						offset of the weapon */
+			/* @var i_state						legendary-state of the weapon */
 			int i_state;
 
-			/* @var vi_skill_slot_kills			offset of the weapon */
+			/* @var vi_skill_slot_kills			needed-kills for the skills of the weapon */
 			vector<int> vi_skill_slot_kills;
 
-			/* @var vi_skill_slots				offset of the weapon */
+			/* @var vi_skill_slots				skills of the weapon */
 			vector<int> vi_skill_slots;
 
-			/* @var i_character_id				offset of the weapon */
+			/* @var i_character_id				character-id of the weapon */
 			int i_character_id;
 
-			/* @var i_type						offset of the weapon */
+			/* @var i_type						type of the weapon (depend on current character.id) */
 			int i_type;
 
-			/* @var b_is_unsued_weapon			offset of the weapon */
+			/* @var b_is_unsued_weapon			state, if the weapon is unused */
 			bool b_is_unsued_weapon;
 
-			/* @var b_is_multi_element_weapon	offset of the weapon */
+			/* @var b_is_multi_element_weapon	state, if the weapon is a multi-element one */
 			bool b_is_multi_element_weapon;
-                        
-                        /* @var i_multi_element_weapon_hex	offset of the weapon */
+
+			/* @var i_multi_element_weapon_hex	hex of the weapons-multi-element type */
 			int i_multi_element_weapon_hex;
 
 			//offset-const declaration
@@ -132,7 +132,7 @@ namespace HWLSaveEdit
 			void set_type(int i_type);
 			void set_IsUnused(bool b_is_unsued_weapon);
 			void set_IsMultiElement(bool b_is_multi_element_weapon);
-                        void set_multi_element_hex(int i_multi_element_weapon_hex);
+			void set_multi_element_hex(int i_multi_element_weapon_hex);
 
 
 			string get_name();
@@ -151,7 +151,7 @@ namespace HWLSaveEdit
 			int get_type();
 			bool get_IsUnused();
 			bool get_IsMultiElement();
-                        int get_multi_element_hex();
+			int get_multi_element_hex();
 
 			//method to change the damage-base and re-calculate the damage
 			void change_damage_base(int i_damage_base);
@@ -162,10 +162,10 @@ namespace HWLSaveEdit
 
 			//method to change stars and re-calculate the damage
 			void change_stars(int i_stars);
-                        
-                        //method to change multi-element state and do needed re-calculation
+
+			//method to change multi-element state and do needed re-calculation
 			void change_multi_element_state(bool b_is_multi_element_weapon);
-                        
+
 			//method to generate a default weapon 
 			void generate_default_weapon();
 

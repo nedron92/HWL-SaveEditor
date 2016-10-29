@@ -44,7 +44,7 @@ namespace HWLSaveEdit
 			/* @var b_isDisabled		state, if character is complety disabled (not editable) */
 			bool b_isDisabled;
 
-			/* @var b_isDisabled		vector, which hold weapon-type-IDs of chara, whcih complety disabled (not editable) */
+			/* @var b_isDisabled		vector, which hold weapon-type-IDs of chara, which are complety disabled (not editable) */
 			vector<int> vi_weapon_disabled_ids;
 
 			/* @var m_player_weapon		holding all weapons of that character */

@@ -28,7 +28,7 @@ const int HWLSaveEditor::playerOffsetBegin = 0x2EBF2;
 
 
 /* @var bronzeMaterialsOffsetBegin	offset begin of first bronze-material */
-const int HWLSaveEditor::bronzeMaterialsOffsetBegin = 0x1924; 
+const int HWLSaveEditor::bronzeMaterialsOffsetBegin = 0x1924;
 
 /* @var bronzeMaterialsOffsetBegin	offset begin of first new bronze-material */
 const int HWLSaveEditor::bronzeMaterialsOffsetBeginNew = 0x19BE;
@@ -61,7 +61,7 @@ const vector<int> HWLSaveEditor::amItemOffsetBegin =
 	0x11120,  //Start of MasterWindWaker-Map Items (Cannon and so on), only 1st DLC: Master Wind Waker DLC
 	0x136D5,  //Start of KoholintIsland-Map Items (Full Moon Cello and so on), only 2nd DLC: Link's Awakening DLC
 	0x15C8D,  //Start of GrandTravels-Map Items (Railway Track and so on), only 3rd DLC: Phantom Hourglass & Spirit Tracks DLC
-	
+
 };
 
 /* @var amItemOffsetBeginSpecial	vector for holding the offsets-begin for AdventureMode items */
@@ -119,9 +119,9 @@ HWLSaveEditor::HWLSaveEditor(string s_filepathname)
 	//set the needed values for the file and program
 	//(path/name of file and open it)
 	this->s_filepathname = s_filepathname;
-	this->fs_filehandler = fstream(s_filepathname, 
-		fstream::binary | fstream::in | fstream::out );
-	
+	this->fs_filehandler = fstream(s_filepathname,
+		fstream::binary | fstream::in | fstream::out);
+
 	//check if file is open, else throw Exception
 	if (this->fs_filehandler.is_open())
 	{
@@ -160,7 +160,7 @@ HWLSaveEditor::HWLSaveEditor(string s_filepathname)
 
 				switch (i_check_savefile_length_state)
 				{
-				case 1: 
+				case 1:
 					s_tmp = "File '" + s_filepathname + "' is valid but too short. \nPlease try to export again.";
 					break;
 
@@ -226,7 +226,7 @@ HWLSaveEditor::~HWLSaveEditor()
 
 
 /**
-* This method calculate the current general-thing-object 
+* This method calculate the current general-thing-object
 * and so all needed general ingame-things like rubies etc.
 *
 */
@@ -253,7 +253,7 @@ void HWLSaveEditor::calc_weapons()
 		//break the loop if its true
 		if (i + this->weaponOffsetLengthComplete > this->i_filelength)
 			break;
-                
+
 		//get the current weapon of that offset as an HexString
 		string s_weapon = this->getHexStringFromFileContent(i, this->weaponOffsetLength, true);
 
@@ -302,8 +302,8 @@ void HWLSaveEditor::calc_players()
 			int i_weapon_type, i_weapon_lvl;
 			vector<int> vi_lvl_hexValues(HWLWeapon::weaponLVLMax); //create an vector, which hold the lvl offsets later (of current weapon)
 			bool b_is_multi_element_weapon = false;
-                        int i_multi_element_weapon_hex = 0x00;
-		
+			int i_multi_element_weapon_hex = 0x00;
+
 			//due to security reasons set all integer-values within the vector to zero
 			for (int k = 0; k < (signed)vi_lvl_hexValues.size(); k++)
 				vi_lvl_hexValues[k] = 0;
@@ -318,18 +318,18 @@ void HWLSaveEditor::calc_players()
 				this->v_weapon[j]->set_character_id(i);
 				this->v_weapon[j]->set_lvl_hex(vi_lvl_hexValues);
 				this->v_weapon[j]->set_IsMultiElement(b_is_multi_element_weapon);
-                                this->v_weapon[j]->set_multi_element_hex(i_multi_element_weapon_hex);
-                                
-                                //do a check, if Multi-Element Weapons are unknown by the game-version
-                                // of the savefile. If TRUE: generate a default Weapon instead
-                                if( (this->s_savefile_game_version == "1.0.0" || this->s_savefile_game_version == "1.2.0" 
-                                    || this->s_savefile_game_version == "1.3.0") 
-                                    || (!this->vb_game_dlc_installed[1] || !this->vb_game_dlc_installed[2] )
-                                    && (b_is_multi_element_weapon) ) 
-                                {
-                                    this->v_weapon[j]->generate_default_weapon();
-                                }
-                                
+				this->v_weapon[j]->set_multi_element_hex(i_multi_element_weapon_hex);
+
+				//do a check, if Multi-Element Weapons are unknown by the game-version
+				// of the savefile. If TRUE: generate a default Weapon instead
+				if ((this->s_savefile_game_version == "1.0.0" || this->s_savefile_game_version == "1.2.0"
+					|| this->s_savefile_game_version == "1.3.0")
+					|| (!this->vb_game_dlc_installed[1] || !this->vb_game_dlc_installed[2])
+					&& (b_is_multi_element_weapon))
+				{
+					this->v_weapon[j]->generate_default_weapon();
+				}
+
 				//bind this weapon to to current chara
 				hwlp_tmp->set_weapon_slot(i_weapon_type, this->v_weapon[j]);
 
@@ -442,7 +442,7 @@ bool HWLSaveEditor::calc_players_weapons(int i_player_id, int i_weapon_id, strin
 		vi_lvl_hexValues[1] = i_current_lvl_2;
 		vi_lvl_hexValues[2] = i_current_lvl_3;
 		vi_lvl_hexValues[3] = i_current_lvl_4;
-                i_multi_element_weapon_hex = i_current_multi_element_weapon_hex;
+		i_multi_element_weapon_hex = i_current_multi_element_weapon_hex;
 
 		//Now checks the given weapon-id, if we have Level-1,2,3 or 4 of the weapon-type and set 
 		//the needed things correctly. And return true if all things went fine
@@ -546,10 +546,10 @@ void HWLSaveEditor::calc_materials()
 
 		//create a new material-object, based on offset and name
 		shared_ptr<HWLMaterial> hwlm_tmp = make_shared<HWLMaterial>(HWLMaterial::vs_goldMaterials[i], i_offset, 2);
-		
+
 		//bind the offset to the current map of them
 		this->m_materials[HWLMaterial::vs_goldMaterials[i]] = hwlm_tmp;
-	
+
 		//calculate the next offset
 		i_offset = i_offset + this->materialOffsetLength;
 	}
@@ -569,7 +569,7 @@ void HWLSaveEditor::calc_fairyFood()
 	{
 		//create new fairyFood object, based on current offset
 		shared_ptr<HWLFairyFood> hwlff_tmp = make_shared<HWLFairyFood>(HWLFairyFood::vs_fairyFood[i], i_offset);
-		
+
 		//bind the object to the map of them
 		this->m_fairyfood[HWLFairyFood::vs_fairyFood[i]] = hwlff_tmp;
 
@@ -683,7 +683,7 @@ void HWLSaveEditor::calc_amItems()
 
 		//create new AdventureMode-item object, based on offset and type (also name)
 		shared_ptr<HWLAdventureModeItems> hwlami_tmp = make_shared<HWLAdventureModeItems>(HWLAdventureModeItems::vs_amItems[i], i_offset, i_type);
-		
+
 		//bind object to the map of them
 		this->m_amItem[i] = hwlami_tmp;
 
@@ -707,10 +707,10 @@ void HWLSaveEditor::calc_myFairies()
 	{
 		//create new object, based on offset
 		shared_ptr<HWLFairy> hwlf_tmp = make_shared<HWLFairy>(i_offset);
-		
+
 		//bind object to the map of them
 		this->m_fairy[i] = hwlf_tmp;
-		
+
 		//calculate the next offset
 		i_offset = i_offset + this->fairyOffsetLength;
 	}
@@ -725,12 +725,12 @@ void HWLSaveEditor::calc_game_versions_restrictions()
 	//calc characters restrictions - disabled state -> BEGIN
 	this->get_player("???")->set_isDisabled(true);
 
-	if (this->s_savefile_game_version == "1.0.0" || this->s_savefile_game_version == "1.2.0") 
-			this->get_player("Medli")->set_isDisabled(true);
+	if (this->s_savefile_game_version == "1.0.0" || this->s_savefile_game_version == "1.2.0")
+		this->get_player("Medli")->set_isDisabled(true);
 
-	if (this->s_savefile_game_version == "1.0.0" || this->s_savefile_game_version == "1.2.0" 
+	if (this->s_savefile_game_version == "1.0.0" || this->s_savefile_game_version == "1.2.0"
 		|| this->s_savefile_game_version == "1.3.0" || !this->vb_game_dlc_installed[1])
-			this->get_player("Marin")->set_isDisabled(true);
+		this->get_player("Marin")->set_isDisabled(true);
 
 	if (this->s_savefile_game_version == "1.0.0" || this->s_savefile_game_version == "1.2.0"
 		|| this->s_savefile_game_version == "1.3.0" || this->s_savefile_game_version == "1.4.0" || !this->vb_game_dlc_installed[2])
@@ -765,7 +765,7 @@ int HWLSaveEditor::get_error()
 */
 shared_ptr<HWLHttp> HWLSaveEditor::get_http_object()
 {
-    return this->http_request;
+	return this->http_request;
 }
 
 /**
@@ -809,15 +809,15 @@ shared_ptr<HWLMaterial> HWLSaveEditor::get_material(int i_id, int i_type)
 	shared_ptr<HWLMaterial> hwlm_tmp;
 	switch (i_type)
 	{
-		case 0:
-			hwlm_tmp = this->m_materials[HWLMaterial::vs_bronzeMaterials[i_id]];
-			break;
-		case 1:
-			hwlm_tmp = this->m_materials[HWLMaterial::vs_silverMaterials[i_id]];
-			break;
-		case 2:
-			hwlm_tmp = this->m_materials[HWLMaterial::vs_goldMaterials[i_id]];
-			break;
+	case 0:
+		hwlm_tmp = this->m_materials[HWLMaterial::vs_bronzeMaterials[i_id]];
+		break;
+	case 1:
+		hwlm_tmp = this->m_materials[HWLMaterial::vs_silverMaterials[i_id]];
+		break;
+	case 2:
+		hwlm_tmp = this->m_materials[HWLMaterial::vs_goldMaterials[i_id]];
+		break;
 	}
 
 
@@ -921,16 +921,17 @@ int HWLSaveEditor::get_adventureMode_maxItemCount()
 int HWLSaveEditor::check_savefile_length()
 {
 	//check if we have the normal length, then all is ok.
-	if (this->i_filelength == this->fileNormalLength || !this->b_auto_trim )
+	if (this->i_filelength == this->fileNormalLength || !this->b_auto_trim)
 		return 0;
 	//check if we have a smaller savegame-file and return 1 
 	// = throw exception with specified massage then
 	else if (this->i_filelength < this->fileNormalLength)
 	{
 		return 1;
-	//check if we have a bigger savegame file , do renaming stuff and
-	//return 2 or 3, 2 = failure with renaming/create second file, 3 = all ok
-	}else if (this->i_filelength > this->fileNormalLength)
+		//check if we have a bigger savegame file , do renaming stuff and
+		//return 2 or 3, 2 = failure with renaming/create second file, 3 = all ok
+	}
+	else if (this->i_filelength > this->fileNormalLength)
 	{
 		//declare/define needed variables
 		string s_filepathname_trimmed = this->s_filepathname + ".trimmed";
@@ -1008,7 +1009,7 @@ bool HWLSaveEditor::check_savefile()
 
 
 /**
-* This method is for triggering the autmatic trim. 
+* This method is for triggering the autmatic trim.
 * Default: TRUE, and auto-trim is enabled.
 *
 */

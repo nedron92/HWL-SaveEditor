@@ -165,7 +165,7 @@ int HWLAdventureModeItems::calc_value()
 
 	//get hex-value from the file-content holder and convert it to int
 	s_amItem_value = this->getHexStringFromFileContent(i_amItem_offset, this->amItemOffsetLength);
-	int i_amItem_value= this->HexStringToInt(s_amItem_value);
+	int i_amItem_value = this->HexStringToInt(s_amItem_value);
 
 	//return the current int-value
 	return i_amItem_value;
@@ -289,7 +289,7 @@ string HWLAdventureModeItems::get_type(bool b_get_string)
 
 	case 7: //only 3rd DLC: Phantom Hourglass & Spirit Tracks DLC
 		return "GrandTravels-Map Item ";
-		break; 
+		break;
 
 	default:
 		return to_string(i_type);
@@ -320,8 +320,8 @@ string HWLAdventureModeItems::get_AMItemForOutput()
 	string s_output = "Name: " + this->s_name + "\n"
 		+ "  Type: " + this->get_type(true) + "\n"
 		+ "  Value: " + to_string(this->i_value) + "\n";
-        //+ "  Offset: " + to_string(this->i_offset) + "\n";
-        
+	//+ "  Offset: " + to_string(this->i_offset) + "\n";
+
 
 	return s_output;
 }

@@ -964,11 +964,11 @@ void HWLWeapon::set_id(int i_id)
 */
 void HWLWeapon::set_lvl(int i_lvl)
 {
-        //only change lvl, if we have not the same as before
-	if ( (i_lvl != this->i_lvl) )
+	//only change lvl, if we have not the same as before
+	if ((i_lvl != this->i_lvl))
 	{
-            	//check if lvl-value smaller then 1, then set it directly to 1
-                //also check for the maximal-value
+		//check if lvl-value smaller then 1, then set it directly to 1
+		//also check for the maximal-value
 		if (i_lvl > this->weaponLVLMax)
 			i_lvl = this->weaponLVLMax;
 		else if (i_lvl <= 1)
@@ -1438,43 +1438,43 @@ void HWLWeapon::change_damage_base(int i_damage_base)
 */
 void HWLWeapon::change_lvl(int i_lvl)
 {
-    //only do a lvl-change if we don't have a multi-element weapon, cause there are only LVL-4 Weapons
-    //with a second element, nth more. So no LVL-Change with it.
-    if(!this->b_is_multi_element_weapon)
-    {
-        //check if we have "MedlI" as character (ID: 26) and if we have no DLCs installed
-        //If TRUE and if we want to set the Max-LVL (4) set it to 3. Cause game will freeze otherwise.
-	if (i_lvl == this->weaponLVLMax && this->i_character_id == 26 && this->i_type == 0
-		&& this->s_savefile_game_version != "1.0.0" && this->s_savefile_game_version != "1.2.0")
+	//only do a lvl-change if we don't have a multi-element weapon, cause there are only LVL-4 Weapons
+	//with a second element, nth more. So no LVL-Change with it.
+	if (!this->b_is_multi_element_weapon)
 	{
-		int i_dlcs_installed = 0;
-		for (int i = 0; i < this->vb_game_dlc_installed.size(); i++)
+		//check if we have "MedlI" as character (ID: 26) and if we have no DLCs installed
+		//If TRUE and if we want to set the Max-LVL (4) set it to 3. Cause game will freeze otherwise.
+		if (i_lvl == this->weaponLVLMax && this->i_character_id == 26 && this->i_type == 0
+			&& this->s_savefile_game_version != "1.0.0" && this->s_savefile_game_version != "1.2.0")
 		{
-			if (this->vb_game_dlc_installed[i])
-				i_dlcs_installed++;
+			int i_dlcs_installed = 0;
+			for (int i = 0; i < this->vb_game_dlc_installed.size(); i++)
+			{
+				if (this->vb_game_dlc_installed[i])
+					i_dlcs_installed++;
+			}
+
+			if (i_dlcs_installed == 0)
+				i_lvl--;
 		}
 
-		if (i_dlcs_installed == 0)
-			i_lvl--;
+
+		//change only, if we have not the same lvl-value
+		if (this->i_lvl != i_lvl)
+		{
+			//set new lvl and the standard damage-base of that lvl
+			this->set_lvl(i_lvl);
+			this->set_damage_base(this->vi_damage_base_defaults[i_lvl - 1]);
+
+			//change the current weapon-id, based on the given-lvl - 1,
+			//because the entries begins with zero. (check the lvl-hex-
+			//vector for that
+			this->set_id(this->vi_lvl_hex[i_lvl - 1]);
+
+			//re-calculate the damage itself
+			this->i_damage = this->calc_damage();
+		}
 	}
-
-
-	//change only, if we have not the same lvl-value
-	if (this->i_lvl != i_lvl)
-	{
-		//set new lvl and the standard damage-base of that lvl
-		this->set_lvl(i_lvl);
-		this->set_damage_base(this->vi_damage_base_defaults[i_lvl - 1]);
-
-		//change the current weapon-id, based on the given-lvl - 1,
-		//because the entries begins with zero. (check the lvl-hex-
-		//vector for that
-		this->set_id(this->vi_lvl_hex[i_lvl - 1]);
-
-		//re-calculate the damage itself
-		this->i_damage = this->calc_damage();
-	}
-    }
 
 }
 
@@ -1506,31 +1506,31 @@ void HWLWeapon::change_stars(int i_stars)
 */
 void HWLWeapon::change_multi_element_state(bool b_is_multi_element_weapon)
 {
-    
-   //do it only if we have a right game-version and one of the needed DLCs is installed 
-    if(this->s_savefile_game_version != "1.0.0" && this->s_savefile_game_version != "1.2.0"
-        && this->s_savefile_game_version != "1.3.0" && (this->vb_game_dlc_installed[1] || this->vb_game_dlc_installed[2] )
-       )
-    {
-        //change only, if we have not the same multi-element-state and if we have a valid-hex for that type
-	if ( (this->b_is_multi_element_weapon != b_is_multi_element_weapon ) 
-              && this->i_multi_element_weapon_hex != 0x00)
+
+	//do it only if we have a right game-version and one of the needed DLCs is installed 
+	if (this->s_savefile_game_version != "1.0.0" && this->s_savefile_game_version != "1.2.0"
+		&& this->s_savefile_game_version != "1.3.0" && (this->vb_game_dlc_installed[1] || this->vb_game_dlc_installed[2])
+		)
 	{
-            //set multi-element-state  and re-calculate the LVL itself
-            //First: Set to false and LVL to 1 to re-calculate Weapons LVL to MAX.
-            this->set_IsMultiElement(false);
-            this->set_lvl(1);
-            this->change_lvl(this->weaponLVLMax);
-            
-            //if the state change to TRUE, set the new ID
-            if(b_is_multi_element_weapon)
-                 this->set_id(this->i_multi_element_weapon_hex);
-                   
-            //finally, set the new state
-            this->set_IsMultiElement(b_is_multi_element_weapon);
+		//change only, if we have not the same multi-element-state and if we have a valid-hex for that type
+		if ((this->b_is_multi_element_weapon != b_is_multi_element_weapon)
+			&& this->i_multi_element_weapon_hex != 0x00)
+		{
+			//set multi-element-state  and re-calculate the LVL itself
+			//First: Set to false and LVL to 1 to re-calculate Weapons LVL to MAX.
+			this->set_IsMultiElement(false);
+			this->set_lvl(1);
+			this->change_lvl(this->weaponLVLMax);
+
+			//if the state change to TRUE, set the new ID
+			if (b_is_multi_element_weapon)
+				this->set_id(this->i_multi_element_weapon_hex);
+
+			//finally, set the new state
+			this->set_IsMultiElement(b_is_multi_element_weapon);
+		}
 	}
-    }
-    
+
 
 }
 
@@ -1604,14 +1604,14 @@ void HWLWeapon::generate_default_weapon()
 	vi_lvl_hexValues[1] = (i_default_weapon_id + 1);
 	vi_lvl_hexValues[2] = (i_default_weapon_id + 2);
 	vi_lvl_hexValues[3] = (HWLWeapon::vi_playerWeaponTypeHexValuesLVL4[i_weapon_count + this->i_type]);
-        
+
 	//set the new lvl-hex-values
 	this->set_lvl_hex(vi_lvl_hexValues);
-        
-        //re-calculate and set the hex-value of the multi-element-type of this weapon 
-        //and then we're done with a new default-weapon
-        this->set_multi_element_hex((HWLWeapon::vi_playerWeaponTypeHexValuesMultiElement[i_weapon_count + this->i_type]));
-        
+
+	//re-calculate and set the hex-value of the multi-element-type of this weapon 
+	//and then we're done with a new default-weapon
+	this->set_multi_element_hex((HWLWeapon::vi_playerWeaponTypeHexValuesMultiElement[i_weapon_count + this->i_type]));
+
 }
 
 
@@ -1673,7 +1673,7 @@ string HWLWeapon::get_WeaponsForOutput()
 		//+ "  Offset: " + this->intToHexString(this->i_offset,false) + "\n"
 		//+ "  i_id: " + this->intToHexString(this->i_id,false) + "\n"
 		//+ "  i_character_id: " + to_string(this->i_character_id) + "\n"
-		+ "  Damage: " + to_string(this->i_damage) + "\n"
+		+"  Damage: " + to_string(this->i_damage) + "\n"
 		+ "  Damage Base: " + to_string(this->i_damage_base) + "\n"
 		+ "  Stars: " + to_string(this->i_stars) + "\n"
 		+ "  Lvl: " + to_string(this->i_lvl) + "\n"

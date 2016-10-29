@@ -13,7 +13,7 @@ namespace HWLSaveEdit
 			/* @var i_rubies			hold the rubies-value */
 			int i_rubies = 0;
 
-			/* @var b_unlocked_smithy	hold unlock-state of the ingame smithy  */
+			/* @var b_unlocked_smithy		state, if ingame smithy is unlocked */
 			bool b_unlocked_smithy = false;
 
 			/* @var b_unlocked_all_normal_weapons		state, if all normal-weapons are found (MW-Skill 1)*/

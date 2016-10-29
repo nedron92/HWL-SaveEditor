@@ -115,10 +115,10 @@ int main(int argc, char* argv[])
 	{
 		cout << "  Hyrule Warriors Legends - SaveEditor, V" << HWLSaveEdit::HWLSaveEditorCore::version << endl;
 		cout << "________________________________________________" << endl << endl;
-		
-                save = nullptr;
+
+		save = nullptr;
 		cout << e.what() << "- Only Update-Check available" << endl << endl;
-                get_check_update_menu();
+		get_check_update_menu();
 	}
 
 	delete save;
@@ -665,7 +665,8 @@ void get_weapons_type(int i_chara_id)
 			{
 				cout << "Weapon-Type-ID: " << i << endl;
 				cout << HWLSaveEdit::HWLWeapon::vs_playerWeaponTypeNames[i_weapon_count + i] << endl << endl;
-			}else
+			}
+			else
 				continue;
 
 		}
@@ -755,8 +756,8 @@ void get_weapons(int i_chara_id, int i_type_id, int i_choose)
 				  cout << " 7,ID - Unlock Skills for this Weapon(Set needed Kills of all to 0)" << endl;
 				  cout << " 8    - Generate and add a new Default Weapon of that type" << endl;
 				  cout << " 9    - Delete the last weapon (get a free slot)" << endl;
-                                  cout << "10    - Make all Weapons to Multi-Element ones" << endl;
-                                  cout << "10,ID - Make that Weapons to a Multi-Element one" << endl;
+				  cout << "10    - Make all Weapons to Multi-Element ones" << endl;
+				  cout << "10,ID - Make that Weapons to a Multi-Element one" << endl;
 				  cout << " 0    - back" << endl;
 				  cout << "Your choose: ";
 				  cin >> s_choose;
@@ -843,21 +844,21 @@ void change_weapon_values(int i_chara_id, int i_type_id, int i_current_id, int i
 			  }
 			  else
 			  {
-                              	int i_multi_element_weapon_counter = 0;
+				  int i_multi_element_weapon_counter = 0;
 				  if (i_current_id == -1)
 				  {
 					  cout << "Maximize LVL of all Weapons" << endl;
 					  int i_used_slot_count = save->get_player(i_chara_id)->get_weapon_count(i_type_id);
-                                          if (i_used_slot_count != 0)
+					  if (i_used_slot_count != 0)
 					  {
 						  for (int i = 0; i < i_used_slot_count; i++)
 						  {
 							  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i)->change_lvl(HWLSaveEdit::HWLWeapon::weaponLVLMax);
 							  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i)->save_weapon();
-                                                          
-                                                          if(save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i)->get_IsMultiElement())
-                                                              i_multi_element_weapon_counter++;
-                                                          
+
+							  if (save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i)->get_IsMultiElement())
+								  i_multi_element_weapon_counter++;
+
 						  }
 						  cout << "Finish. You now have the strongest weapons." << endl;
 					  }
@@ -873,26 +874,26 @@ void change_weapon_values(int i_chara_id, int i_type_id, int i_current_id, int i
 					  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_id)->change_lvl(HWLSaveEdit::HWLWeapon::weaponLVLMax);
 					  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_id)->save_weapon();
 					  cout << "Finish. You now have a very strong weapons." << endl;
-                                          
-                                          if(save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_id)->get_IsMultiElement())
-                                              i_multi_element_weapon_counter++;
+
+					  if (save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_id)->get_IsMultiElement())
+						  i_multi_element_weapon_counter++;
 				  }
 
-				  if (i_chara_id == 26 && i_type_id == 0 && save->get_general_things()->get_current_savefile_game_version() != "1.0.0" 
-					  && save->get_general_things()->get_current_savefile_game_version() != "1.2.0" 
+				  if (i_chara_id == 26 && i_type_id == 0 && save->get_general_things()->get_current_savefile_game_version() != "1.0.0"
+					  && save->get_general_things()->get_current_savefile_game_version() != "1.2.0"
 					  && save->get_general_things()->get_dlc_installed_dlcs_value() == 0)
 				  {
 					  cout << endl << "Due to a security reason and because the game doesn't \n" <<
-						  "recognize LVL-4 Weapons of "<< save->get_player(i_chara_id)->get_name() <<" without a DLC, the calculation \n" <<
+						  "recognize LVL-4 Weapons of " << save->get_player(i_chara_id)->get_name() << " without a DLC, the calculation \n" <<
 						  "maximize the Weapons to LVL-3 instead." << endl << endl;
 				  }
-                                
-                                if(i_multi_element_weapon_counter > 0)
-                                {
-                                    cout << endl << "There was one or multiple Multi-Element Weapon(s) \n" <<
-                                            "and because they are only special LVL-4 Weapons, the editor didn't \n" <<
-                                            "change anything of those ones, due to security reasons also."  << endl << endl;
-                                }
+
+				  if (i_multi_element_weapon_counter > 0)
+				  {
+					  cout << endl << "There was one or multiple Multi-Element Weapon(s) \n" <<
+						  "and because they are only special LVL-4 Weapons, the editor didn't \n" <<
+						  "change anything of those ones, due to security reasons also." << endl << endl;
+				  }
 
 				  cin.clear();
 				  getchar();
@@ -1181,82 +1182,83 @@ void change_weapon_values(int i_chara_id, int i_type_id, int i_current_id, int i
 
 			  break;
 	}
-        
-            case 10:
-            {
-                string s_savefile_game_version = save->get_general_things()->get_current_savefile_game_version();
-                
-                if(s_savefile_game_version != "1.0.0" && s_savefile_game_version != "1.2.0"
-                    && s_savefile_game_version != "1.3.0" && (save->get_general_things()->get_dlc_installed_state(1) || save->get_general_things()->get_dlc_installed_state(2) ))
-                {
-                          if (i_type_id == 4 && i_chara_id == 0)
-                          {
-                              system(CLEAR);
-                              cout << "Sorry, you can't make Master Sword to a multi-element weapon, \ndue to there is only this ONE Sword." << endl;
-                              cin.clear();
-                              getchar();
-                              cin.get();
-                          }
-                
-			  if (i_current_id == -1)
-			  {
-				  cout << "Make all Weapons to Multi-Element ones" << endl;
-				  int i_used_slot_count = save->get_player(i_chara_id)->get_weapon_count(i_type_id);
-				  if (i_used_slot_count != 0)
-				  {
-                                      bool b_has_multi_element_weapon = true;
-					  for (int i = 0; i < i_used_slot_count; i++)
-					  {
-                                              if(save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i)->get_multi_element_hex() == 0x00)
-                                              {
-                                                  b_has_multi_element_weapon = false;
-                                                  break;
-                                              }
-                                                  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i)->change_multi_element_state(true);
-						  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i)->save_weapon();
-					  }
-                                          
-                                          if(b_has_multi_element_weapon)
-                                             cout << "Finish. You now have Multi-Element Weapons" << endl;
-                                          else
-                                               cout << "This Weapon-Type has no Multi-Element Weapon." << endl;
-				  }
-				  else
-				  {
-					  cout << "There is no weapon of this type" << endl;
-				  }
 
-			  }                
-			  else
-			  {
-				  cout << "Make Weapon with ID: " << i_current_id << " to a Multi-Element one." << endl;
-                                  
-                                  if(save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_id)->get_multi_element_hex() == 0x00)
-                                  {
-                                       cout << "This Weapon-Type has no Multi-Element Weapon." << endl;
-                                  }
-                                  else
-                                  {
-                                      save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_id)->change_multi_element_state(true);
-                                      save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_id)->save_weapon();                                    
-                                       cout << "Finish. You now have a Multi-Element Weapon" << endl;
-                                  }
-                    
-                          }
+	case 10:
+	{
+			   string s_savefile_game_version = save->get_general_things()->get_current_savefile_game_version();
 
-                }else
-                {
-                    cout<<"This option is only available, if you on GameVersion '1.4.0' or higher \n"
-                            << "and if you have one of the following DLCs installed: \n"
-                            << save->get_general_things()->get_dlc_name(1) <<endl
-                            << save->get_general_things()->get_dlc_name(2) <<endl;
-                }
-                
-                    cin.clear();
-                    getchar();
-                    cin.get();
- 
-            }
+			   if (s_savefile_game_version != "1.0.0" && s_savefile_game_version != "1.2.0"
+				   && s_savefile_game_version != "1.3.0" && (save->get_general_things()->get_dlc_installed_state(1) || save->get_general_things()->get_dlc_installed_state(2)))
+			   {
+				   if (i_type_id == 4 && i_chara_id == 0)
+				   {
+					   system(CLEAR);
+					   cout << "Sorry, you can't make Master Sword to a multi-element weapon, \ndue to there is only this ONE Sword." << endl;
+					   cin.clear();
+					   getchar();
+					   cin.get();
+				   }
+
+				   if (i_current_id == -1)
+				   {
+					   cout << "Make all Weapons to Multi-Element ones" << endl;
+					   int i_used_slot_count = save->get_player(i_chara_id)->get_weapon_count(i_type_id);
+					   if (i_used_slot_count != 0)
+					   {
+						   bool b_has_multi_element_weapon = true;
+						   for (int i = 0; i < i_used_slot_count; i++)
+						   {
+							   if (save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i)->get_multi_element_hex() == 0x00)
+							   {
+								   b_has_multi_element_weapon = false;
+								   break;
+							   }
+							   save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i)->change_multi_element_state(true);
+							   save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i)->save_weapon();
+						   }
+
+						   if (b_has_multi_element_weapon)
+							   cout << "Finish. You now have Multi-Element Weapons" << endl;
+						   else
+							   cout << "This Weapon-Type has no Multi-Element Weapon." << endl;
+					   }
+					   else
+					   {
+						   cout << "There is no weapon of this type" << endl;
+					   }
+
+				   }
+				   else
+				   {
+					   cout << "Make Weapon with ID: " << i_current_id << " to a Multi-Element one." << endl;
+
+					   if (save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_id)->get_multi_element_hex() == 0x00)
+					   {
+						   cout << "This Weapon-Type has no Multi-Element Weapon." << endl;
+					   }
+					   else
+					   {
+						   save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_id)->change_multi_element_state(true);
+						   save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_id)->save_weapon();
+						   cout << "Finish. You now have a Multi-Element Weapon" << endl;
+					   }
+
+				   }
+
+			   }
+			   else
+			   {
+				   cout << "This option is only available, if you on GameVersion '1.4.0' or higher \n"
+					   << "and if you have one of the following DLCs installed: \n"
+					   << save->get_general_things()->get_dlc_name(1) << endl
+					   << save->get_general_things()->get_dlc_name(2) << endl;
+			   }
+
+			   cin.clear();
+			   getchar();
+			   cin.get();
+
+	}
 
 	default:
 		break;

@@ -230,7 +230,7 @@ vector<bool> HWLGeneral::calc_installed_dlcs()
 		if (i_savefile_installed_dlc_offset_begin == 0x0)
 			continue;
 
-		s_savefile_installed_dlc = this->getHexStringFromFileContent(i_savefile_installed_dlc_offset_begin, i_savefile_installed_dlc_offset_length,true);
+		s_savefile_installed_dlc = this->getHexStringFromFileContent(i_savefile_installed_dlc_offset_begin, i_savefile_installed_dlc_offset_length, true);
 
 		if (s_savefile_installed_dlc != this->vs_game_dlc_default_hexStrings[i])
 			vb_savefile_installed_dlcs[i] = true;
@@ -580,7 +580,7 @@ int HWLGeneral::get_dlc_max_available_dlcs()
 * Getter for a int-Value of installed DLCs
 *
 *	@return int		Value of installed DLCs
-*  
+*
 */
 int HWLGeneral::get_dlc_installed_dlcs_value()
 {

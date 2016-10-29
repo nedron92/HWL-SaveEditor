@@ -28,10 +28,10 @@ namespace HWLSaveEdit
 			static const int fairyOffsetLength;
 			static const int weaponOffsetLength;
 			static const int weaponOffsetLengthComplete;
-                        
-                        //needed non-const members for subclasses
+
+			//needed non-const members for subclasses
 			static string s_savefile_game_version;
-                        static vector<bool> vb_game_dlc_installed;
+			static vector<bool> vb_game_dlc_installed;
 
 		public:
 			//needed public static-constants
@@ -61,5 +61,5 @@ namespace HWLSaveEdit
 			/* Methods to get and set content from/to the save-file */
 			string getHexStringFromFileContent(int i_offset, int i_offset_length, bool b_is_char = false);
 			void   setHexStringToFileContent(string s_hexString, int i_offset, bool b_is_char = false);
-	};
+		};
 }

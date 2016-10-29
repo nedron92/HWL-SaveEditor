@@ -34,7 +34,7 @@ namespace HWLSaveEdit
 			/* @var s_version_check_http_url		the url of the version-check-file */
 			string s_version_check_http_url = "http://nightly.nedron92.php-friends.de/hwl_save-editor/builds/version.txt";
 
-			/* @var s_version_check_nightly_http_url        the url of the nightly-version-check-file, user defined */
+			/* @var s_version_check_nightly_http_url		the url of the nightly-version-check-file, user defined */
 			string s_version_check_nightly_http_url = VERSION_CHECK_NIGHTLY_HTTP_URL;
 
 

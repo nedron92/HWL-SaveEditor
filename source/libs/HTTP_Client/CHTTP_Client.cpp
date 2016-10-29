@@ -159,7 +159,7 @@ void HTTP_Client::send_http_request()
 	else
 		this->s_http_result = "";
 
-	
+
 
 	//clear buffer
 	strcpy(this->c_http_buffer, "");

@@ -259,20 +259,20 @@ string HWLMaterial::get_type(bool b_get_string)
 {
 	switch (this->i_type)
 	{
-		case 0:
-			return "Bronze";
-			break;
+	case 0:
+		return "Bronze";
+		break;
 
-		case 1:
-			return "Silver";
-			break;
+	case 1:
+		return "Silver";
+		break;
 
-		case 2:
-			return "Gold";
-			break;
+	case 2:
+		return "Gold";
+		break;
 
-		default:
-			return to_string(i_type);
+	default:
+		return to_string(i_type);
 	}
 }
 

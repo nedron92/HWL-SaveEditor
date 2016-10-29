@@ -104,6 +104,9 @@ void HTTP_Client::set_current_url(string s_url)
 */
 void HTTP_Client::send_http_request()
 {
+	//Clean buffer first
+	strcpy(this->c_http_buffer, "");
+
 	do
 	{
 		// Open the HTTP request handle
@@ -147,9 +150,16 @@ void HTTP_Client::send_http_request()
 		HTTPClientCloseRequest(&this->o_http_session);
 	} while (0); // Run only once
 
-	//copy buffer to the internal output-string and delete the last newline-character
-	this->s_http_result = this->c_http_buffer;
-	this->s_http_result.erase(remove(this->s_http_result.begin(), this->s_http_result.end(), '\n'), this->s_http_result.end());
+	//copy buffer to the internal output-string and delete the last newline-character 
+	if (strcmp(this->c_http_buffer, "") != 0)
+	{
+		this->s_http_result = this->c_http_buffer;
+		this->s_http_result.erase(remove(this->s_http_result.begin(), this->s_http_result.end(), '\n'), this->s_http_result.end());
+	}
+	else
+		this->s_http_result = "";
+
+	
 
 	//clear buffer
 	strcpy(this->c_http_buffer, "");

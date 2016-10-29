@@ -1,10 +1,10 @@
 #pragma once
 
 /*
- * You need lib ws2_32.lib to compile
- * uncomment these line or link the lib in your options directly
- * WIN32 only!
- * 
+* You need lib ws2_32.lib to compile
+* uncomment these line or link the lib in your options directly
+* WIN32 only!
+*
 */
 //#pragma comment(lib, "ws2_32.lib")
 
@@ -15,8 +15,8 @@
 #include "API/HTTPClient.h"
 
 /*
- * Typedef of needed structure (holding the data)
- * 
+* Typedef of needed structure (holding the data)
+*
 */
 typedef struct _HTTPParameters
 {
@@ -38,36 +38,36 @@ using namespace std;
 class HTTP_Client
 {
 	private:
-            
-                /* @var s_current_url   the current url for an http-request */
+
+		/* @var s_current_url   the current url for an http-request */
 		string s_current_url = "";
 
-                
+
 		/* @var b_use_proxy   Toogling if http-request will use an proxy or not */
-                bool b_use_proxy = false;
-                
+		bool b_use_proxy = false;
+
 		/* @var s_http_proxy_host   the proxy-host */
-                string s_http_proxy_host = "0.0.0.0";
-                
+		string s_http_proxy_host = "0.0.0.0";
+
 		/* @var i_http_proxy_port   the proxy-port */
-                unsigned int i_http_proxy_port = 0;
+		unsigned int i_http_proxy_port = 0;
 
-                
+
 		/* @var b_use_auth   Toogling if http-request will use authentication or not */
-                bool b_use_auth = false;
-                
-		/* @var s_http_auth_name   username for authentication */
-                string s_http_auth_name = "";
-                
-		/* @var s_http_auth_password   password for authentication */
-                string s_http_auth_password = "";
-                
-		/* @var s_http_auth_type   type of authentication */
-                string s_http_auth_type = "";
+		bool b_use_auth = false;
 
-                
+		/* @var s_http_auth_name   username for authentication */
+		string s_http_auth_name = "";
+
+		/* @var s_http_auth_password   password for authentication */
+		string s_http_auth_password = "";
+
+		/* @var s_http_auth_type   type of authentication */
+		string s_http_auth_type = "";
+
+
 		/* @var s_http_result   hold the current output (after successfull http-request) */
-                string s_http_result = "";
+		string s_http_result = "";
 
 		//import from old example
 		int i_return_code;
@@ -83,8 +83,8 @@ class HTTP_Client
 		//constructor and destructor
 		HTTP_Client(string s_url = "");
 		~HTTP_Client();
-                
-                //needed getter/setter methods
+
+		//needed getter/setter methods
 		string get_current_url();
 		//string get_proxy_settings - not implemented yet
 		//string get_auth_settings - not implemented yet
@@ -94,8 +94,8 @@ class HTTP_Client
 		//void change_proxy_settings - not implemented yet
 		//void change_auth_settings - not implemented yet
 
-                //method for sending http-requests
-                void send_http_request();
+		//method for sending http-requests
+		void send_http_request();
 };
 
 #endif // HTTP_CLIENT_CPP

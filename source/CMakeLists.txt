@@ -26,4 +26,3 @@ if(USE_OWN_URLS)
   add_definitions( -DNIGHTLY_URL=${NIGHTLY_URL} )
 
 endif()
-

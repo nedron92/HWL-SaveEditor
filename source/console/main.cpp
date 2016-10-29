@@ -62,8 +62,8 @@ int main(int argc, char* argv[])
 		{
 			HWLSaveEdit::HWLSaveEditor::enable_auto_trim(false);
 		}
-                
-                //if we have --check-updates, check for updates
+
+		//if we have --check-updates, check for updates
 		if (argv[1] == string("--check-updates"))
 		{
 			get_check_update_menu();
@@ -74,12 +74,11 @@ int main(int argc, char* argv[])
 	{
 		save = new HWLSaveEdit::HWLSaveEditor();
 
-
 		char i_choose;
 
 		while (1)
 		{
-			cout << "  Hyrule Warriors Legends - SaveEditor, V" << HWLSaveEdit::HWLSaveEditorCore::version <<endl;
+			cout << "  Hyrule Warriors Legends - SaveEditor, V" << HWLSaveEdit::HWLSaveEditorCore::version << endl;
 			cout << "________________________________________________" << endl << endl;
 
 			cout << "Menue: " << endl;
@@ -89,7 +88,7 @@ int main(int argc, char* argv[])
 			cout << "4 - FairyFood (Submenu)" << endl;
 			cout << "5 - Adventure Mode-Items (Submenu)" << endl;
 			cout << "6 - My Fairies (Submenu)" << endl;
-                        cout << "7 - Check for updates (Submenu)" << endl;
+			cout << "7 - Check for Updates (Submenu)" << endl;
 			cout << "0 - Quit" << endl;
 			cout << "Your choose: ";
 			cin >> i_choose;
@@ -110,16 +109,18 @@ int main(int argc, char* argv[])
 				cin.get();
 				system(CLEAR);
 			}
-		} 
+		}
 	}
 	catch (HWLSaveEdit::HWLException &e)
 	{
 		cout << "  Hyrule Warriors Legends - SaveEditor, V" << HWLSaveEdit::HWLSaveEditorCore::version << endl;
 		cout << "________________________________________________" << endl << endl;
-		save = nullptr;
-		cout << e.what() << endl;
+		
+                save = nullptr;
+		cout << e.what() << "- Only Update-Check available" << endl << endl;
+                get_check_update_menu();
 	}
-	
+
 	delete save;
 	cin.get();
 
@@ -167,13 +168,13 @@ void get_submenu(int i_menu_code)
 			  get_fairy_menu();
 			  break;
 	}
-        
+
 	case 7:
 	{
 			  get_check_update_menu();
 			  break;
 	}
-        
+
 	}
 
 }
@@ -273,7 +274,7 @@ void change_general_things(int i_choose)
 			  system(CLEAR);
 			  break;
 	}
-        
+
 	case 5:
 	{
 			  cout << "Unlock-State: All materials found" << endl;
@@ -289,7 +290,7 @@ void change_general_things(int i_choose)
 			  system(CLEAR);
 			  break;
 	}
-        
+
 	default:
 		break;
 	}
@@ -356,7 +357,7 @@ void get_ruby_menu()
 
 				if (atoi(&c_choose) == 2)
 				{
-					save->get_general_things()->set_rubies(HWLSaveEdit::HWLGeneral::rubyMax);		
+					save->get_general_things()->set_rubies(HWLSaveEdit::HWLGeneral::rubyMax);
 
 					cout << "The max value was saved. :)" << endl;
 					cin.get();
@@ -376,14 +377,14 @@ void get_ruby_menu()
 void get_chara_menu()
 {
 	string s_choose;
-	
-	
+
+
 	while (1)
 	{
-		
+
 		for (int i = 0; i < (signed)HWLSaveEdit::HWLPlayer::vs_players.size(); i++)
 		{
-			if (save->get_player(i)->get_name() == "???")
+			if (save->get_player(i)->get_isDisabled())
 				continue;
 
 			vi_ids.push_back(i);
@@ -406,7 +407,7 @@ void get_chara_menu()
 		int i_find_pos = s_choose.find(",");
 		if (i_find_pos != string::npos)
 		{
-			string s_substr = s_choose.substr(i_find_pos+1, string::npos);
+			string s_substr = s_choose.substr(i_find_pos + 1, string::npos);
 			i_current_id = atoi(&s_substr[0u]);
 		}
 
@@ -440,10 +441,10 @@ void change_chara_values(int i_type, int i_chara_id)
 				  cout << "Maximize EXP of all Charas." << endl;
 				  for (int i = 0; i < (signed)HWLSaveEdit::HWLPlayer::vs_players.size(); i++)
 				  {
-					  if (save->get_player(i)->get_name() == "???")
+					  if (save->get_player(i)->get_isDisabled())
 						  continue;
 
-					  save->get_player(i)->set_exp(HWLSaveEdit::HWLPlayer::playerEXPMax);
+					  save->get_player(i)->set_exp(HWLSaveEdit::HWLPlayer::get_max_stati_value("EXP"));
 					  save->get_player(i)->save_Player();
 				  }
 				  cout << "Finish. All your Charas are now battle master!" << endl;
@@ -466,7 +467,7 @@ void change_chara_values(int i_type, int i_chara_id)
 				  if (check_id)
 				  {
 					  cout << "Maximize EXP of Chara with ID " << i_chara_id << endl;
-					  save->get_player(i_chara_id)->set_exp(HWLSaveEdit::HWLPlayer::playerEXPMax);
+					  save->get_player(i_chara_id)->set_exp(HWLSaveEdit::HWLPlayer::get_max_stati_value("EXP"));
 					  save->get_player(i_chara_id)->save_Player();
 					  cout << "Finish. This Chara is now a battle master!" << endl;
 
@@ -491,10 +492,10 @@ void change_chara_values(int i_type, int i_chara_id)
 				  cout << "Maximize ATK of all Charas." << endl;
 				  for (int i = 0; i < (signed)HWLSaveEdit::HWLPlayer::vs_players.size(); i++)
 				  {
-					  if (save->get_player(i)->get_name() == "???")
+					  if (save->get_player(i)->get_isDisabled())
 						  continue;
 
-					  save->get_player(i)->set_atk(HWLSaveEdit::HWLPlayer::playerATKMax);
+					  save->get_player(i)->set_atk(HWLSaveEdit::HWLPlayer::get_max_stati_value("ATK"));
 					  save->get_player(i)->save_Player();
 				  }
 				  cout << "Finish. All your Charas are now very strong!" << endl;
@@ -517,7 +518,7 @@ void change_chara_values(int i_type, int i_chara_id)
 				  if (check_id)
 				  {
 					  cout << "Maximize ATK of Chara with ID " << i_chara_id << endl;
-					  save->get_player(i_chara_id)->set_atk(HWLSaveEdit::HWLPlayer::playerATKMax);
+					  save->get_player(i_chara_id)->set_atk(HWLSaveEdit::HWLPlayer::get_max_stati_value("ATK"));
 					  save->get_player(i_chara_id)->save_Player();
 					  cout << "Finish. This Chara is now very strong!" << endl;
 
@@ -543,7 +544,7 @@ void change_chara_values(int i_type, int i_chara_id)
 				  cout << "Unlock all Charas." << endl;
 				  for (int i = 0; i < (signed)HWLSaveEdit::HWLPlayer::vs_players.size(); i++)
 				  {
-					  if (save->get_player(i)->get_name() == "???")
+					  if (save->get_player(i)->get_isDisabled())
 						  continue;
 
 					  save->get_player(i)->set_isUnlock(true);
@@ -658,10 +659,15 @@ void get_weapons_type(int i_chara_id)
 			i_weapon_count = i_weapon_count + HWLSaveEdit::HWLWeapon::vi_playerWeaponTypeCount[j];
 		}
 
-		for (int i = 0; i < HWLSaveEdit::HWLWeapon::vi_playerWeaponTypeCount[i_chara_id]; i++)
+		for (int i = 0; i < save->get_player(i_chara_id)->get_weapon_type_count(); i++)
 		{
-			cout << "Weapon-Type-ID: " << i << endl;
-			cout << HWLSaveEdit::HWLWeapon::vs_playerWeaponTypeNames[i_weapon_count + i] << endl << endl;
+			if (!save->get_player(i_chara_id)->get_isWeaponTypeDisabled(i))
+			{
+				cout << "Weapon-Type-ID: " << i << endl;
+				cout << HWLSaveEdit::HWLWeapon::vs_playerWeaponTypeNames[i_weapon_count + i] << endl << endl;
+			}else
+				continue;
+
 		}
 
 		cout << "Weapon Editing of Chara: " << HWLSaveEdit::HWLPlayer::vs_players[i_chara_id] << endl << endl;
@@ -694,9 +700,9 @@ void get_weapons_type(int i_chara_id)
 				cin.get();
 			}
 			else{
-				if (i_current_id >= HWLSaveEdit::HWLWeapon::vi_playerWeaponTypeCount[i_chara_id])
+				if (i_current_id >= save->get_player(i_chara_id)->get_weapon_type_count() || save->get_player(i_chara_id)->get_isWeaponTypeDisabled(i_current_id))
 				{
-					cout << "This Weapon-ID doesn't exist. Sorry. " << endl;
+					cout << "This Weapon-Type-ID doesn't exist. Sorry. " << endl;
 					cin.clear();
 					getchar();
 					cin.get();
@@ -732,24 +738,26 @@ void get_weapons(int i_chara_id, int i_type_id, int i_choose)
 				  {
 					  i_weapon_count = i_weapon_count + HWLSaveEdit::HWLWeapon::vi_playerWeaponTypeCount[j];
 				  }
-				 
+
 				  cout << "Weapon Editing of Chara: " << HWLSaveEdit::HWLPlayer::vs_players[i_chara_id] << " and Weapon-Type: " << HWLSaveEdit::HWLWeapon::vs_playerWeaponTypeNames[i_weapon_count + i_type_id] << endl << endl;
 				  cout << "Menue: " << endl;
-				  cout << "1    - List all Weapons of this type (only used Slots)" << endl;
-				  cout << "2    - Max LVL of all Weapons (Info: Damage-Base set auto to LVL-Default)" << endl;
-				  cout << "2,ID - Max LVL of that Weapon (Info: Damage-Base set auto to LVL-Default)" << endl;
-				  cout << "3    - Max Damage-Base of all Weapons (useless for legendary-ones)" << endl;
-				  cout << "3,ID - Max Damage-Base of that Weapon (useless for legendary-ones)" << endl;
-				  cout << "4    - Max Stars of all Weapons" << endl;
-				  cout << "4,ID - Max Stars of that Weapon" << endl;
-				  cout << "5    - Make all Weapons to a Legendary One" << endl;
-				  cout << "5,ID - Make that Weapon to a Legendary One" << endl;
-				  cout << "6,ID - Edit Skills of that Weapon (Submenu)" << endl;
-				  cout << "7    - Unlock Skills for all Weapons(Set needed Kills of all to 0)" << endl;
-				  cout << "7,ID - Unlock Skills for this Weapon(Set needed Kills of all to 0)" << endl;
-				  cout << "8    - Generate and add a new Default Weapon of that type" << endl;
-				  cout << "9    - Delete the last weapon (get a free slot)" << endl;
-				  cout << "0    - back" << endl;
+				  cout << " 1    - List all Weapons of this type (only used Slots)" << endl;
+				  cout << " 2    - Max LVL of all Weapons (Info: Damage-Base set auto to LVL-Default)" << endl;
+				  cout << " 2,ID - Max LVL of that Weapon (Info: Damage-Base set auto to LVL-Default)" << endl;
+				  cout << " 3    - Max Damage-Base of all Weapons (useless for legendary-ones)" << endl;
+				  cout << " 3,ID - Max Damage-Base of that Weapon (useless for legendary-ones)" << endl;
+				  cout << " 4    - Max Stars of all Weapons" << endl;
+				  cout << " 4,ID - Max Stars of that Weapon" << endl;
+				  cout << " 5    - Make all Weapons to a Legendary One" << endl;
+				  cout << " 5,ID - Make that Weapon to a Legendary One" << endl;
+				  cout << " 6,ID - Edit Skills of that Weapon (Submenu)" << endl;
+				  cout << " 7    - Unlock Skills for all Weapons(Set needed Kills of all to 0)" << endl;
+				  cout << " 7,ID - Unlock Skills for this Weapon(Set needed Kills of all to 0)" << endl;
+				  cout << " 8    - Generate and add a new Default Weapon of that type" << endl;
+				  cout << " 9    - Delete the last weapon (get a free slot)" << endl;
+                                  cout << "10    - Make all Weapons to Multi-Element ones" << endl;
+                                  cout << "10,ID - Make that Weapons to a Multi-Element one" << endl;
+				  cout << " 0    - back" << endl;
 				  cout << "Your choose: ";
 				  cin >> s_choose;
 
@@ -811,7 +819,8 @@ void change_weapon_values(int i_chara_id, int i_type_id, int i_current_id, int i
 				  {
 					  cout << "ID: " << i << endl << save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i)->get_WeaponsForOutput() << endl;
 				  }
-			  }else
+			  }
+			  else
 			  {
 				  cout << "There is no weapon of this type" << endl;
 			  }
@@ -831,18 +840,24 @@ void change_weapon_values(int i_chara_id, int i_type_id, int i_current_id, int i
 				  cin.clear();
 				  getchar();
 				  cin.get();
-			  }else
+			  }
+			  else
 			  {
+                              	int i_multi_element_weapon_counter = 0;
 				  if (i_current_id == -1)
 				  {
 					  cout << "Maximize LVL of all Weapons" << endl;
 					  int i_used_slot_count = save->get_player(i_chara_id)->get_weapon_count(i_type_id);
-					  if (i_used_slot_count != 0)
+                                          if (i_used_slot_count != 0)
 					  {
 						  for (int i = 0; i < i_used_slot_count; i++)
 						  {
 							  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i)->change_lvl(HWLSaveEdit::HWLWeapon::weaponLVLMax);
 							  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i)->save_weapon();
+                                                          
+                                                          if(save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i)->get_IsMultiElement())
+                                                              i_multi_element_weapon_counter++;
+                                                          
 						  }
 						  cout << "Finish. You now have the strongest weapons." << endl;
 					  }
@@ -851,13 +866,33 @@ void change_weapon_values(int i_chara_id, int i_type_id, int i_current_id, int i
 						  cout << "There is no weapon of this type" << endl;
 					  }
 
-				  }else
+				  }
+				  else
 				  {
 					  cout << "Maximize LVL of Weapon with ID: " << i_current_id << endl;
 					  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_id)->change_lvl(HWLSaveEdit::HWLWeapon::weaponLVLMax);
 					  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_id)->save_weapon();
 					  cout << "Finish. You now have a very strong weapons." << endl;
+                                          
+                                          if(save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_id)->get_IsMultiElement())
+                                              i_multi_element_weapon_counter++;
 				  }
+
+				  if (i_chara_id == 26 && i_type_id == 0 && save->get_general_things()->get_current_savefile_game_version() != "1.0.0" 
+					  && save->get_general_things()->get_current_savefile_game_version() != "1.2.0" 
+					  && save->get_general_things()->get_dlc_installed_dlcs_value() == 0)
+				  {
+					  cout << endl << "Due to a security reason and because the game doesn't \n" <<
+						  "recognize LVL-4 Weapons of "<< save->get_player(i_chara_id)->get_name() <<" without a DLC, the calculation \n" <<
+						  "maximize the Weapons to LVL-3 instead." << endl << endl;
+				  }
+                                
+                                if(i_multi_element_weapon_counter > 0)
+                                {
+                                    cout << endl << "There was one or multiple Multi-Element Weapon(s) \n" <<
+                                            "and because they are only special LVL-4 Weapons, the editor didn't \n" <<
+                                            "change anything of those ones, due to security reasons also."  << endl << endl;
+                                }
 
 				  cin.clear();
 				  getchar();
@@ -984,7 +1019,7 @@ void change_weapon_values(int i_chara_id, int i_type_id, int i_current_id, int i
 				  }
 				  else
 				  {
-					  cout << "Make weapon with ID: " << i_current_id << " to a legendary one" <<  endl;
+					  cout << "Make weapon with ID: " << i_current_id << " to a legendary one" << endl;
 					  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_id)->set_state(HWLSaveEdit::HWLWeapon::weaponStateValuesHex[1]);
 					  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_id)->set_skill_slot(0, 0x2A);
 					  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_id)->save_weapon();
@@ -1146,6 +1181,82 @@ void change_weapon_values(int i_chara_id, int i_type_id, int i_current_id, int i
 
 			  break;
 	}
+        
+            case 10:
+            {
+                string s_savefile_game_version = save->get_general_things()->get_current_savefile_game_version();
+                
+                if(s_savefile_game_version != "1.0.0" && s_savefile_game_version != "1.2.0"
+                    && s_savefile_game_version != "1.3.0" && (save->get_general_things()->get_dlc_installed_state(1) || save->get_general_things()->get_dlc_installed_state(2) ))
+                {
+                          if (i_type_id == 4 && i_chara_id == 0)
+                          {
+                              system(CLEAR);
+                              cout << "Sorry, you can't make Master Sword to a multi-element weapon, \ndue to there is only this ONE Sword." << endl;
+                              cin.clear();
+                              getchar();
+                              cin.get();
+                          }
+                
+			  if (i_current_id == -1)
+			  {
+				  cout << "Make all Weapons to Multi-Element ones" << endl;
+				  int i_used_slot_count = save->get_player(i_chara_id)->get_weapon_count(i_type_id);
+				  if (i_used_slot_count != 0)
+				  {
+                                      bool b_has_multi_element_weapon = true;
+					  for (int i = 0; i < i_used_slot_count; i++)
+					  {
+                                              if(save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i)->get_multi_element_hex() == 0x00)
+                                              {
+                                                  b_has_multi_element_weapon = false;
+                                                  break;
+                                              }
+                                                  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i)->change_multi_element_state(true);
+						  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i)->save_weapon();
+					  }
+                                          
+                                          if(b_has_multi_element_weapon)
+                                             cout << "Finish. You now have Multi-Element Weapons" << endl;
+                                          else
+                                               cout << "This Weapon-Type has no Multi-Element Weapon." << endl;
+				  }
+				  else
+				  {
+					  cout << "There is no weapon of this type" << endl;
+				  }
+
+			  }                
+			  else
+			  {
+				  cout << "Make Weapon with ID: " << i_current_id << " to a Multi-Element one." << endl;
+                                  
+                                  if(save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_id)->get_multi_element_hex() == 0x00)
+                                  {
+                                       cout << "This Weapon-Type has no Multi-Element Weapon." << endl;
+                                  }
+                                  else
+                                  {
+                                      save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_id)->change_multi_element_state(true);
+                                      save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_id)->save_weapon();                                    
+                                       cout << "Finish. You now have a Multi-Element Weapon" << endl;
+                                  }
+                    
+                          }
+
+                }else
+                {
+                    cout<<"This option is only available, if you on GameVersion '1.4.0' or higher \n"
+                            << "and if you have one of the following DLCs installed: \n"
+                            << save->get_general_things()->get_dlc_name(1) <<endl
+                            << save->get_general_things()->get_dlc_name(2) <<endl;
+                }
+                
+                    cin.clear();
+                    getchar();
+                    cin.get();
+ 
+            }
 
 	default:
 		break;
@@ -1191,7 +1302,7 @@ void get_skills(int i_chara_id, int i_weapon_type_id, int i_weapon_slot_id)
 				string s_substr2 = s_substr.substr(i_find_pos2 + 1, string::npos);
 				i_skill_id = atoi(&s_substr2[0u]);
 			}
-		
+
 
 		}
 
@@ -1247,7 +1358,8 @@ void change_skill_values(int i_chara_id, int i_weapon_type_id, int i_weapon_slot
 				  cout << endl;
 				  cout << "Edit Skills " << endl;
 				  cout << "This Slot-ID or Skill-ID doesn't exist. Try again." << endl;
-			  }else
+			  }
+			  else
 			  {
 				  cout << endl;
 				  cout << "Edit Skill for Slot " << i_skill_slot_id << endl;
@@ -1255,7 +1367,7 @@ void change_skill_values(int i_chara_id, int i_weapon_type_id, int i_weapon_slot
 
 				  if (i_skill_id >= (signed)(HWLSaveEdit::HWLWeapon::weaponSkillNames.size() - 1))
 					  i_skill_id = HWLSaveEdit::HWLWeapon::weaponSkillValueNoSkill;
-				
+
 				  save->get_player(i_chara_id)->get_weapon_slot(i_weapon_type_id, i_weapon_slot_id)->set_skill_slot(i_skill_slot_id - 1, i_skill_id);
 				  save->get_player(i_chara_id)->get_weapon_slot(i_weapon_type_id, i_weapon_slot_id)->save_weapon();
 				  cout << "Finish. You set to Slot " << i_skill_slot_id << " following Skill: '" << HWLSaveEdit::HWLWeapon::weaponSkillNames[i_orignal_skill_id] << "'" << endl;
@@ -1365,7 +1477,7 @@ void get_materials_submenu(int i_type)
 					break;
 				}
 				else
-					change_materials_values(atoi(&s_choose[0]), i_current_id, i_type-1, i_size);
+					change_materials_values(atoi(&s_choose[0]), i_current_id, i_type - 1, i_size);
 			}
 
 			save->save_file();
@@ -1416,7 +1528,7 @@ void change_materials_values(int i_choose, int i_material_id, int i_type, int i_
 						  cout << "Changing Value of Material with ID " << i_material_id << endl;
 						  save->get_material(i_material_id, i_type)->set_value(i_material_value);
 						  save->get_material(i_material_id, i_type)->save_Material();
-						  cout << "Finish. You have now " << i_material_value  << " of this material! "<< endl;
+						  cout << "Finish. You have now " << i_material_value << " of this material! " << endl;
 
 					  }
 					  else
@@ -1528,7 +1640,7 @@ void get_fairyFood_menu()
 
 		save->save_file();
 
-		if(atoi(&s_choose[0]) > 2)
+		if (atoi(&s_choose[0]) > 2)
 			system(CLEAR);
 
 	}
@@ -1871,7 +1983,7 @@ void change_fairy_values(int i_choose, int i_fairy_id)
 				  if (check_id)
 				  {
 					  string s_fairy_name = "";
-					  cout << "Enter a new Name (Max: "<< HWLSaveEdit::HWLFairy::fairyNameLength <<" chars) : ";
+					  cout << "Enter a new Name (Max: " << HWLSaveEdit::HWLFairy::fairyNameLength << " chars) : ";
 					  cin >> s_fairy_name;
 
 					  if ((signed)s_fairy_name.size() <= HWLSaveEdit::HWLFairy::fairyNameLength)
@@ -1924,7 +2036,8 @@ void change_fairy_values(int i_choose, int i_fairy_id)
 				  getchar();
 				  cin.get();
 				  system(CLEAR);
-			  }else
+			  }
+			  else
 			  {
 				  bool check_id = false;
 
@@ -2037,7 +2150,8 @@ void change_fairy_values(int i_choose, int i_fairy_id)
 					  save->get_fairy(i_fairy_id)->save_Fairy();
 					  cout << "Finish. Press a key to go back." << endl;
 
-				  }else{
+				  }
+				  else{
 					  cout << "Sorry, but this Fairy-ID doesn't exist!" << endl;
 				  }
 
@@ -2083,42 +2197,42 @@ void get_check_update_menu()
 				{
 				case 1:
 				{
-					  system(CLEAR);
-					  cout << endl;
-					  cout << "Your version: " << HWLSaveEdit::HWLSaveEditorCore::version << endl;
-					  cout << "Latest stable Version: " << save->get_http_object()->get_current_version() << endl;
-					  cout << "URL: " << save->get_http_object()->latestURL << endl << endl;
+						  system(CLEAR);
+						  cout << endl;
+						  cout << "Your version: " << HWLSaveEdit::HWLSaveEditorCore::version << endl;
+						  cout << "Latest stable Version: " << save->get_http_object()->get_current_version() << endl;
+						  cout << "URL: " << save->get_http_object()->latestURL << endl << endl;
 
-					  cout << save->get_http_object()->compare_with_current_version() << endl;
+						  cout << save->get_http_object()->compare_with_current_version() << endl;
 
-                      cout<<endl;
-					  break;
+						  cout << endl;
+						  break;
 				}
 
 				case 2:
 				{
-					  system(CLEAR);
-					  cout << endl;
-					  cout << "Your version: " << HWLSaveEdit::HWLSaveEditorCore::version << endl;
-					  cout << "Latest nightly Version: " << save->get_http_object()->get_current_nightly_version() << endl;
-					  cout << "URL: " << save->get_http_object()->nightlyURL << endl << endl;
+						  system(CLEAR);
+						  cout << endl;
+						  cout << "Your version: " << HWLSaveEdit::HWLSaveEditorCore::version << endl;
+						  cout << "Latest nightly Version: " << save->get_http_object()->get_current_nightly_version() << endl;
+						  cout << "URL: " << save->get_http_object()->nightlyURL << endl << endl;
 
-					  cout << save->get_http_object()->compare_with_current_version(true) << endl;
+						  cout << save->get_http_object()->compare_with_current_version(true) << endl;
 
-                      cout<<endl;
-					  break;
+						  cout << endl;
+						  break;
 				}
 
 				default:
 					break;
 				}
-                                
+
 				cout << "Press any key to go back to the menu" << endl;
 				cin.clear();
 
 				getchar();
 				cin.get();
-                                
+
 			}
 
 			if (atoi(&s_choose[0]) > 0)

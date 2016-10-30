@@ -5,7 +5,6 @@
 
 //include the correct header-file
 #include "HWLPlayer.h"
-#include "HWLGeneral.h"
 
 //use the project-namespace
 using namespace HWLSaveEdit;

@@ -171,6 +171,8 @@ int HWLAdventureModeItems::calc_value()
 	return i_amItem_value;
 }
 
+
+
 /**
 * This method set the current AM-Item value
 * to the file-content holder
@@ -191,7 +193,6 @@ void HWLAdventureModeItems::save_value()
 	//set converted hex-value to the file-content holder
 	this->setHexStringToFileContent(s_amItem_value, i_amItem_offset);
 }
-
 
 
 
@@ -320,7 +321,7 @@ string HWLAdventureModeItems::get_AMItemForOutput()
 	string s_output = "Name: " + this->s_name + "\n"
 		+ "  Type: " + this->get_type(true) + "\n"
 		+ "  Value: " + to_string(this->i_value) + "\n";
-	//+ "  Offset: " + to_string(this->i_offset) + "\n";
+		//+ "  Offset: " + to_string(this->i_offset) + "\n";
 
 
 	return s_output;

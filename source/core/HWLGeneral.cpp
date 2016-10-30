@@ -27,14 +27,14 @@ const int HWLGeneral::unlockIngameSmithyOffsetLength = 1;
 const int HWLGeneral::unlockIngameSmithyOffsetPart = 2;
 
 
-/* @var unlockAllNormalWeaponsOffset			the offset-begin for unlocking-state of all normal-weapons (for MW-Skill 1) */
+/* @var unlockAllNormalWeaponsOffset			the offset-begin for unlocking-state of all normal-weapons (for MS-Skill 1) */
 const int HWLGeneral::unlockAllNormalWeaponsOffset = 0xD4;
 
 /* @var unlockAllNormalWeaponsOffsetLength		the offset-length for unlocking-state of all normal-weapons  */
 const int HWLGeneral::unlockAllNormalWeaponsOffsetLength = 1;
 
 
-/* @var unlockAllPlusWeaponsOffset				the offset-begin for unlocking-state of all plus-weapons (for MW-Skill 2) */
+/* @var unlockAllPlusWeaponsOffset				the offset-begin for unlocking-state of all plus-weapons (for MS-Skill 2) */
 const int HWLGeneral::unlockAllPlusWeaponsOffset = 0xD2;
 
 /* @var unlockAllPlusWeaponsOffsetLength		the offset-length for unlocking-state of all plus-weapons  */
@@ -212,7 +212,6 @@ string HWLGeneral::calc_current_savefile_game_version()
 */
 vector<bool> HWLGeneral::calc_installed_dlcs()
 {
-
 	//declare needed variables, fucntion-global-scope
 	vector<bool> vb_savefile_installed_dlcs;
 
@@ -220,25 +219,31 @@ vector<bool> HWLGeneral::calc_installed_dlcs()
 	for (int i = 0; i < this->vs_game_dlc_strings.size(); i++)
 		vb_savefile_installed_dlcs.push_back(false);
 
+	//iterate over all known DLCs and get there state
 	for (int i = 0; i < this->vs_game_dlc_strings.size(); i++)
 	{
+		//get offset begin, end and the length
 		string s_savefile_installed_dlc;
 		int i_savefile_installed_dlc_offset_begin = this->vi_game_dlc_identifier_offsets_begin[i];
 		int i_savefile_installed_dlc_offset_end = this->vi_game_dlc_identifier_offsets_end[i];
 		int i_savefile_installed_dlc_offset_length = (i_savefile_installed_dlc_offset_end - i_savefile_installed_dlc_offset_begin) + 1;
 
+		//if the offset begin/or end is 0x00, then the DLC is not known yet
 		if (i_savefile_installed_dlc_offset_begin == 0x0)
 			continue;
 
+		//get the complete hexString
 		s_savefile_installed_dlc = this->getHexStringFromFileContent(i_savefile_installed_dlc_offset_begin, i_savefile_installed_dlc_offset_length, true);
 
+		//check if the hexString NOT MATCH the default hexString.
+		//TRUE: it is installed, FALSE otherwise
 		if (s_savefile_installed_dlc != this->vs_game_dlc_default_hexStrings[i])
 			vb_savefile_installed_dlcs[i] = true;
 		else
 			continue;
 	}
 
-	//return the current version based on the value and the vector-index
+	//return the current install-state of all DLCs
 	return vb_savefile_installed_dlcs;
 }
 

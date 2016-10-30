@@ -444,7 +444,7 @@ bool HWLSaveEditor::calc_players_weapons(int i_player_id, int i_weapon_id, strin
 		vi_lvl_hexValues[3] = i_current_lvl_4;
 		i_multi_element_weapon_hex = i_current_multi_element_weapon_hex;
 
-		//Now checks the given weapon-id, if we have Level-1,2,3 or 4 of the weapon-type and set 
+		//Now checks the given weapon-id, if we have Level-1,2,3,4 or multi-element of the weapon-type and set 
 		//the needed things correctly. And return true if all things went fine
 		if (i_weapon_id == HWLWeapon::vi_playerWeaponTypeHexValues[i_weapon_count + j])
 		{
@@ -723,24 +723,33 @@ void HWLSaveEditor::calc_myFairies()
 void HWLSaveEditor::calc_game_versions_restrictions()
 {
 	//calc characters restrictions - disabled state -> BEGIN
+
+	//disable the ??? characters
 	this->get_player("???")->set_isDisabled(true);
 
+	//disable Medli on lower version as 1.3.0
 	if (this->s_savefile_game_version == "1.0.0" || this->s_savefile_game_version == "1.2.0")
 		this->get_player("Medli")->set_isDisabled(true);
 
+	//disable Marin on lower versions as 1.4.0 or if DLC is not installed
 	if (this->s_savefile_game_version == "1.0.0" || this->s_savefile_game_version == "1.2.0"
 		|| this->s_savefile_game_version == "1.3.0" || !this->vb_game_dlc_installed[1])
 		this->get_player("Marin")->set_isDisabled(true);
 
+	//disable Toon-Zelda on lower versions as 1.5.0 or if DLC is not installed
 	if (this->s_savefile_game_version == "1.0.0" || this->s_savefile_game_version == "1.2.0"
 		|| this->s_savefile_game_version == "1.3.0" || this->s_savefile_game_version == "1.4.0" || !this->vb_game_dlc_installed[2])
 		this->get_player("Toon Zelda")->set_isDisabled(true);
+
 	//calc characters restrictions - disabled state -> END
 
 	//calc characters restrictions - weapon-types-disabled state -> BEGIN
+
+	//disable Linkles Boots, if DLC is not installed
 	if (!this->vb_game_dlc_installed[1])
 		this->get_player("Linkle")->set_disabled_weaponTypeID(1);
 
+	//disable Toon-Links SandWand if DLC is not installed
 	if (!this->vb_game_dlc_installed[2])
 		this->get_player("Toon Link")->set_disabled_weaponTypeID(1);
 

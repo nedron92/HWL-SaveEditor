@@ -22,6 +22,13 @@ CZeldaEditFairyDlg::~CZeldaEditFairyDlg()
 {
 }
 
+BOOL CZeldaEditFairyDlg::OnInitDialog()
+{
+	//calculate the disabled-Items and remove the Menu-Entry, if neccessary
+	CZeldaHWLSaveEditorGUIApp::calc_disabled_MenuItems(GetMenu()->GetSubMenu(1));
+	return CDialogEx::OnInitDialog();
+}
+
 void CZeldaEditFairyDlg::DoDataExchange(CDataExchange* pDX)
 {
 	// Set the icon for this dialog.  The framework does this automatically
@@ -35,7 +42,7 @@ void CZeldaEditFairyDlg::DoDataExchange(CDataExchange* pDX)
 	CMenu* cm_submenu = cm_menu->GetSubMenu(1);
 	cm_submenu->CheckMenuItem(5, MF_CHECKED | MF_BYPOSITION);
 
-	//own inits
+	//get the save-content
 	save = CZeldaHWLSaveEditorGUIApp::save;
 
 	if (save != nullptr)
@@ -114,6 +121,13 @@ BEGIN_MESSAGE_MAP(CZeldaEditFairyDlg, CDialogEx)
 	ON_EN_CHANGE(IDC_EDIT_FAIRY_TRUST, &CZeldaEditFairyDlg::OnEnChangeEditFairyTrust)
 	ON_EN_CHANGE(IDC_EDIT_FAIRY_ITERATOR, &CZeldaEditFairyDlg::OnEnChangeEditFairyIterator)
 	ON_COMMAND(ID_MENU_EDIT_CHARACTERS_WEAPONS, &CZeldaEditFairyDlg::OnMenuEditCharactersWeapons)
+	ON_COMMAND(ID_MENU_EDIT_AM_MWWMAP, &CZeldaEditFairyDlg::OnMenuEditAmMwwmap)
+	ON_COMMAND(ID_MENU_EDIT_AM_KIMAP, &CZeldaEditFairyDlg::OnMenuEditAmKimap)
+	ON_COMMAND(ID_MENU_EDIT_AM_GTMAP, &CZeldaEditFairyDlg::OnMenuEditAmGtmap)
+	ON_BN_CLICKED(IDC_FAIRY_MAX_STATS_ALL, &CZeldaEditFairyDlg::OnBnClickedFairyMaxStatsAll)
+	ON_BN_CLICKED(IDC_FAIRY_UNLOCK_ALL, &CZeldaEditFairyDlg::OnBnClickedFairyUnlockAll)
+	ON_COMMAND(ID_MENU_MAIN_EXIT, &CZeldaEditFairyDlg::OnMenuMainExit)
+	ON_COMMAND(ID_MENU_EDIT_CHARACTERS_OVERVIEW, &CZeldaEditFairyDlg::OnMenuEditCharactersOverview)
 END_MESSAGE_MAP()
 
 
@@ -183,7 +197,7 @@ void CZeldaEditFairyDlg::OnMenuEditFairyfoods()
 void CZeldaEditFairyDlg::OnMenuEditAmAvmap()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
-	CZeldaEditAdventureModeItem dlg(NULL, 0);
+	CZeldaEditAdventureModeMaps dlg(NULL, 0);
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }
@@ -192,7 +206,7 @@ void CZeldaEditFairyDlg::OnMenuEditAmAvmap()
 void CZeldaEditFairyDlg::OnMenuEditAmGsmap()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
-	CZeldaEditAdventureModeItem dlg(NULL, 1);
+	CZeldaEditAdventureModeMaps dlg(NULL, 1);
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }
@@ -201,7 +215,7 @@ void CZeldaEditFairyDlg::OnMenuEditAmGsmap()
 void CZeldaEditFairyDlg::OnMenuEditAmMqmap()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
-	CZeldaEditAdventureModeItem dlg(NULL, 2);
+	CZeldaEditAdventureModeMaps dlg(NULL, 2);
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }
@@ -210,7 +224,7 @@ void CZeldaEditFairyDlg::OnMenuEditAmMqmap()
 void CZeldaEditFairyDlg::OnMenuEditAmTlmap()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
-	CZeldaEditAdventureModeItem dlg(NULL, 3);
+	CZeldaEditAdventureModeMaps dlg(NULL, 3);
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }
@@ -219,11 +233,35 @@ void CZeldaEditFairyDlg::OnMenuEditAmTlmap()
 void CZeldaEditFairyDlg::OnMenuEditAmTmmap()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
-	CZeldaEditAdventureModeItem dlg(NULL, 4);
+	CZeldaEditAdventureModeMaps dlg(NULL, 4);
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }
 
+void CZeldaEditFairyDlg::OnMenuEditAmMwwmap()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditAdventureModeMaps dlg(NULL, 5);
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+void CZeldaEditFairyDlg::OnMenuEditAmKimap()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditAdventureModeMaps dlg(NULL, 6);
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+
+void CZeldaEditFairyDlg::OnMenuEditAmGtmap()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditAdventureModeMaps dlg(NULL, 7);
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
 
 void CZeldaEditFairyDlg::OnBnClickedSave()
 {
@@ -279,32 +317,61 @@ void CZeldaEditFairyDlg::OnBnClickedFairyPageNext()
 void CZeldaEditFairyDlg::OnBnClickedFairyMaxStats()
 {
 	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
-	
 	if (save != nullptr)
 	{
-		int i_length = (IDC_CHECK_FAIRY_UNLOCK - IDC_EDIT_FAIRY_LVL) + 1;
-		int *i_values = new int[i_length];
+		save->get_fairy(this->i_fairy - 1)->set_lvl(HWLSaveEdit::HWLFairy::fairyLVLMax);
+		save->get_fairy(this->i_fairy - 1)->set_trust(HWLSaveEdit::HWLFairy::fairyTrustMax);
+		save->get_fairy(this->i_fairy - 1)->set_iterator(HWLSaveEdit::HWLFairy::fairyIteratorMax);
+		save->get_fairy(this->i_fairy - 1)->save_Fairy();
 
-		i_values[0] = HWLSaveEdit::HWLFairy::fairyLVLMax;
-		i_values[1] = HWLSaveEdit::HWLFairy::fairyTrustMax;
-		i_values[2] = HWLSaveEdit::HWLFairy::fairyIteratorMax;
-
-		int i_counter = 0;
-
-		for (int i = IDC_EDIT_FAIRY_LVL; i < IDC_CHECK_FAIRY_UNLOCK; i++)
-		{
-			CString s_tmp_value;
-			s_tmp_value.Format(L"%d", i_values[i_counter]);
-			SetDlgItemText(i, s_tmp_value);
-			i_counter++;
-		}
-		delete i_values;
+		this->UpdateData();
 
 		CString str("Finish! All needed Values are updated.");
 		MessageBox(str, L"Information", MB_OK | MB_ICONINFORMATION);
 	}
 
 }
+
+void CZeldaEditFairyDlg::OnBnClickedFairyMaxStatsAll()
+{
+	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	if (save != nullptr)
+	{
+		for (int i = 0; i < HWLSaveEdit::HWLGeneral::fairiesMax; i++)
+		{
+			save->get_fairy(i)->set_lvl(HWLSaveEdit::HWLFairy::fairyLVLMax);
+			save->get_fairy(i)->set_trust(HWLSaveEdit::HWLFairy::fairyTrustMax);
+			save->get_fairy(i)->set_iterator(HWLSaveEdit::HWLFairy::fairyIteratorMax);
+			save->get_fairy(i)->save_Fairy();
+		}
+
+		this->UpdateData();
+
+		CString str("Finish! All needed Values are updated.");
+		MessageBox(str, L"Information", MB_OK | MB_ICONINFORMATION);
+	}
+
+}
+
+
+void CZeldaEditFairyDlg::OnBnClickedFairyUnlockAll()
+{
+	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	if (save != nullptr)
+	{
+		for (int i = 0; i < HWLSaveEdit::HWLGeneral::fairiesMax; i++)
+		{
+			save->get_fairy(i)->set_isUnlock(true);
+			save->get_fairy(i)->save_Fairy();
+		}
+
+		this->UpdateData();
+
+		CString str("Finish! All needed Fairies are unlocked.");
+		MessageBox(str, L"Information", MB_OK | MB_ICONINFORMATION);
+	}
+}
+
 
 void CZeldaEditFairyDlg::calc_fairy()
 {
@@ -434,6 +501,24 @@ void CZeldaEditFairyDlg::OnMenuEditCharactersWeapons()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditCharaWeaponsDlg dlg;
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+
+
+void CZeldaEditFairyDlg::OnMenuMainExit()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditFairyDlg::OnOK();
+
+}
+
+
+void CZeldaEditFairyDlg::OnMenuEditCharactersOverview()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditCharaOverviewDlg dlg;
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }

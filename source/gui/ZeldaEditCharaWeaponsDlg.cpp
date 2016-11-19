@@ -11,11 +11,14 @@
 
 IMPLEMENT_DYNAMIC(CZeldaEditCharaWeaponsDlg, CDialogEx)
 
-CZeldaEditCharaWeaponsDlg::CZeldaEditCharaWeaponsDlg(CWnd* pParent /*=NULL*/)
+CZeldaEditCharaWeaponsDlg::CZeldaEditCharaWeaponsDlg(CWnd* pParent /*=NULL*/, int i_chara_id, int i_skipped_charas)
 	: CDialogEx(CZeldaEditCharaWeaponsDlg::IDD, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
-	this->i_chara_id = this->i_weapon_type = this->i_weapon_slot = 0;
+	this->i_chara_id = i_chara_id;
+	this->i_skipped_charas = i_skipped_charas;
+
+	this->i_weapon_type = this->i_weapon_slot = this->i_skipped_weaponTypes = 0;
 }
 
 CZeldaEditCharaWeaponsDlg::~CZeldaEditCharaWeaponsDlg()
@@ -54,6 +57,9 @@ BOOL CZeldaEditCharaWeaponsDlg::OnInitDialog()
 		cb_level->InsertString(-1,cs_level);
 	}
 
+	//calculate the disabled-Items and remove the Menu-Entry, if neccessary
+	CZeldaHWLSaveEditorGUIApp::calc_disabled_MenuItems(GetMenu()->GetSubMenu(1));
+
 	this->UpdateData();
 	return CDialogEx::OnInitDialog();
 }
@@ -72,66 +78,58 @@ void CZeldaEditCharaWeaponsDlg::DoDataExchange(CDataExchange* pDX)
 	cm_submenu->CheckMenuItem(1, MF_CHECKED | MF_BYPOSITION);
 
 	cm_submenu = cm_submenu->GetSubMenu(1);
-	cm_submenu->CheckMenuItem(1, MF_CHECKED | MF_BYPOSITION);
+	cm_submenu->CheckMenuItem(3, MF_CHECKED | MF_BYPOSITION);
 
-	//own inits
+	//get the save-content
 	save = CZeldaHWLSaveEditorGUIApp::save;
 
 	if (save != nullptr)
 	{
-		int i_unused_charas = 0;
-		for (int i = 0; i < HWLSaveEdit::HWLPlayer::vs_players.size(); i++)
+
+		if (this->i_chara_id >= HWLSaveEdit::HWLPlayer::vs_players.size() || save->get_player(this->i_chara_id)->get_isDisabled())
 		{
-			CString s_name(save->get_player(i)->get_name().c_str());
-			if (s_name == L"???")
-			{
-				i_unused_charas++;
-				continue;
-			}
+			this->i_skipped_charas = 0;
+			this->i_chara_id = 0;
+		}
+
+		if (this->i_weapon_type >= save->get_player(this->i_chara_id)->get_weapon_type_count() || save->get_player(this->i_chara_id)->get_isWeaponTypeDisabled(this->i_weapon_type))
+		{
+			this->i_skipped_weaponTypes = 0;
+			this->i_weapon_type = 0;
 		}
 
 		std::shared_ptr<HWLSaveEdit::HWLWeapon> hwlpw = save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot);
 
 		//Chara-Choose activate
-		CString s_chara_count;
-		int i_unused_charas_now = 0;
-		for (int i = 0; i < this->i_chara_id; i++)
-		{
-			CString s_name(save->get_player(i)->get_name().c_str());
-			if (s_name == L"???")
-			{
-				i_unused_charas_now++;
-			}
-		}
-
-		s_chara_count.Format(L"%d / %d", this->i_chara_id + 1 - i_unused_charas_now, HWLSaveEdit::HWLPlayer::vs_players.size() - i_unused_charas);
+		CString s_chara_count; 
+		s_chara_count.Format(L"%d / %d", (this->i_chara_id + 1) - this->i_skipped_charas, HWLSaveEdit::HWLPlayer::vs_players.size() - HWLSaveEdit::HWLPlayer::get_disabledPlayerCounter());
 		SetDlgItemText(IDC_STATIC_CWEAPON_CHARA_COUNT, s_chara_count);
 		GetDlgItem(IDC_CWEAPON_CHAR_PAGE_PREVIOUS)->EnableWindow(true);
 		GetDlgItem(IDC_CWEAPON_CHAR_PAGE_NEXT)->EnableWindow(true);
 
-		if (this->i_chara_id + 1 <= 1)
+		if (this->i_chara_id <= 0)
 			GetDlgItem(IDC_CWEAPON_CHAR_PAGE_PREVIOUS)->EnableWindow(false);
 		else
 			GetDlgItem(IDC_CWEAPON_CHAR_PAGE_PREVIOUS)->EnableWindow(true);
 
-		if (this->i_chara_id + 1 >= HWLSaveEdit::HWLPlayer::vs_players.size())
+		if (this->i_chara_id + 1 >= HWLSaveEdit::HWLPlayer::vs_players.size() - HWLSaveEdit::HWLPlayer::get_disabledPlayerCounter() + 2)
 			GetDlgItem(IDC_CWEAPON_CHAR_PAGE_NEXT)->EnableWindow(false);
 		else
 			GetDlgItem(IDC_CWEAPON_CHAR_PAGE_NEXT)->EnableWindow(true);
 
 		//Weapon-Type activate
 		CString s_type_count;
-		s_type_count.Format(L"%d / %d", this->i_weapon_type + 1, HWLSaveEdit::HWLWeapon::vi_playerWeaponTypeCount[this->i_chara_id]);
+		s_type_count.Format(L"%d / %d", (this->i_weapon_type + 1) - this->i_skipped_weaponTypes, save->get_player(this->i_chara_id)->get_weapon_type_count() - save->get_player(this->i_chara_id)->get_disabledWeaponTypeCounter() );
 		SetDlgItemText(IDC_STATIC_CWEAPON_TYPE_COUNT, s_type_count);
 		GetDlgItem(IDC_CWEAPON_TYPE_PAGE_PREVIOUS)->EnableWindow(true);
 		GetDlgItem(IDC_CWEAPON_TYPE_PAGE_NEXT)->EnableWindow(true);
 
-		if (this->i_weapon_type + 1 <= 1)
+		if (this->i_weapon_type <= 0)
 			GetDlgItem(IDC_CWEAPON_TYPE_PAGE_PREVIOUS)->EnableWindow(false);
 		else
 			GetDlgItem(IDC_CWEAPON_TYPE_PAGE_PREVIOUS)->EnableWindow(true);
 
-		if (this->i_weapon_type + 1 >= HWLSaveEdit::HWLWeapon::vi_playerWeaponTypeCount[this->i_chara_id])
+		if (this->i_weapon_type + 1 >= save->get_player(this->i_chara_id)->get_weapon_type_count() - save->get_player(this->i_chara_id)->get_disabledWeaponTypeCounter() )
 			GetDlgItem(IDC_CWEAPON_TYPE_PAGE_NEXT)->EnableWindow(false);
 		else
 			GetDlgItem(IDC_CWEAPON_TYPE_PAGE_NEXT)->EnableWindow(true);
@@ -176,6 +174,10 @@ void CZeldaEditCharaWeaponsDlg::DoDataExchange(CDataExchange* pDX)
 			GetDlgItem(IDC_CWEAPON_RESET_KILLS)->EnableWindow(false);
 			GetDlgItem(IDC_CWEAPON_RESET_SKILLS)->EnableWindow(false);
 
+			//Deactivate Copy/Paste Buttons
+			GetDlgItem(IDC_CWEAPON_COPY_VALUES)->EnableWindow(false);
+			GetDlgItem(IDC_CWEAPON_PASTE_VALUES)->EnableWindow(false);
+
 			//Skill-Kills Slot1 to Damage-Base deactivate and set current content to nothing
 			for (int i = IDC_EDIT_CWEAPON_KILLS_SLOT_1; i <= IDC_EDIT_CWEAPON_DAMAGE_BASE; i++)
 			{
@@ -184,7 +186,7 @@ void CZeldaEditCharaWeaponsDlg::DoDataExchange(CDataExchange* pDX)
 			}
 
 			//Deactivate the other Stats
-			for (int i = IDC_COMBO_CWEAPON_STARS; i <= IDC_CHECK_CWEAPON_LEGENDARY; i++)
+			for (int i = IDC_COMBO_CWEAPON_STARS; i <= IDC_CHECK_CWEAPON_MULTIELEMENT; i++)
 			{
 				GetDlgItem(i)->ShowWindow(SW_SHOWNORMAL);
 				GetDlgItem(i)->EnableWindow(false);
@@ -208,6 +210,10 @@ void CZeldaEditCharaWeaponsDlg::DoDataExchange(CDataExchange* pDX)
 			GetDlgItem(IDC_CWEAPON_RESET_KILLS)->EnableWindow(true);
 			GetDlgItem(IDC_CWEAPON_RESET_SKILLS)->EnableWindow(true);
 
+			//Deactivate Copy/Paste Buttons
+			GetDlgItem(IDC_CWEAPON_COPY_VALUES)->EnableWindow(true);
+			GetDlgItem(IDC_CWEAPON_PASTE_VALUES)->EnableWindow(true);
+
 			//Skill-Kills Slot1 to Damage-Base activate
 			for (int i = IDC_EDIT_CWEAPON_KILLS_SLOT_1; i <= IDC_EDIT_CWEAPON_KILLS_SLOT_8; i++)
 			{
@@ -228,7 +234,7 @@ void CZeldaEditCharaWeaponsDlg::DoDataExchange(CDataExchange* pDX)
 				GetDlgItem(IDC_COMBO_CWEAPON_STARS)->EnableWindow(true);
 
 				//Deactivate the other Stats
-				for (int i = IDC_COMBO_CWEAPON_LEVEL; i <= IDC_CHECK_CWEAPON_LEGENDARY; i++)
+				for (int i = IDC_COMBO_CWEAPON_LEVEL; i <= IDC_CHECK_CWEAPON_MULTIELEMENT; i++)
 				{
 					GetDlgItem(i)->ShowWindow(SW_SHOWNORMAL);
 					GetDlgItem(i)->EnableWindow(false);
@@ -240,6 +246,18 @@ void CZeldaEditCharaWeaponsDlg::DoDataExchange(CDataExchange* pDX)
 				{
 					GetDlgItem(i)->ShowWindow(SW_SHOWNORMAL);
 					GetDlgItem(i)->EnableWindow(true);
+				}
+
+				//Check if we have a Multi-ElementWeapon of that type, deactiate CheckBox if not (and also LVL)
+				if (hwlpw->get_multi_element_hex() != 0x00)
+				{
+					GetDlgItem(IDC_CHECK_CWEAPON_MULTIELEMENT)->ShowWindow(SW_SHOWNORMAL);
+					GetDlgItem(IDC_CHECK_CWEAPON_MULTIELEMENT)->EnableWindow(true);
+				}
+				else  
+				{
+					GetDlgItem(IDC_CHECK_CWEAPON_MULTIELEMENT)->ShowWindow(SW_SHOWNORMAL);
+					GetDlgItem(IDC_CHECK_CWEAPON_MULTIELEMENT)->EnableWindow(false);
 				}
 			}
 
@@ -284,6 +302,10 @@ void CZeldaEditCharaWeaponsDlg::DoDataExchange(CDataExchange* pDX)
 		GetDlgItem(IDC_CWEAPON_RESET_KILLS)->EnableWindow(false);
 		GetDlgItem(IDC_CWEAPON_RESET_SKILLS)->EnableWindow(false);
 
+		//Deactivate Copy/Paste Buttons
+		GetDlgItem(IDC_CWEAPON_COPY_VALUES)->EnableWindow(false);
+		GetDlgItem(IDC_CWEAPON_PASTE_VALUES)->EnableWindow(false);
+
 		//Skill-Kills Slot1 to Damage-Base deactivate and set current content to nothing
 		for (int i = IDC_EDIT_CWEAPON_KILLS_SLOT_1; i <= IDC_EDIT_CWEAPON_DAMAGE_BASE; i++)
 		{
@@ -293,7 +315,7 @@ void CZeldaEditCharaWeaponsDlg::DoDataExchange(CDataExchange* pDX)
 		}
 
 		//Deactivate the other Stats
-		for (int i = IDC_COMBO_CWEAPON_STARS; i <= IDC_CHECK_CWEAPON_LEGENDARY; i++)
+		for (int i = IDC_COMBO_CWEAPON_STARS; i <= IDC_CHECK_CWEAPON_MULTIELEMENT; i++)
 		{
 			GetDlgItem(i)->ShowWindow(SW_SHOWNORMAL);
 			GetDlgItem(i)->EnableWindow(false);
@@ -349,6 +371,14 @@ ON_BN_CLICKED(IDC_CWEAPON_RESET_KILLS, &CZeldaEditCharaWeaponsDlg::OnBnClickedCw
 ON_BN_CLICKED(IDC_CWEAPON_RESET_SKILLS, &CZeldaEditCharaWeaponsDlg::OnBnClickedCweaponResetSkills)
 ON_CONTROL_RANGE(EN_CHANGE, IDC_EDIT_CWEAPON_KILLS_SLOT_1, IDC_EDIT_CWEAPON_KILLS_SLOT_8, &OnEnChangeKillSlotEdit)
 ON_CBN_SELCHANGE(IDC_COMBO_CWEAPON_STARS, &CZeldaEditCharaWeaponsDlg::OnCbnSelchangeComboCweaponStars)
+ON_COMMAND(ID_MENU_EDIT_AM_MWWMAP, &CZeldaEditCharaWeaponsDlg::OnMenuEditAmMwwmap)
+ON_COMMAND(ID_MENU_EDIT_AM_KIMAP, &CZeldaEditCharaWeaponsDlg::OnMenuEditAmKimap)
+ON_COMMAND(ID_MENU_EDIT_AM_GTMAP, &CZeldaEditCharaWeaponsDlg::OnMenuEditAmGtmap)
+ON_BN_CLICKED(IDC_CHECK_CWEAPON_MULTIELEMENT, &CZeldaEditCharaWeaponsDlg::OnBnClickedCheckCweaponMultielement)
+ON_COMMAND(ID_MENU_MAIN_EXIT, &CZeldaEditCharaWeaponsDlg::OnMenuMainExit)
+ON_COMMAND(ID_MENU_EDIT_CHARACTERS_OVERVIEW, &CZeldaEditCharaWeaponsDlg::OnMenuEditCharactersOverview)
+ON_BN_CLICKED(IDC_CWEAPON_COPY_VALUES, &CZeldaEditCharaWeaponsDlg::OnBnClickedCweaponCopyValues)
+ON_BN_CLICKED(IDC_CWEAPON_PASTE_VALUES, &CZeldaEditCharaWeaponsDlg::OnBnClickedCweaponPasteValues)
 END_MESSAGE_MAP()
 
 // CZeldaEditCharaWeaponsDlg-Meldungshandler
@@ -417,7 +447,7 @@ void CZeldaEditCharaWeaponsDlg::OnMenuEditFairyfoods()
 void CZeldaEditCharaWeaponsDlg::OnMenuEditAmAvmap()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
-	CZeldaEditAdventureModeItem dlg(NULL, 0);
+	CZeldaEditAdventureModeMaps dlg(NULL, 0);
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }
@@ -426,7 +456,7 @@ void CZeldaEditCharaWeaponsDlg::OnMenuEditAmAvmap()
 void CZeldaEditCharaWeaponsDlg::OnMenuEditAmGsmap()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
-	CZeldaEditAdventureModeItem dlg(NULL, 1);
+	CZeldaEditAdventureModeMaps dlg(NULL, 1);
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }
@@ -435,7 +465,7 @@ void CZeldaEditCharaWeaponsDlg::OnMenuEditAmGsmap()
 void CZeldaEditCharaWeaponsDlg::OnMenuEditAmMqmap()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
-	CZeldaEditAdventureModeItem dlg(NULL, 2);
+	CZeldaEditAdventureModeMaps dlg(NULL, 2);
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }
@@ -444,7 +474,7 @@ void CZeldaEditCharaWeaponsDlg::OnMenuEditAmMqmap()
 void CZeldaEditCharaWeaponsDlg::OnMenuEditAmTlmap()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
-	CZeldaEditAdventureModeItem dlg(NULL, 3);
+	CZeldaEditAdventureModeMaps dlg(NULL, 3);
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }
@@ -453,11 +483,36 @@ void CZeldaEditCharaWeaponsDlg::OnMenuEditAmTlmap()
 void CZeldaEditCharaWeaponsDlg::OnMenuEditAmTmmap()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
-	CZeldaEditAdventureModeItem dlg(NULL, 4);
+	CZeldaEditAdventureModeMaps dlg(NULL, 4);
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }
 
+void CZeldaEditCharaWeaponsDlg::OnMenuEditAmMwwmap()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditAdventureModeMaps dlg(NULL, 5);
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+
+void CZeldaEditCharaWeaponsDlg::OnMenuEditAmKimap()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditAdventureModeMaps dlg(NULL, 6);
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+
+void CZeldaEditCharaWeaponsDlg::OnMenuEditAmGtmap()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditAdventureModeMaps dlg(NULL, 7);
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
 
 void CZeldaEditCharaWeaponsDlg::OnMenuEditFairies()
 {
@@ -509,19 +564,26 @@ void CZeldaEditCharaWeaponsDlg::OnBnClickedCweaponCharPagePrevious()
 
 	this->i_weapon_slot = 0;
 	this->i_weapon_type = 0;
-	this->i_chara_id--;
 
-	while (1)
+	int i_old_chara_id = this->i_chara_id;
+	for (int i = this->i_chara_id - 1; i > 0; i--)
 	{
-		CString s_name(save->get_player(i_chara_id)->get_name().c_str());
-		if (s_name == L"???")
+		if (save->get_player(i)->get_isDisabled())
 		{
-			this->i_chara_id--;
+			if (this->i_skipped_charas > 0)
+				this->i_skipped_charas--;
+			continue;
 		}
-		else{
+		else
+		{
+			this->i_chara_id = i;
 			break;
 		}
 	}
+
+	if (this->i_chara_id == i_old_chara_id)
+		this->i_chara_id = 0;
+
 	this->UpdateData();
 }
 
@@ -533,19 +595,25 @@ void CZeldaEditCharaWeaponsDlg::OnBnClickedCweaponCharPageNext()
 
 	this->i_weapon_slot = 0;
 	this->i_weapon_type = 0;
-	this->i_chara_id++;
 
-	while (1)
+	int i_old_chara_id = this->i_chara_id;
+	for (int i = this->i_chara_id + 1; i < HWLSaveEdit::HWLPlayer::vs_players.size(); i++)
 	{
-		CString s_name(save->get_player(i_chara_id)->get_name().c_str());
-		if (s_name == L"???")
+		if (save->get_player(i)->get_isDisabled())
 		{
-			this->i_chara_id++;
+			this->i_skipped_charas++;
+			continue;
 		}
-		else{
+		else
+		{
+			this->i_chara_id = i;
 			break;
 		}
 	}
+
+	if (this->i_chara_id == i_old_chara_id)
+		this->i_chara_id = 0;
+
 	this->UpdateData();
 }
 
@@ -556,7 +624,26 @@ void CZeldaEditCharaWeaponsDlg::OnBnClickedCweaponTypePagePrevious()
 	this->save_weapon();
 
 	this->i_weapon_slot = 0;
-	this->i_weapon_type--;
+
+	int i_old_weaponType_id = this->i_weapon_type;
+	for (int i = this->i_weapon_type - 1; i > 0; i--)
+	{
+		if (save->get_player(this->i_chara_id)->get_isWeaponTypeDisabled(i))
+		{
+			if (this->i_skipped_weaponTypes > 0)
+				this->i_skipped_weaponTypes--;
+			continue;
+		}
+		else
+		{
+			this->i_weapon_type = i;
+			break;
+		}
+	}
+
+	if (this->i_weapon_type == i_old_weaponType_id)
+		this->i_weapon_type = 0;
+
 	this->UpdateData();
 }
 
@@ -567,7 +654,25 @@ void CZeldaEditCharaWeaponsDlg::OnBnClickedCweaponTypePageNext()
 	this->save_weapon();
 
 	this->i_weapon_slot = 0;
-	this->i_weapon_type++;
+
+	int i_old_weaponType_id = this->i_weapon_type;
+	for (int i = this->i_weapon_type + 1; i < save->get_player(this->i_chara_id)->get_weapon_type_count(); i++)
+	{
+		if (save->get_player(this->i_chara_id)->get_isWeaponTypeDisabled(i))
+		{
+			this->i_skipped_weaponTypes++;
+			continue;
+		}
+		else
+		{
+			this->i_weapon_type = i;
+			break;
+		}
+	}
+
+	if (this->i_weapon_type == i_old_weaponType_id)
+		this->i_weapon_type = 0;
+
 	this->UpdateData();
 }
 
@@ -649,10 +754,16 @@ void CZeldaEditCharaWeaponsDlg::calc_weapon()
 	//Get current Weapon-Name of chosen chara and type and print it out (with LVL-added, but no, if we have the Master Sword)
 	std::shared_ptr<HWLSaveEdit::HWLWeapon> hwlpw = save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot);
 	CString s_weapon_name, s_weapon_name_tmp(hwlpw->get_name().c_str());
+	CString s_weapon_multiElement_addition = L"";
+	if (hwlpw->get_IsMultiElement())
+		s_weapon_multiElement_addition = L"+";
+
 	if (hwlpw->get_id() == HWLSaveEdit::HWLWeapon::vi_playerWeaponTypeHexValues[4])
 		s_weapon_name.Format(L"%s", s_weapon_name_tmp);
 	else
-		s_weapon_name.Format(L"%s LVL-%d", s_weapon_name_tmp, hwlpw->get_lvl());
+		s_weapon_name.Format(L"%s LVL-%d%s", s_weapon_name_tmp, hwlpw->get_lvl(), s_weapon_multiElement_addition);
+
+
 
 	SetDlgItemText(IDC_STATIC_CWEAPON_WEAPON_NAME, s_weapon_name);
 
@@ -707,6 +818,16 @@ void CZeldaEditCharaWeaponsDlg::calc_weapon()
 	CButton *cb_check_legendary_state = (CButton*)GetDlgItem(IDC_CHECK_CWEAPON_LEGENDARY);
 	cb_check_legendary_state->SetCheck(hwlpw->get_state());
 
+	//Get current MultiElement-state and set it
+	CButton *cb_check_MultiElement_state = (CButton*)GetDlgItem(IDC_CHECK_CWEAPON_MULTIELEMENT);
+	cb_check_MultiElement_state->SetCheck(hwlpw->get_IsMultiElement());
+
+	if (hwlpw->get_IsMultiElement())
+	{
+		GetDlgItem(IDC_COMBO_CWEAPON_LEVEL)->ShowWindow(SW_SHOWNORMAL);
+		GetDlgItem(IDC_COMBO_CWEAPON_LEVEL)->EnableWindow(false);
+	}
+
 	//Get the current isUnused-State and set it
 	CButton *cb_check_is_unused = (CButton*)GetDlgItem(IDC_CHECK_CWEAPON_FREE_SLOT);
 	cb_check_is_unused->SetCheck(hwlpw->get_IsUnused());
@@ -740,20 +861,10 @@ void CZeldaEditCharaWeaponsDlg::save_weapon()
 		int i_stars = cb_stars->GetCurSel();
 		hwlpw->set_stars(i_stars);
 	
-		//Get current legendary-sate and check if we have the unique master sword or not
-		if (hwlpw->get_id() != HWLSaveEdit::HWLWeapon::vi_playerWeaponTypeHexValues[4])
-		{
-			CButton *cb_check_legendary_state = (CButton*)GetDlgItem(IDC_CHECK_CWEAPON_LEGENDARY);
-			bool b_is_legendary = cb_check_legendary_state->GetCheck();
-			
-			if (b_is_legendary)
-				hwlpw->set_state(HWLSaveEdit::HWLWeapon::weaponStateValuesHex[1]);
-			else
-				hwlpw->set_state(HWLSaveEdit::HWLWeapon::weaponStateValuesHex[0]);
-		}
-		else{
-			hwlpw->set_state(HWLSaveEdit::HWLWeapon::weaponStateValuesHex[2]);
-		}
+		//Get current legendary-state and change the state
+		CButton *cb_check_legendary_state = (CButton*)GetDlgItem(IDC_CHECK_CWEAPON_LEGENDARY);
+		bool b_is_legendary = cb_check_legendary_state->GetCheck();
+		hwlpw->change_legendary_state(b_is_legendary);
 
 		//Get current Skills and set to the object
 		int i_slot_counter2 = 0;
@@ -788,7 +899,25 @@ void CZeldaEditCharaWeaponsDlg::OnCbnSelchangeComboCweaponLevel()
 	//Get current stars and set to the object
 	CComboBox *cb_lvl = (CComboBox*)GetDlgItem(IDC_COMBO_CWEAPON_LEVEL);
 	int i_lvl = cb_lvl->GetCurSel() + 1;
-	save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot)->change_lvl(i_lvl);
+
+	if (i_lvl == HWLSaveEdit::HWLWeapon::weaponLVLMax && this->i_chara_id == 26 && this->i_weapon_type == 0 
+		&& save->get_general_things()->get_current_savefile_game_version() != "1.0.0"
+		&& save->get_general_things()->get_current_savefile_game_version() != "1.2.0"
+		&& save->get_general_things()->get_dlc_installed_dlcs_value() == 0)
+	{
+		save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot)->change_lvl(i_lvl-1);
+
+		CString cs_info;
+		cs_info.Format
+			(L"Due to a security reason and because the game doesn't recognize LVL-%d Weapons of %s without a DLC. \nSo this Weapon is set to LVL-%d instead."
+			, i_lvl, CString(save->get_player(this->i_chara_id)->get_name().c_str()), i_lvl - 1);
+		MessageBox(cs_info, L"Information", MB_OK | MB_ICONINFORMATION);
+
+	}else
+		save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot)->change_lvl(i_lvl);
+
+
+	save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot)->save_weapon();
 
 	this->UpdateData();
 }
@@ -816,16 +945,19 @@ void CZeldaEditCharaWeaponsDlg::OnEnChangeEditCweaponDamageBase()
 		}
 
 		save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot)->change_damage_base(i_test);
-		this->UpdateData();
+		save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot)->save_weapon();
+
 	}
 }
 
 void CZeldaEditCharaWeaponsDlg::OnEnKillfocusEditCweaponDamageBase()
 {
+	/*
 	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
 	if (save != nullptr)
 	{
-		CString test;
+		
+				CString test;
 		CEdit *e_test = (CEdit*)GetDlgItem(IDC_EDIT_CWEAPON_DAMAGE_BASE);
 		CString cs_max_chars;
 		cs_max_chars.Format(L"%d", HWLSaveEdit::HWLWeapon::weaponDamageBaseMax);
@@ -842,8 +974,10 @@ void CZeldaEditCharaWeaponsDlg::OnEnKillfocusEditCweaponDamageBase()
 		}
 
 		save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot)->change_damage_base(i_test);
+		
 		this->UpdateData();
 	}
+	*/
 }
 
 
@@ -863,6 +997,10 @@ void CZeldaEditCharaWeaponsDlg::OnBnClickedCheckCweaponLegendary()
 	}
 	else
 		GetDlgItem(IDC_EDIT_CWEAPON_DAMAGE_BASE)->EnableWindow(true);
+
+	save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot)->change_legendary_state(b_is_legendary);
+	save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot)->save_weapon();
+
 }
 
 void CZeldaEditCharaWeaponsDlg::OnEnChangeKillSlotEdit(UINT nID)
@@ -886,6 +1024,9 @@ void CZeldaEditCharaWeaponsDlg::OnEnChangeKillSlotEdit(UINT nID)
 				e_test->SetLimitText(cs_max_chars.GetLength());
 			}
 
+			int i_kill_slot_id = nID - IDC_EDIT_CWEAPON_KILLS_SLOT_1;
+			save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot)->set_skill_slot_kill(i_kill_slot_id, i_test);
+			save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot)->save_weapon();
 		}
 	}
 }
@@ -900,8 +1041,12 @@ void CZeldaEditCharaWeaponsDlg::OnBnClickedCweaponResetKills()
 		CString s_kill_value;
 		s_kill_value.Format(L"%d", 0);
 		SetDlgItemText(i, s_kill_value);
+
+		save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot)->set_skill_slot_kill(i_slot_counter, 0);
 		i_slot_counter++;
 	}
+
+	save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot)->save_weapon();
 	CString str("Finish! All needed Values are updated.");
 	MessageBox(str, L"Information", MB_OK | MB_ICONINFORMATION);
 }
@@ -933,8 +1078,11 @@ void CZeldaEditCharaWeaponsDlg::OnBnClickedCweaponResetSkills()
 				cb_skill->SetCurSel(i_last_item_index);
 		}
 
+		save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot)->set_skill_slot(i_slot_counter, i_skill_value);
 		i_slot_counter++;
 	}
+
+	save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot)->save_weapon();
 	CString str("Finish! All needed Values are updated.");
 	MessageBox(str, L"Information", MB_OK | MB_ICONINFORMATION);
 }
@@ -946,6 +1094,138 @@ void CZeldaEditCharaWeaponsDlg::OnCbnSelchangeComboCweaponStars()
 	CComboBox *cb_stars = (CComboBox*)GetDlgItem(IDC_COMBO_CWEAPON_STARS);
 	int i_stars = cb_stars->GetCurSel();
 	save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot)->change_stars(i_stars);
+	save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot)->save_weapon();
 
 	this->UpdateData();
+}
+
+void CZeldaEditCharaWeaponsDlg::OnBnClickedCheckCweaponMultielement()
+{
+	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	CButton *cb_check_multiElement_state = (CButton*)GetDlgItem(IDC_CHECK_CWEAPON_MULTIELEMENT);
+	bool b_is_multiElement = cb_check_multiElement_state->GetCheck();
+
+	save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot)->change_multi_element_state(b_is_multiElement);
+	save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot)->save_weapon();
+
+	this->UpdateData();
+
+}
+
+
+void CZeldaEditCharaWeaponsDlg::OnMenuMainExit()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditCharaWeaponsDlg::OnOK();
+}
+
+
+void CZeldaEditCharaWeaponsDlg::OnMenuEditCharactersOverview()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditCharaOverviewDlg dlg;
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+
+void CZeldaEditCharaWeaponsDlg::OnBnClickedCweaponCopyValues()
+{
+	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+	if (save != nullptr)
+	{
+		CZeldaConfigWeaponCopyDlg weapon_config;
+		weapon_config.DoModal();
+
+		if (CZeldaHWLSaveEditorGUIApp::sp_weapon_copy == nullptr)
+			CZeldaHWLSaveEditorGUIApp::sp_weapon_copy = make_shared<HWLSaveEdit::HWLWeapon>(0, -1, false, true);
+
+		*(CZeldaHWLSaveEditorGUIApp::sp_weapon_copy) = *(this->save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot));
+
+		this->UpdateData();
+	}
+
+}
+
+
+void CZeldaEditCharaWeaponsDlg::OnBnClickedCweaponPasteValues()
+{
+	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
+
+	if (save != nullptr)
+	{
+		std::shared_ptr<HWLSaveEdit::HWLWeapon> sp_hwl_current_weapon = this->save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot);
+		std::shared_ptr<HWLSaveEdit::HWLWeapon> sp_hwl_copy_weapon = CZeldaHWLSaveEditorGUIApp::sp_weapon_copy;
+		bool b_is_current_weapon_master_sword = false;
+
+		if (sp_hwl_current_weapon->get_id() == HWLSaveEdit::HWLWeapon::vi_playerWeaponTypeHexValues[4])
+			b_is_current_weapon_master_sword = true;
+
+		if (sp_hwl_copy_weapon != nullptr)
+		{
+			if (!sp_hwl_current_weapon->get_IsUnused())
+			{
+				for (int i = 0; i < CZeldaHWLSaveEditorGUIApp::mib_config_copy_weapon_values.size(); i++)
+				{
+					bool b_current_config_value = CZeldaHWLSaveEditorGUIApp::mib_config_copy_weapon_values[i];
+
+					switch (i)
+					{
+					case 0:
+						if (b_current_config_value && !b_is_current_weapon_master_sword)
+							sp_hwl_current_weapon->change_legendary_state(sp_hwl_copy_weapon->get_state());
+						break;
+
+					case 1:
+						if (b_current_config_value && !b_is_current_weapon_master_sword)
+							sp_hwl_current_weapon->change_lvl(sp_hwl_copy_weapon->get_lvl());
+						break;
+
+					case 2:
+						if (b_current_config_value && !b_is_current_weapon_master_sword)
+							sp_hwl_current_weapon->change_multi_element_state(sp_hwl_copy_weapon->get_IsMultiElement());
+						break;
+
+					case 3:
+						if (b_current_config_value && !b_is_current_weapon_master_sword && !sp_hwl_current_weapon->get_state())
+							sp_hwl_current_weapon->change_damage_base(sp_hwl_copy_weapon->get_damage_base());
+						break;
+
+					case 4:
+						if (b_current_config_value)
+							sp_hwl_current_weapon->change_stars(sp_hwl_copy_weapon->get_stars());
+						break;
+
+					case 5:
+						if (b_current_config_value)
+							sp_hwl_current_weapon->set_skill_kills(sp_hwl_copy_weapon->get_skill_kills());
+						break;
+
+					case 6:
+						if (b_current_config_value)
+							sp_hwl_current_weapon->set_skills(sp_hwl_copy_weapon->get_skills());
+						break;
+
+					default:
+						break;
+					}
+
+				}
+
+				sp_hwl_current_weapon->save_weapon();
+				this->UpdateData();
+
+			}else
+			{
+				CString str("You can't paste values to this weapon, because it's an unused one.\n"
+					"Please generate a default weapon first.");
+				MessageBox(str, L"Information", MB_OK | MB_ICONINFORMATION);
+			}
+		}else
+		{
+			CString str("You haven't copied any values yet!");
+			MessageBox(str, L"Information", MB_OK | MB_ICONINFORMATION);
+		}
+
+	}
 }

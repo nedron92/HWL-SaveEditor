@@ -19,6 +19,7 @@ protected:
 	HWLSaveEdit::HWLSaveEditor *save;
 
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV-Unterstützung
+	virtual BOOL OnInitDialog();
 
 	DECLARE_MESSAGE_MAP()
 
@@ -34,6 +35,7 @@ public:
 	afx_msg void OnEnChangeRubyEdit();
 	afx_msg void OnMenuMainFileOpen();
 
+	void calc_disabledState_AmMaps();
 	int get_active_window_id();
 	afx_msg void OnMenuMainFileClose();
 	afx_msg void OnMenuMainExit();
@@ -54,4 +56,8 @@ public:
 	afx_msg void OnBnClickedButtonHelpUnlockAllMaterials();
 	afx_msg void OnBnClickedStaticGeneral();
 	afx_msg void OnMenuCheckforupdates();
+	afx_msg void OnMenuEditAmMwwmap();
+	afx_msg void OnMenuEditAmKimap();
+	afx_msg void OnMenuEditAmGtmap();
+	afx_msg void OnMenuEditCharactersOverview();
 };

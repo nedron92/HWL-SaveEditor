@@ -16,6 +16,7 @@ public:
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV-Unterstützung
+	virtual BOOL OnInitDialog();
 
 	HICON m_hIcon;
 	HWLSaveEdit::HWLSaveEditor *save;
@@ -55,4 +56,8 @@ public:
 	afx_msg void OnMenuEditAmTmmap();
 	afx_msg void OnMenuEditFairies();
 	afx_msg void OnMenuEditCharactersWeapons();
+	afx_msg void OnMenuEditAmMwwmap();
+	afx_msg void OnMenuEditAmKimap();
+	afx_msg void OnMenuEditAmGtmap();
+	afx_msg void OnMenuEditCharactersOverview();
 };

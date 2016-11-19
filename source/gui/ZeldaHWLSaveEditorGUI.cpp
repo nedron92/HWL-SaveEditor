@@ -38,6 +38,10 @@ CZeldaHWLSaveEditorGUIApp theApp;
 // CZeldaHWLSaveEditorGUIApp initialization
 //initialize the static-member
 HWLSaveEdit::HWLSaveEditor *CZeldaHWLSaveEditorGUIApp::save = nullptr;
+std::shared_ptr<HWLSaveEdit::HWLWeapon> CZeldaHWLSaveEditorGUIApp::sp_weapon_copy = nullptr;
+
+map<int, bool> CZeldaHWLSaveEditorGUIApp::mib_disabled_adventure_maps;
+map<int, bool> CZeldaHWLSaveEditorGUIApp::mib_config_copy_weapon_values;
 
 BOOL CZeldaHWLSaveEditorGUIApp::InitInstance()
 {
@@ -72,6 +76,8 @@ BOOL CZeldaHWLSaveEditorGUIApp::InitInstance()
 	//SetRegistryKey(_T("Local AppWizard-Generated Applications"));
 
 	CZeldaEditGeneralDlg dlg;
+	bool b_is_update_check = false;
+	INT_PTR nResponse;
 
 	//get the current command-line parameter
 	CString cs_cmd_param = theApp.m_lpCmdLine;
@@ -82,32 +88,49 @@ BOOL CZeldaHWLSaveEditorGUIApp::InitInstance()
 		HWLSaveEdit::HWLSaveEditor::enable_auto_trim(false);
 	}
 
-	//own initialization
-	try
+	//check if we have only to check for updates
+	if (cs_cmd_param == L"--check-updates")
 	{
-		this->save = new HWLSaveEdit::HWLSaveEditor();
-		if (MessageBox(dlg, L"Found a 'zmha.bin' within this dir. Open it?", L"Information", MB_YESNO | MB_ICONASTERISK) == IDNO)
-			this->save = nullptr;
+		b_is_update_check = true;
 	}
-	catch (HWLSaveEdit::HWLException &e)
+
+	//check if we have NOT the commnad-line for update-checking
+	if (!b_is_update_check)
 	{
-		CString str(e.what());
-		if (e.get_code() == 400)
+		//own initialization
+		try
 		{
-			str = L"Found a 'zmha.bin' within this dir, but an error occured: \n" + str + L"\n\nShould Application start with no SaveFile opened?";
+			this->save = new HWLSaveEdit::HWLSaveEditor();
+			if (MessageBox(dlg, L"Found a 'zmha.bin' within this dir. Open it?", L"Information", MB_YESNO | MB_ICONASTERISK) == IDNO)
+				this->save = nullptr;
 		}
-		else{
-			str = str + L"\n\nShould Application start with no SaveFile opened?";
+		catch (HWLSaveEdit::HWLException &e)
+		{
+			CString str(e.what());
+			if (e.get_code() == 400)
+			{
+				str = L"Found a 'zmha.bin' within this dir, but an error occured: \n" + str + L"\n\nShould Application start with no SaveFile opened?";
+			}
+			else{
+				str = str + L"\n\nShould Application start with no SaveFile opened?";
 
+			}
+
+			if (MessageBox(dlg, str, L"Information", MB_YESNO | MB_ICONASTERISK) == IDNO)
+				return FALSE;
 		}
 
-		if (MessageBox(dlg, str, L"Information", MB_YESNO | MB_ICONASTERISK) == IDNO)
-			return FALSE;
+		m_pMainWnd = &dlg;
+		nResponse = dlg.DoModal();
+
+	}
+	else{
+		CZeldaCheckForUpdatesDlg dlg_update;
+		m_pMainWnd = &dlg_update;
+		nResponse = dlg_update.DoModal();
+
 	}
 
-
-	m_pMainWnd = &dlg;
-	INT_PTR nResponse = dlg.DoModal();
 	if (nResponse == IDOK)
 	{
 		// TODO: Place code here to handle when the dialog is
@@ -135,3 +158,26 @@ BOOL CZeldaHWLSaveEditorGUIApp::InitInstance()
 	return FALSE;
 }
 
+void CZeldaHWLSaveEditorGUIApp::calc_disabled_MenuItems(CMenu *cm_menu_edit)
+{
+	//check if the static map is empty
+	if (!mib_disabled_adventure_maps.empty())
+	{
+		//get the ID of the first MAP->Menu-Item
+		int i_first_map_id = ID_MENU_EDIT_AM_AVMAP;
+		
+		//get the AM-SubeMenu
+		CMenu *cm_menu_edit_am_maps = cm_menu_edit->GetSubMenu(4);
+
+		//iterate over the static-map
+		for (int i = 0; i < mib_disabled_adventure_maps.size(); i++)
+		{
+			//check, if the map is disabled and remove the Item, if its TRUE
+			if (mib_disabled_adventure_maps[i])
+				cm_menu_edit_am_maps->EnableMenuItem(i_first_map_id + i, MF_GRAYED | MF_BYCOMMAND);
+			else
+				cm_menu_edit_am_maps->EnableMenuItem(i_first_map_id + i, MF_ENABLED | MF_BYCOMMAND);
+
+		}
+	}
+}

@@ -16,6 +16,7 @@ public:
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV-Unterstützung
+	virtual BOOL OnInitDialog();
 
 	HICON m_hIcon;
 	HWLSaveEdit::HWLSaveEditor *save;
@@ -50,4 +51,11 @@ public:
 	afx_msg void OnEnChangeEditFairyTrust();
 	afx_msg void OnEnChangeEditFairyIterator();
 	afx_msg void OnMenuEditCharactersWeapons();
+	afx_msg void OnMenuEditAmMwwmap();
+	afx_msg void OnMenuEditAmKimap();
+	afx_msg void OnMenuEditAmGtmap();
+	afx_msg void OnBnClickedFairyMaxStatsAll();
+	afx_msg void OnBnClickedFairyUnlockAll();
+	afx_msg void OnMenuMainExit();
+	afx_msg void OnMenuEditCharactersOverview();
 };

@@ -22,6 +22,13 @@ CZeldaEditFairyFoods::~CZeldaEditFairyFoods()
 {
 }
 
+BOOL CZeldaEditFairyFoods::OnInitDialog()
+{
+	//calculate the disabled-Items and remove the Menu-Entry, if neccessary
+	CZeldaHWLSaveEditorGUIApp::calc_disabled_MenuItems(GetMenu()->GetSubMenu(1));
+	return CDialogEx::OnInitDialog();
+}
+
 void CZeldaEditFairyFoods::DoDataExchange(CDataExchange* pDX)
 {
 	// Set the icon for this dialog.  The framework does this automatically
@@ -36,7 +43,7 @@ void CZeldaEditFairyFoods::DoDataExchange(CDataExchange* pDX)
 	CMenu* cm_submenu = cm_menu->GetSubMenu(1);
 	cm_submenu->CheckMenuItem(3, MF_CHECKED | MF_BYPOSITION);
 
-	//own inits
+	//get the save-content
 	save = CZeldaHWLSaveEditorGUIApp::save;
 
 	if (save != nullptr)
@@ -122,6 +129,10 @@ BEGIN_MESSAGE_MAP(CZeldaEditFairyFoods, CDialogEx)
 	ON_COMMAND(ID_MENU_EDIT_AM_TMMAP, &CZeldaEditFairyFoods::OnMenuEditAmTmmap)
 	ON_COMMAND(ID_MENU_EDIT_FAIRIES, &CZeldaEditFairyFoods::OnMenuEditFairies)
 	ON_COMMAND(ID_MENU_EDIT_CHARACTERS_WEAPONS, &CZeldaEditFairyFoods::OnMenuEditCharactersWeapons)
+	ON_COMMAND(ID_MENU_EDIT_AM_MWWMAP, &CZeldaEditFairyFoods::OnMenuEditAmMwwmap)
+	ON_COMMAND(ID_MENU_EDIT_AM_KIMAP, &CZeldaEditFairyFoods::OnMenuEditAmKimap)
+	ON_COMMAND(ID_MENU_EDIT_AM_GTMAP, &CZeldaEditFairyFoods::OnMenuEditAmGtmap)
+	ON_COMMAND(ID_MENU_EDIT_CHARACTERS_OVERVIEW, &CZeldaEditFairyFoods::OnMenuEditCharactersOverview)
 END_MESSAGE_MAP()
 
 
@@ -329,7 +340,7 @@ void CZeldaEditFairyFoods::OnBnClickedFairyfoodPageNext()
 void CZeldaEditFairyFoods::OnMenuEditAmAvmap()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
-	CZeldaEditAdventureModeItem dlg(NULL, 0);
+	CZeldaEditAdventureModeMaps dlg(NULL, 0);
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }
@@ -338,7 +349,7 @@ void CZeldaEditFairyFoods::OnMenuEditAmAvmap()
 void CZeldaEditFairyFoods::OnMenuEditAmGsmap()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
-	CZeldaEditAdventureModeItem dlg(NULL, 1);
+	CZeldaEditAdventureModeMaps dlg(NULL, 1);
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }
@@ -347,7 +358,7 @@ void CZeldaEditFairyFoods::OnMenuEditAmGsmap()
 void CZeldaEditFairyFoods::OnMenuEditAmMqmap()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
-	CZeldaEditAdventureModeItem dlg(NULL, 2);
+	CZeldaEditAdventureModeMaps dlg(NULL, 2);
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }
@@ -355,7 +366,7 @@ void CZeldaEditFairyFoods::OnMenuEditAmMqmap()
 void CZeldaEditFairyFoods::OnMenuEditAmTlmap()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
-	CZeldaEditAdventureModeItem dlg(NULL, 3);
+	CZeldaEditAdventureModeMaps dlg(NULL, 3);
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }
@@ -363,7 +374,32 @@ void CZeldaEditFairyFoods::OnMenuEditAmTlmap()
 void CZeldaEditFairyFoods::OnMenuEditAmTmmap()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
-	CZeldaEditAdventureModeItem dlg(NULL, 4);
+	CZeldaEditAdventureModeMaps dlg(NULL, 4);
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+void CZeldaEditFairyFoods::OnMenuEditAmMwwmap()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditAdventureModeMaps dlg(NULL, 5);
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+void CZeldaEditFairyFoods::OnMenuEditAmKimap()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditAdventureModeMaps dlg(NULL, 6);
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+
+void CZeldaEditFairyFoods::OnMenuEditAmGtmap()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditAdventureModeMaps dlg(NULL, 7);
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }
@@ -447,6 +483,14 @@ void CZeldaEditFairyFoods::OnMenuEditCharactersWeapons()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaEditCharaWeaponsDlg dlg;
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+void CZeldaEditFairyFoods::OnMenuEditCharactersOverview()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditCharaOverviewDlg dlg;
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }

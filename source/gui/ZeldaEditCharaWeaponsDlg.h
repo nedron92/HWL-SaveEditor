@@ -8,7 +8,7 @@ class CZeldaEditCharaWeaponsDlg : public CDialogEx
 	DECLARE_DYNAMIC(CZeldaEditCharaWeaponsDlg)
 
 public:
-	CZeldaEditCharaWeaponsDlg(CWnd* pParent = NULL);   // Standardkonstruktor
+	CZeldaEditCharaWeaponsDlg(CWnd* pParent = NULL, int i_chara_id = 0, int i_skipped_charas = 0);   // Standardkonstruktor
 	virtual ~CZeldaEditCharaWeaponsDlg();
 
 // Dialogfelddaten
@@ -16,12 +16,12 @@ public:
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV-Unterstützung
+	virtual BOOL OnInitDialog();
 
 	HICON m_hIcon;
 	HWLSaveEdit::HWLSaveEditor *save;
-	int i_chara_id, i_weapon_type, i_weapon_slot;
+	int i_chara_id, i_weapon_type, i_weapon_slot, i_skipped_charas, i_skipped_weaponTypes;
 
-	virtual BOOL OnInitDialog();
 	DECLARE_MESSAGE_MAP()
 
 	//own methods
@@ -61,4 +61,12 @@ public:
 	afx_msg void OnBnClickedCweaponResetKills();
 	afx_msg void OnBnClickedCweaponResetSkills();
 	afx_msg void OnCbnSelchangeComboCweaponStars();
+	afx_msg void OnMenuEditAmMwwmap();
+	afx_msg void OnMenuEditAmKimap();
+	afx_msg void OnMenuEditAmGtmap();
+	afx_msg void OnBnClickedCheckCweaponMultielement();
+	afx_msg void OnMenuMainExit();
+	afx_msg void OnMenuEditCharactersOverview();
+	afx_msg void OnBnClickedCweaponCopyValues();
+	afx_msg void OnBnClickedCweaponPasteValues();
 };

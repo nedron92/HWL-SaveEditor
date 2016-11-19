@@ -24,6 +24,22 @@ CZeldaEditGeneralDlg::~CZeldaEditGeneralDlg()
 {
 }
 
+BOOL CZeldaEditGeneralDlg::OnInitDialog()
+{
+	//get the save-content
+	save = CZeldaHWLSaveEditorGUIApp::save;
+
+	//check, if the static-Map is empty and calculate then
+	if (CZeldaHWLSaveEditorGUIApp::mib_disabled_adventure_maps.empty())
+	{
+		this->calc_disabledState_AmMaps();
+	}
+
+	//calculate the disabled-Items and remove the Menu-Entry, if neccessary
+	CZeldaHWLSaveEditorGUIApp::calc_disabled_MenuItems(GetMenu()->GetSubMenu(1));
+	return CDialogEx::OnInitDialog();
+}
+
 void CZeldaEditGeneralDlg::DoDataExchange(CDataExchange* pDX)
 {
 	// Set the icon for this dialog.  The framework does this automatically
@@ -31,6 +47,7 @@ void CZeldaEditGeneralDlg::DoDataExchange(CDataExchange* pDX)
 	SetIcon(m_hIcon, TRUE);			// Set big icon
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
+	//get the save-content
 	save = CZeldaHWLSaveEditorGUIApp::save;
 
 	if (save != nullptr)
@@ -50,6 +67,9 @@ void CZeldaEditGeneralDlg::DoDataExchange(CDataExchange* pDX)
 		{
 			GetDlgItem(i)->EnableWindow(false);
 		}
+
+		CListBox *cl_dlc = (CListBox*)GetDlgItem(IDC_LIST_DLCS);
+		cl_dlc->ResetContent();
 
 	}
 
@@ -86,12 +106,14 @@ ON_COMMAND(ID_MENU_EDIT_CHARACTERS_WEAPONS, &CZeldaEditGeneralDlg::OnMenuEditCha
 ON_BN_CLICKED(IDC_BUTTON_HELP_UNLOCK_WEAPON_STATES, &CZeldaEditGeneralDlg::OnBnClickedButtonHelpUnlockWeaponStates)
 ON_BN_CLICKED(IDC_BUTTON_HELP_UNLOCK_ALL_MATERIALS, &CZeldaEditGeneralDlg::OnBnClickedButtonHelpUnlockAllMaterials)
 ON_COMMAND(ID_MENU_CHECKFORUPDATES, &CZeldaEditGeneralDlg::OnMenuCheckforupdates)
+ON_COMMAND(ID_MENU_EDIT_AM_MWWMAP, &CZeldaEditGeneralDlg::OnMenuEditAmMwwmap)
+ON_COMMAND(ID_MENU_EDIT_AM_KIMAP, &CZeldaEditGeneralDlg::OnMenuEditAmKimap)
+ON_COMMAND(ID_MENU_EDIT_AM_GTMAP, &CZeldaEditGeneralDlg::OnMenuEditAmGtmap)
+ON_COMMAND(ID_MENU_EDIT_CHARACTERS_OVERVIEW, &CZeldaEditGeneralDlg::OnMenuEditCharactersOverview)
 END_MESSAGE_MAP()
 
 
 // CZeldaEditGeneralDlg-Meldungshandler
-
-
 
 void CZeldaEditGeneralDlg::calc_general()
 {
@@ -114,6 +136,23 @@ void CZeldaEditGeneralDlg::calc_general()
 
 	cb_check = (CButton*)GetDlgItem(IDC_CHECK_GENERAL_UNLOCK_ALL_MATERIALS_FOUND);
 	cb_check->SetCheck(save->get_general_things()->get_unlocked_all_materials_state());
+
+	CListBox *cl_dlc = (CListBox*)GetDlgItem(IDC_LIST_DLCS);
+	cl_dlc->ResetContent();
+	for (int i = 0; i < save->get_general_things()->get_dlc_installed_dlcs_value(); i++)
+	{
+		if (save->get_general_things()->get_dlc_installed_state(i))
+		{
+			//get CString equivalent of DLC-Name and add it to the ListBox
+			CString cs_dlc_name(save->get_general_things()->get_dlc_name(i).c_str());
+			cl_dlc->AddString(cs_dlc_name);
+		}
+		
+	}
+
+	if (cl_dlc->GetCount() == 0)
+		cl_dlc->AddString(L"No DLCs installed");
+
 }
 
 void CZeldaEditGeneralDlg::save_general()
@@ -228,9 +267,13 @@ void CZeldaEditGeneralDlg::OnMenuMainFileOpen()
 			delete CZeldaHWLSaveEditorGUIApp::save;
 			try
 			{
-				CZeldaHWLSaveEditorGUIApp::save = new HWLSaveEdit::HWLSaveEditor(s_filepath);
+				CZeldaHWLSaveEditorGUIApp::save = new HWLSaveEdit::HWLSaveEditor(s_filepath, true);
 				save = CZeldaHWLSaveEditorGUIApp::save;
 				GetActiveWindow()->UpdateData();
+
+				CZeldaHWLSaveEditorGUIApp::mib_disabled_adventure_maps.clear();
+				this->calc_disabledState_AmMaps();
+				CZeldaHWLSaveEditorGUIApp::calc_disabled_MenuItems(GetActiveWindow()->GetMenu()->GetSubMenu(1));
 
 				int i_active_window_id = this->get_active_window_id();
 
@@ -240,7 +283,10 @@ void CZeldaEditGeneralDlg::OnMenuMainFileOpen()
 					str.Format(L"%d", save->get_general_things()->get_rubies());
 					SetDlgItemText(IDC_RUBY_EDIT, str);
 				}
-				else{
+				else
+				
+				{
+					/*
 					switch (i_active_window_id)
 					{
 					case IDD_EDIT_CHARA_STATS:
@@ -255,6 +301,7 @@ void CZeldaEditGeneralDlg::OnMenuMainFileOpen()
 						break;
 
 					}
+					*/
 				}
 
 			}
@@ -273,6 +320,36 @@ void CZeldaEditGeneralDlg::OnMenuMainFileOpen()
 		}
 	}
 }
+
+
+void CZeldaEditGeneralDlg::calc_disabledState_AmMaps()
+{
+	if (save != nullptr)
+	{
+		for (int i = 0; i < save->get_adventureMode_maxMaps(); i++)
+		{
+			if (save->get_amMap(i)->get_isDisabled())
+				CZeldaHWLSaveEditorGUIApp::mib_disabled_adventure_maps[i] = true;
+			else
+				CZeldaHWLSaveEditorGUIApp::mib_disabled_adventure_maps[i] = false;
+		}
+	}
+	else{
+		int i_counter = 0;
+		for (int i = ID_MENU_EDIT_AM_AVMAP; i <= ID_MENU_EDIT_AM_GTMAP; i++)
+		{
+			if (i_counter >= 5)
+				CZeldaHWLSaveEditorGUIApp::mib_disabled_adventure_maps[i_counter] = true;
+			else
+				CZeldaHWLSaveEditorGUIApp::mib_disabled_adventure_maps[i_counter] = false;
+
+			i_counter++;
+		}
+	}
+
+
+}
+
 
 int CZeldaEditGeneralDlg::get_active_window_id()
 {
@@ -296,6 +373,10 @@ void CZeldaEditGeneralDlg::OnMenuMainFileClose()
 	delete CZeldaHWLSaveEditorGUIApp::save;
 	CZeldaHWLSaveEditorGUIApp::save = nullptr;
 	save = CZeldaHWLSaveEditorGUIApp::save;
+
+	CZeldaHWLSaveEditorGUIApp::mib_disabled_adventure_maps.clear();
+	this->calc_disabledState_AmMaps();
+	CZeldaHWLSaveEditorGUIApp::calc_disabled_MenuItems(GetActiveWindow()->GetMenu()->GetSubMenu(1));
 
 	GetActiveWindow()->UpdateData();
 }
@@ -322,6 +403,15 @@ void CZeldaEditGeneralDlg::OnMenuCheckforupdates()
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
 	CZeldaCheckForUpdatesDlg updates;
 	updates.DoModal();
+}
+
+
+void CZeldaEditGeneralDlg::OnMenuEditCharactersOverview()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditCharaOverviewDlg dlg;
+	EndDialog(this->IDD);
+	dlg.DoModal();
 }
 
 
@@ -373,7 +463,7 @@ void CZeldaEditGeneralDlg::OnMenuEditFairyfoods()
 void CZeldaEditGeneralDlg::OnMenuEditAmAvmap()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
-	CZeldaEditAdventureModeItem dlg(NULL, 0);
+	CZeldaEditAdventureModeMaps dlg(NULL, 0);
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }
@@ -382,7 +472,7 @@ void CZeldaEditGeneralDlg::OnMenuEditAmAvmap()
 void CZeldaEditGeneralDlg::OnMenuEditAmGsmap()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
-	CZeldaEditAdventureModeItem dlg(NULL, 1);
+	CZeldaEditAdventureModeMaps dlg(NULL, 1);
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }
@@ -391,7 +481,7 @@ void CZeldaEditGeneralDlg::OnMenuEditAmGsmap()
 void CZeldaEditGeneralDlg::OnMenuEditAmMqmap()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
-	CZeldaEditAdventureModeItem dlg(NULL, 2);
+	CZeldaEditAdventureModeMaps dlg(NULL, 2);
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }
@@ -399,7 +489,7 @@ void CZeldaEditGeneralDlg::OnMenuEditAmMqmap()
 void CZeldaEditGeneralDlg::OnMenuEditAmTlmap()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
-	CZeldaEditAdventureModeItem dlg(NULL, 3);
+	CZeldaEditAdventureModeMaps dlg(NULL, 3);
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }
@@ -407,7 +497,32 @@ void CZeldaEditGeneralDlg::OnMenuEditAmTlmap()
 void CZeldaEditGeneralDlg::OnMenuEditAmTmmap()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
-	CZeldaEditAdventureModeItem dlg(NULL, 4);
+	CZeldaEditAdventureModeMaps dlg(NULL, 4);
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+void CZeldaEditGeneralDlg::OnMenuEditAmMwwmap()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditAdventureModeMaps dlg(NULL, 5);
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+void CZeldaEditGeneralDlg::OnMenuEditAmKimap()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditAdventureModeMaps dlg(NULL, 6);
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+
+void CZeldaEditGeneralDlg::OnMenuEditAmGtmap()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditAdventureModeMaps dlg(NULL, 7);
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }

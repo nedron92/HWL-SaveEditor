@@ -30,6 +30,7 @@ namespace HWLSaveEdit
 			static const int weaponOffsetLengthComplete;
 
 			//needed non-const members for subclasses
+			static bool b_isNewSaveFile;
 			static string s_savefile_game_version;
 			static vector<bool> vb_game_dlc_installed;
 

@@ -8,6 +8,7 @@
 #include "HWLPlayer.h"
 #include "HWLMaterial.h"
 #include "HWLFairyFood.h"
+#include "HWLAdventureModeMaps.h"
 #include "HWLAdventureModeItems.h"
 #include "HWLFairy.h"
 #include "HWLWeapon.h"
@@ -54,9 +55,6 @@ namespace HWLSaveEdit
 
 			static const int fairyFoodOffsetBegin;
 
-			static const vector<int> amItemOffsetBegin;
-			static const vector<int> amItemOffsetBeginSpecial;
-
 			static const int fairyOffsetBegin;
 
 			static const int weaponOffsetBegin;
@@ -77,8 +75,8 @@ namespace HWLSaveEdit
 			/* @var m_fairyfood		map for holding all foundable fairyfood items */
 			map< string, shared_ptr<HWLFairyFood> > m_fairyfood;
 
-			/* @var m_amItem		map for holding all foundable Adventure-Mode items */
-			map< int, shared_ptr<HWLAdventureModeItems> > m_amItem;
+			/* @var m_amItem		map for holding all current Adventure-Mode Maps with their items */
+			map< int, shared_ptr<HWLAdventureModeMaps> > m_amMaps;
 
 			/* @var m_fairy			map for holding all myFairies */
 			map< int, shared_ptr<HWLFairy> > m_fairy;
@@ -97,12 +95,12 @@ namespace HWLSaveEdit
 			bool calc_players_weapons(int i_player_id, int i_weapon_id, string &s_weapon_name, int &i_weapon_type, int &i_weapon_lvl, vector<int> &vi_lvl_hexValues, bool &b_is_multi_element_weapon, int &i_multi_element_weapon_hex);
 			void calc_materials();
 			void calc_fairyFood();
-			void calc_amItems();
+			void calc_amMaps();
 			void calc_myFairies();
 			void calc_game_versions_restrictions();
 
 		public:
-			HWLSaveEditor(string s_filepathname = "zmha.bin");
+			HWLSaveEditor(string s_filepathname = "zmha.bin", bool b_isNewSaveFile=false);
 			~HWLSaveEditor();
 
 			//getter for errors, general things, players(with weapons), materials, fairyFoods, 
@@ -116,13 +114,11 @@ namespace HWLSaveEdit
 			shared_ptr<HWLMaterial> get_material(string s_name);
 			shared_ptr<HWLFairyFood> get_fairyFood(int i_id);
 			shared_ptr<HWLFairyFood> get_fairyFood(string s_name);
-			shared_ptr<HWLAdventureModeItems> get_amItem(int i_id);
-			shared_ptr<HWLAdventureModeItems> get_amItem(int i_id, int i_type);
+			shared_ptr<HWLAdventureModeMaps> get_amMap(int i_map_id);
 			shared_ptr<HWLFairy> get_fairy(int i_id);
 
-			//special getter for the size of current adventure-mode-offsets vector,
-			//better how many maps we have
-			int get_adventureMode_maxItemCount();
+			//special getter for the number of AM-Maps we have,
+			int get_adventureMode_maxMaps();
 
 			//method for checking file-header and file-length
 			int check_savefile_length();

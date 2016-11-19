@@ -50,50 +50,6 @@ const int HWLSaveEditor::goldMaterialsOffsetBeginNew = 0x19DC;
 const int HWLSaveEditor::fairyFoodOffsetBegin = 0x233A;
 
 
-/* @var amItemOffsetBegin	vector for holding the offsets-begin for AdventureMode items */
-const vector<int> HWLSaveEditor::amItemOffsetBegin =
-{
-	0x2EFA,  //Start of Adventure-Map Items
-	0xEB73,  //Start of GreatSea-Map Items (WindWaker and so on)
-	0x7A52,  //Start of MasterQuest-Map Items
-	0xA00A,  //Start of Twilight-Map Items (Lantern and so on)
-	0xC5BE,	 //Start of Termina-Map Items (Song of Time and so on)
-	0x11120,  //Start of MasterWindWaker-Map Items (Cannon and so on), only 1st DLC: Master Wind Waker DLC
-	0x136D5,  //Start of KoholintIsland-Map Items (Full Moon Cello and so on), only 2nd DLC: Link's Awakening DLC
-	0x15C8D,  //Start of GrandTravels-Map Items (Railway Track and so on), only 3rd DLC: Phantom Hourglass & Spirit Tracks DLC
-
-};
-
-/* @var amItemOffsetBeginSpecial	vector for holding the offsets-begin for AdventureMode items */
-const vector<int> HWLSaveEditor::amItemOffsetBeginSpecial =
-{
-	0xEB56,  //Compass of GreatSea-Map
-	0xEB5F,  //Hookshot of GreatSea-Map
-
-	0x9FFE,  //Compass of Twilight-Map (+1 = Bombs)
-	0xA003,  //Waterbombs of Twilight-Map (+1 = Digging Mitts)
-
-	0xC5AA, //Compass of Termina-Map (+1 = Bombs)
-	0xC5B1, //Ice Arrow of Termina-Map
-
-	//only 1st DLC: Master Wind Waker DLC
-	0x11102, //Compass of MasterWindWaker-Map
-	0x1110B, //Hookshot of MasterWindWaker-Map
-	0x1111F, //WindWaker of MasterWindWaker-Map
-
-	//only 2nd DLC: Link's Awakening DLC
-	0x136AE, //Compass of KoholintIsland-Map
-
-	//only 3rd DLC: Phantom Hourglass & Spirit Tracks DLC
-	0x15C5A, //Compass of GrandTravels-Map
-	0x15C8C, //Whirlwind of GrandTravels-Map
-	0x15C68, //Fishing Rod of GrandTravels-Map
-	0x15C78, //Cannon of GrandTravels-Map
-
-
-};
-
-
 /* @var fairyOffsetBegin	offset begin of first myFairy */
 const int HWLSaveEditor::fairyOffsetBegin = 0x1AEA;
 
@@ -111,7 +67,7 @@ shared_ptr<HWLHttp> HWLSaveEditor::http_request = make_shared<HWLHttp>();
 /**
 * Only the initialization of the normal-constructor
 */
-HWLSaveEditor::HWLSaveEditor(string s_filepathname)
+HWLSaveEditor::HWLSaveEditor(string s_filepathname, bool b_isNewSaveFile)
 {
 	//set locale to LC_ALL, for special names (myFairy and so on)
 	setlocale(LC_ALL, "");
@@ -143,11 +99,13 @@ HWLSaveEditor::HWLSaveEditor(string s_filepathname)
 			int i_check_savefile_length_state = this->check_savefile_length();
 			if (i_check_savefile_length_state == 0)
 			{
+				this->b_isNewSaveFile = b_isNewSaveFile;
+
 				this->calc_general();
 				this->calc_weapons();
 				this->calc_materials();
 				this->calc_fairyFood();
-				this->calc_amItems();
+				this->calc_amMaps();
 				this->calc_myFairies();
 				this->calc_players();
 				this->calc_game_versions_restrictions();
@@ -580,117 +538,18 @@ void HWLSaveEditor::calc_fairyFood()
 }
 
 /**
-* This method calculate the AdventureMode-Item-Objects
+* This method calculate the AdventureMode-Map-Objects
 *
 */
-void HWLSaveEditor::calc_amItems()
+void HWLSaveEditor::calc_amMaps()
 {
-	//decalre/define needed variables
-	int i_offset = this->amItemOffsetBegin[0]; //first index of the holded offsets is for the first AM-Map
-	int i_type = 0; //hold the current number of AM-Map
-
-	//Iterate over all AdventureMode-Items
-	for (int i = 0; i < (signed)HWLAdventureModeItems::vs_amItems.size(); i++)
+	//iterate over Max-size of current known Maps and let the class
+	//do its thing
+	for (int i = 0; i < this->get_adventureMode_maxMaps(); i++)
 	{
-		//check if we have the maximum of items of a current map, increment the type then
-		if (i == HWLSaveEdit::HWLAdventureModeItems::amItemPerMapMax * (i_type + 1))
-		{
-			i_type++;
-
-			//check if we reached the end and explicit break the loop 
-			if (i_type == this->amItemOffsetBegin.size())
-				break;
-
-			//switch of iterate-variable i, cause we have to check some special AdventureMode Items, they are called
-			//"shared-items" like Compass,...that we found on nearly every AdventureMode-Map. They have special-offsets then
-			switch (i)
-			{
-			case 12: ////Compass, Great-Sea Map
-				i_offset = this->amItemOffsetBeginSpecial[0];
-				break;
-
-			case 36: ////Compass, Twilight Map
-				i_offset = this->amItemOffsetBeginSpecial[2];
-				break;
-
-			case 48: ////Compass, Termina Map
-				i_offset = this->amItemOffsetBeginSpecial[4];
-				break;
-
-			case 60: ////Compass, MasterWindWaker Map, only 1st DLC: Master Wind Waker DLC
-				i_offset = this->amItemOffsetBeginSpecial[6];
-				break;
-
-			case 72: ////Compass, KoholintIsland Map, only 2nd DLC: Link's Awakening DLC
-				i_offset = this->amItemOffsetBeginSpecial[9];
-				break;
-
-			case 84: ////Compass, GrandTravels Map, only 3rd DLC: Phantom Hourglass & Spirit Tracks DLC
-				i_offset = this->amItemOffsetBeginSpecial[10];
-				break;
-
-			default: //normal
-				i_offset = this->amItemOffsetBegin[i_type];
-				break;
-			}
-
-		}
-
-		switch (i)
-		{
-		case 13: //Hookshot, Great-Sea Map
-			i_offset = this->amItemOffsetBeginSpecial[1];
-			break;
-
-		case 14: //Wind Waker, Great-Sea map
-		case 40: //Lantern, Twilight Map
-		case 51: //Song of Time, Termina Map
-		case 63: //Cannon, MasterWindWaker Map, only 1st DLC: Master Wind Waker DLC
-		case 73: //Full Moon Cello, KoholintIsland Map, only 2nd DLC: Link's Awakening DLC
-		case 88: //Railway Track, KoholintIsland Map, only 3rd DLC: Phantom Hourglass & Spirit Tracks DLC
-			i_offset = this->amItemOffsetBegin[i_type];
-			break;
-
-		case 38: //Water Bombs, Twilight Map
-			i_offset = this->amItemOffsetBeginSpecial[3];
-			break;
-
-		case 50: //Ice Arrow, Termina Map
-			i_offset = this->amItemOffsetBeginSpecial[5];
-			break;
-
-		case 61: //Hookshot, MasterWindWaker Map, only 1st DLC: Master Wind Waker DLC
-			i_offset = this->amItemOffsetBeginSpecial[7];
-			break;
-
-		case 62: //Wind Waker, MasterWindWaker Map, only 1st DLC: Master Wind Waker DLC
-			i_offset = this->amItemOffsetBeginSpecial[8];
-			break;
-
-		case 85: //Whirlwind, GrandTravels Map, only 3rd DLC: Phantom Hourglass & Spirit Tracks DLC
-			i_offset = this->amItemOffsetBeginSpecial[8];
-			break;
-
-		case 86: //Fishing Rod, GrandTravels Map, only 3rd DLC: Phantom Hourglass & Spirit Tracks DLC
-			i_offset = this->amItemOffsetBeginSpecial[8];
-			break;
-
-		case 87: //Cannon, GrandTravels Map, only 3rd DLC: Phantom Hourglass & Spirit Tracks DLC
-			i_offset = this->amItemOffsetBeginSpecial[8];
-			break;
-
-		}
-
-		//create new AdventureMode-item object, based on offset and type (also name)
-		shared_ptr<HWLAdventureModeItems> hwlami_tmp = make_shared<HWLAdventureModeItems>(HWLAdventureModeItems::vs_amItems[i], i_offset, i_type);
-
-		//bind object to the map of them
-		this->m_amItem[i] = hwlami_tmp;
-
-		//calculate the next offset
-		i_offset = i_offset + this->amItemOffsetLength;
+		shared_ptr<HWLAdventureModeMaps> hwlamm_tmp = make_shared<HWLAdventureModeMaps>(i);
+		this->m_amMaps[i] = hwlamm_tmp;
 	}
-
 }
 
 /**
@@ -725,7 +584,8 @@ void HWLSaveEditor::calc_game_versions_restrictions()
 	//calc characters restrictions - disabled state -> BEGIN
 
 	//disable the ??? characters
-	this->get_player("???")->set_isDisabled(true);
+	this->get_player("???_1")->set_isDisabled(true);
+	this->get_player("???_2")->set_isDisabled(true);
 
 	//disable Medli on lower version as 1.3.0
 	if (this->s_savefile_game_version == "1.0.0" || this->s_savefile_game_version == "1.2.0")
@@ -754,6 +614,22 @@ void HWLSaveEditor::calc_game_versions_restrictions()
 		this->get_player("Toon Link")->set_disabled_weaponTypeID(1);
 
 	//calc characters restrictions - weapon-types-disabled state -> END
+
+	//calc characters restrictions - AM-Maps disabled-state -> BEGIN
+
+	//disable "MasterWindWaker-Map",  if DLC is not installed
+	if (!this->vb_game_dlc_installed[0])
+		this->get_amMap(5)->set_isDisabled(1);
+
+	//disable "KoholintIsland-Map",  if DLC is not installed
+	if (!this->vb_game_dlc_installed[1])
+		this->get_amMap(6)->set_isDisabled(1);
+
+	//disable "GrandTravels-Map",  if DLC is not installed
+	if (!this->vb_game_dlc_installed[2])
+		this->get_amMap(7)->set_isDisabled(1);
+
+	//calc characters restrictions - AM-Maps disabled-state -> END
 
 }
 
@@ -867,34 +743,15 @@ shared_ptr<HWLFairyFood> HWLSaveEditor::get_fairyFood(string s_name)
 }
 
 /**
-* This method return the coressponding AdventureMode-Item-object,
-*  based on AdventureMode-item-id (unique ID)
+* This method return the coressponding AdventureMode-Map-object,
+*  based on AdventureMode-Map-id (unique ID)
 *
 */
-shared_ptr<HWLAdventureModeItems> HWLSaveEditor::get_amItem(int i_id)
+shared_ptr<HWLAdventureModeMaps> HWLSaveEditor::get_amMap(int i_map_id)
 {
-	shared_ptr<HWLAdventureModeItems> hwlami_tmp = this->m_amItem[i_id];
+	shared_ptr<HWLAdventureModeMaps> hwlamm_tmp = this->m_amMaps[i_map_id];
 
-	return hwlami_tmp;
-}
-
-/**
-* This method return the coressponding AdventureMode-Item-object,
-*  based on AdventureMode-item-id of the current given type of map
-*  so ID is not unique in that case
-*
-*/
-shared_ptr<HWLAdventureModeItems> HWLSaveEditor::get_amItem(int i_id, int i_type)
-{
-	if (i_type >= (signed)this->amItemOffsetBegin.size())
-		i_type = 0;
-
-	if (i_type != 0)
-		i_id = i_id + (HWLSaveEdit::HWLAdventureModeItems::amItemPerMapMax * i_type);
-
-	shared_ptr<HWLAdventureModeItems> hwlami_tmp = this->m_amItem[i_id];
-
-	return hwlami_tmp;
+	return hwlamm_tmp;
 }
 
 /**
@@ -911,13 +768,13 @@ shared_ptr<HWLFairy> HWLSaveEditor::get_fairy(int i_id)
 
 
 /**
-* This method return the size of the AdventureMode-Vector,
+* This method return the size of the AdventureMode-MapNames-Vector,
 * so we know how many Maps we have
 *
 */
-int HWLSaveEditor::get_adventureMode_maxItemCount()
+int HWLSaveEditor::get_adventureMode_maxMaps()
 {
-	return this->amItemOffsetBegin.size();
+	return HWLSaveEdit::HWLAdventureModeMaps::vs_map_names.size();
 }
 
 

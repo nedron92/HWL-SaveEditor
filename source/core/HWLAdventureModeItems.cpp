@@ -91,7 +91,7 @@ const vector<string> HWLAdventureModeItems::vs_amItems =
 	"Power Bracelet",
 	"Hammer",  //MasterWindWaker-Map Items End
 
-	////only 2nd DLC: Link's Awakening DLC
+	//only 2nd DLC: Link's Awakening DLC
 	"Compass", //KoholintIsland-Map Items Begin
 	"Full Moon Cello",
 	"Conch Horn",
@@ -105,7 +105,7 @@ const vector<string> HWLAdventureModeItems::vs_amItems =
 	"Power Bracelet",
 	"Magic Powder",  //KoholintIsland-Map Items End
 
-	////only 3rd DLC: Phantom Hourglass & Spirit Tracks DLC
+	//only 3rd DLC: Phantom Hourglass & Spirit Tracks DLC
 	"Compass", //GrandTravels-Map Items Begin
 	"Whirlwind",
 	"Fishing Rod",
@@ -124,20 +124,18 @@ const vector<string> HWLAdventureModeItems::vs_amItems =
 /* @var amItemValueMax		maximal-value of an AdventureMode-Item */
 const int HWLAdventureModeItems::amItemValueMax = 5;
 
-/* @var amItemPerMapMax		maximal-value of AdventureMode-Items per AM-Map */
-const int HWLAdventureModeItems::amItemPerMapMax = 12;
-
 
 
 /**
 * Only the initialization of the normal-constructor
 */
-HWLAdventureModeItems::HWLAdventureModeItems(string s_name, int i_offset, int i_type)
+HWLAdventureModeItems::HWLAdventureModeItems(int i_id, int i_offset, int i_map_id)
 {
 	//set or calculate all needed members
-	this->s_name = s_name;
+	this->i_id = i_id;
+	this->s_name = this->vs_amItems[this->i_id];
 	this->i_offset = i_offset;
-	this->i_type = i_type;
+	this->i_map_id = i_map_id;
 	this->i_value = this->calc_value();
 }
 
@@ -229,6 +227,17 @@ string HWLAdventureModeItems::get_name()
 }
 
 /**
+* Getter for the AM-Item-ID
+*
+*	@return int		the ID of the AM-Item
+*
+*/
+int HWLAdventureModeItems::get_id()
+{
+	return this->i_id;
+}
+
+/**
 * Getter for the AM-Item-offset
 *
 *	@return int		the offset of the AM-Item
@@ -245,56 +254,9 @@ int HWLAdventureModeItems::get_offset()
 *	@return int		the type of the AM-Item
 *
 */
-int HWLAdventureModeItems::get_type()
+int HWLAdventureModeItems::get_map_id()
 {
-	return this->i_type;
-}
-
-/**
-* Getter for the AM-Item-type as string
-*
-*	@return string		the type of the AM-Item as a string
-*
-*/
-string HWLAdventureModeItems::get_type(bool b_get_string)
-{
-	switch (this->i_type)
-	{
-	case 0:
-		return "Adventure-Map Item";
-		break;
-
-	case 1:
-		return "GreatSea-Map Item";
-		break;
-
-	case 2:
-		return "MasterQuest-Map Item ";
-		break;
-
-	case 3:
-		return "Twilight-Map Item ";
-		break;
-
-	case 4:
-		return "Termina-Map Item ";
-		break;
-
-	case 5: //only 1st DLC: Master Wind Waker DLC
-		return "MasterWindWaker-Map Item ";
-		break;
-
-	case 6: //only 2nd DLC: Link's Awakening DLC
-		return "KoholintIsland-Map Item ";
-		break;
-
-	case 7: //only 3rd DLC: Phantom Hourglass & Spirit Tracks DLC
-		return "GrandTravels-Map Item ";
-		break;
-
-	default:
-		return to_string(i_type);
-	}
+	return this->i_map_id;
 }
 
 /**
@@ -319,10 +281,10 @@ int HWLAdventureModeItems::get_value()
 string HWLAdventureModeItems::get_AMItemForOutput()
 {
 	string s_output = "Name: " + this->s_name + "\n"
-		+ "  Type: " + this->get_type(true) + "\n"
+		//+ "  ID: " + to_string(this->i_id) + "\n"
+		//+ "  Map-ID: " + to_string(this->i_map_id) + "\n"
 		+ "  Value: " + to_string(this->i_value) + "\n";
 		//+ "  Offset: " + to_string(this->i_offset) + "\n";
-
 
 	return s_output;
 }

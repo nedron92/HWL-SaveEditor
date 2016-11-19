@@ -583,21 +583,27 @@ const string HWLWeapon::weaponBlankWeaponHex = "00000000000000000000000000000000
 /**
 * Only the initialization of the normal-constructor
 */
-HWLWeapon::HWLWeapon(int i_offset, int i_character_id, bool b_is_unsued_weapon)
+HWLWeapon::HWLWeapon(int i_offset, int i_character_id, bool b_is_unsued_weapon, bool b_will_copied)
 {
-	//set or calculate all needed members
-	this->i_offset = i_offset;
-	this->i_id = this->calc_weapon_id();
-	this->i_lvl = 1;
-	this->i_damage_base = this->calc_damage_base();
-	this->i_stars = this->calc_stars();
-	this->i_damage = this->calc_damage();
-	this->i_state = this->calc_state();
-	this->vi_skill_slot_kills = this->calc_skill_slot_kills();
-	this->vi_skill_slots = this->calc_skill_slots();
-	this->i_character_id = i_character_id;
-	this->i_type = 0;
-	this->b_is_unsued_weapon = b_is_unsued_weapon;
+	if (!b_will_copied)
+	{
+		//set or calculate all needed members
+		this->i_offset = i_offset;
+		this->i_id = this->calc_weapon_id();
+		this->i_lvl = 1;
+		this->i_damage_base = this->calc_damage_base();
+		this->i_stars = this->calc_stars();
+		this->i_damage = this->calc_damage();
+		this->i_state = this->calc_state();
+		this->vi_skill_slot_kills = this->calc_skill_slot_kills();
+		this->vi_skill_slots = this->calc_skill_slots();
+		this->i_character_id = i_character_id;
+		this->i_type = 0;
+		this->b_is_unsued_weapon = b_is_unsued_weapon;
+		this->b_is_multi_element_weapon = false;
+	}
+
+		
 }
 
 /**
@@ -1063,6 +1069,17 @@ void HWLWeapon::set_skill_slot_kill(int i_slot_id, int i_kill_value)
 }
 
 /**
+* Setter for the weapons Kills-vector
+*
+*	@var vector<int>	vi_skill_slot_kills		the vector which holds the new data
+*
+*/
+void HWLWeapon::set_skill_kills(vector<int> vi_skill_slot_kills)
+{
+	this->vi_skill_slot_kills = vi_skill_slot_kills;
+}
+
+/**
 * Setter for the weapons skills-value/ID of a Skill-Slot
 *
 *	@var int	i_slot_id		slot-id to identify the slot
@@ -1078,6 +1095,18 @@ void HWLWeapon::set_skill_slot(int i_slot_id, int i_skill_id)
 		this->vi_skill_slots[i_slot_id] = i_skill_id;
 	}
 }
+
+/**
+* Setter for the weapons skills-vector
+*
+*	@var vector<int>	vi_skill_slots		the vector which holds the new data
+*
+*/
+void HWLWeapon::set_skills(vector<int> vi_skill_slots)
+{
+	this->vi_skill_slots = vi_skill_slots;
+}
+
 
 /**
 * Setter for the character-ID the weapon belongs to
@@ -1283,7 +1312,7 @@ string HWLWeapon::get_state(bool b_return_as_string)
 * Getter for the weapons Kills of a given Skill-Slot
 *
 *	@var int	i_slot_id		slot-id to identify the slot
-+
+*
 *	@return int		the needed Kills of the given Skill-Slot
 *
 */
@@ -1292,11 +1321,22 @@ int HWLWeapon::get_skill_slot_kill(int i_slot_id)
 	//check if the slot-id is bigger or equal 0 and smaller then 8
 	if (i_slot_id >= 0 && i_slot_id < 8)
 	{
-		return vi_skill_slot_kills[i_slot_id];
+		return this->vi_skill_slot_kills[i_slot_id];
 	}
 	else{
 		return -1;
 	}
+}
+
+/**
+* Getter for the weapons Kills-vector
+*
+*	@return vector<int>		the needed Kills of all slots
+*
+*/
+vector<int> HWLWeapon::get_skill_kills()
+{
+	return this->vi_skill_slot_kills;
 }
 
 /**
@@ -1350,6 +1390,17 @@ string HWLWeapon::get_skill_slot(int i_slot_id, bool b_get_string)
 	else{
 		return "";
 	}
+}
+
+/**
+* Getter for the weapons Skills-vector
+*
+*	@return vector<int>		the current skill-ids of all slots
+*
+*/
+vector<int> HWLWeapon::get_skills()
+{
+	return this->vi_skill_slots;
 }
 
 /**
@@ -1498,6 +1549,29 @@ void HWLWeapon::change_stars(int i_stars)
 }
 
 /**
+* This method change the current legendary-sate with safety-checks
+*
+*	@var int	b_is_legendary		the legendary-state to set
+*
+*/
+void HWLWeapon::change_legendary_state(int b_is_legendary)
+{
+	//check if we have the MasterSword and set the special state then, else: normal behaviour
+	if (this->i_id != HWLSaveEdit::HWLWeapon::vi_playerWeaponTypeHexValues[4])
+	{
+		//change only if we have it set to TRUE
+		if (b_is_legendary)
+			this->set_state(HWLSaveEdit::HWLWeapon::weaponStateValuesHex[1]);
+		else
+			this->set_state(HWLSaveEdit::HWLWeapon::weaponStateValuesHex[0]);
+	}else
+	{
+		this->set_state(HWLSaveEdit::HWLWeapon::weaponStateValuesHex[2]);
+	}
+
+}
+
+/**
 * This method change the current Multi-Element state and re-calculate
 *  lvl and implicit others.
 *
@@ -1583,7 +1657,7 @@ void HWLWeapon::generate_default_weapon()
 		this->set_state(this->weaponStateValuesHex[0]); //Normal Weapon, no Legendary-State
 
 	//iterate over all Skill-Slots, to set the needed Kills of all to zero
-	//and the Skill-IDs to "No-Slot", except the first one - it's a "Open-Slot"
+	//and the Skill-IDs to "No-Slot", except the first one - it's a "Free-Slot"
 	for (int i = 0; i < 8; i++)
 	{
 		this->set_skill_slot_kill(i, 0);
@@ -1636,8 +1710,7 @@ void HWLWeapon::delete_weapon()
 	this->b_is_unsued_weapon = true;
 	this->b_is_multi_element_weapon = false;
 
-	//set type-to zero and lvl to 1
-	this->i_type = 0;
+	//lvl to 1
 	this->i_lvl = 1;
 }
 

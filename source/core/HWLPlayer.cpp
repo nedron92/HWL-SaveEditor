@@ -9,6 +9,10 @@
 //use the project-namespace
 using namespace HWLSaveEdit;
 
+/* @var si_disabledPlayerCounter	Counter which holds the current value of disabled Characters */
+int HWLPlayer::si_disabledPlayerCounter = 0;
+
+
 /* @var playerLVLOffsetLength		offset length of the characters LVL */
 const int HWLPlayer::playerLVLOffsetLength = 0x1;
 
@@ -69,8 +73,8 @@ const vector<string> HWLPlayer::vs_players =
 	"Twili Midna",
 	"Young Link",
 	"Tingle",
-	"???",
-	"???",
+	"???_1",
+	"???_2",
 	"Linkle",
 	"Skull Kid",
 	"Toon Link",
@@ -126,6 +130,10 @@ const int HWLPlayer::playerWeaponSlotsMax = 10;
 */
 HWLPlayer::HWLPlayer(int i_id, string s_name, int i_offset, int i_weapon_type_count)
 {
+	//Reset static values if new saveFile is opened
+	if (this->b_isNewSaveFile)
+		this->si_disabledPlayerCounter = 0;
+
 	//set or calculate all needed members
 	this->i_id = i_id;
 	this->s_name = s_name;
@@ -505,6 +513,11 @@ void HWLPlayer::set_isUnlock(bool b_isUnlock)
 */
 void HWLPlayer::set_isDisabled(bool b_isDisabled)
 {
+	if (b_isDisabled)
+		this->si_disabledPlayerCounter++;
+	else if (this->si_disabledPlayerCounter > 0)
+		this->si_disabledPlayerCounter--;
+
 	this->b_isDisabled = b_isDisabled;
 }
 
@@ -687,6 +700,29 @@ shared_ptr<HWLWeapon> HWLPlayer::get_weapon_slot(int i_weapon_type, int i_weapon
 	return this->m_player_weapon[i_weapon_type][i_weapon_slot];
 }
 
+/**
+* This Getter-Method return the length of the disabled-Weapon-Type-ID vector or
+*  better how many weapon-types of this character are disabled.
+*
+*	@return int		the disabled-MapCounter
+*
+*/
+int HWLPlayer::get_disabledWeaponTypeCounter()
+{
+	return vi_weapon_disabled_ids.size();
+}
+
+/**
+* Getter for the disbaledPlayerCounter
+*
+*	@return int		the disabled-PlayerCounter
+*
+*/
+int HWLPlayer::get_disabledPlayerCounter()
+{
+	return si_disabledPlayerCounter;
+}
+
 
 
 /**
@@ -832,6 +868,8 @@ int HWLPlayer::get_max_stati_value(string s_stati_id)
 		if (s_stati_id == "EXP") return get_max_stati_value(1);
 		if (s_stati_id == "ATK") return get_max_stati_value(2);
 		if (s_stati_id == "Hearts") return get_max_stati_value(3);
+		if (s_stati_id == "HEARTS") return get_max_stati_value(3);
+
 		else
 			return -1;
 	}

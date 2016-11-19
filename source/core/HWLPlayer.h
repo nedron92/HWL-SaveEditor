@@ -52,6 +52,9 @@ namespace HWLSaveEdit
 			//int-key = weapon-type, and via a weapon_slot_id access to a 
 			//single weapon
 
+			//needed private static members
+			static int si_disabledPlayerCounter;
+
 			//offset-const declaration
 			static const int playerLVLOffsetLength;
 			static const int playerEXPOffsetLength;
@@ -122,6 +125,8 @@ namespace HWLSaveEdit
 			bool get_isDisabled();
 			bool get_isWeaponTypeDisabled(int i_weapon_type);
 			shared_ptr<HWLWeapon> get_weapon_slot(int i_weapon_type, int i_weapon_slot);
+			int get_disabledWeaponTypeCounter();
+			static int get_disabledPlayerCounter();
 
 			//methods to get current weapon-count and a formatted output (for console)
 			int get_weapon_count(int i_weapon_type);

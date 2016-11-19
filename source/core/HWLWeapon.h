@@ -115,7 +115,7 @@ namespace HWLSaveEdit
 			static const string weaponBlankWeaponHex;
 
 			//constructor and destructor
-			HWLWeapon(int i_offset, int i_character_id = -1, bool b_is_unsued_weapon = false);
+			HWLWeapon(int i_offset, int i_character_id = -1, bool b_is_unsued_weapon = false, bool b_will_copied = false);
 			~HWLWeapon();
 
 			//methods to set and get all stati-values
@@ -127,7 +127,9 @@ namespace HWLSaveEdit
 			void set_stars(int i_stars);
 			void set_state(int i_state);
 			void set_skill_slot_kill(int i_slot_id, int i_kill_value);
+			void set_skill_kills(vector<int> vi_skill_slot_kills);
 			void set_skill_slot(int i_slot_id, int i_skill_id);
+			void set_skills(vector<int> vi_skill_slots);
 			void set_character_id(int i_character_id);
 			void set_type(int i_type);
 			void set_IsUnused(bool b_is_unsued_weapon);
@@ -145,8 +147,10 @@ namespace HWLSaveEdit
 			bool get_state();
 			string get_state(bool b_return_as_string);
 			int get_skill_slot_kill(int i_slot_id);
+			vector<int> get_skill_kills();
 			int get_skill_slot(int i_slot_id);
 			string get_skill_slot(int i_slot_id, bool b_get_string);
+			vector<int> get_skills();
 			int get_character_id();
 			int get_type();
 			bool get_IsUnused();
@@ -162,6 +166,9 @@ namespace HWLSaveEdit
 
 			//method to change stars and re-calculate the damage
 			void change_stars(int i_stars);
+
+			//method to change the legendary-state
+			void change_legendary_state(int b_is_legendary);
 
 			//method to change multi-element state and do needed re-calculation
 			void change_multi_element_state(bool b_is_multi_element_weapon);

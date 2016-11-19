@@ -31,7 +31,7 @@ void get_fairyFood_menu();
 void change_fairyFood_values(int i_choose, int i_fairyFood_id);
 
 void get_amItem_menu();
-void change_amItem_values(int i_choose);
+void change_amItem_values(int i_choose, int i_am_map_id);
 
 void get_fairy_menu();
 void change_fairy_values(int i_choose, int i_fairy_id);
@@ -1804,37 +1804,48 @@ void change_fairyFood_values(int i_choose, int i_fairyFood_id)
 
 void get_amItem_menu()
 {
-	char c_choose;
+	string s_choose;
 
 	while (1)
 	{
+		cout << "Current Adenture-Mode Maps: " << endl << endl;
+
+		for (int i = 0; i < save->get_adventureMode_maxMaps(); i++)
+		{
+			if (save->get_amMap(i)->get_isDisabled())
+				continue;
+
+			cout << save->get_amMap(i)->get_AMMapForOutput(false);
+		}
+
+		cout << endl;
+
 		cout << "Menue: " << endl;
-		cout << "1 - List all Map-Items" << endl;
-		cout << "2 - Maximize Adventure-Map Items" << endl;
-		cout << "3 - Maximize GreatSea-Map Items" << endl;
-		cout << "4 - Maximize MasterQuest-Map Items" << endl;
-		cout << "5 - Maximize Twilight-Map Items" << endl;
-		cout << "6 - Maximize Termina-Map Items" << endl;
+		cout << "1    - List all Map-Items" << endl;
+		cout << "1,ID - List all Map-Items of that Map" << endl;
+		cout << "2    - Maximize Items of all Maps" << endl;
+		cout << "2,ID - Maximize Items of that Map" << endl;
 		cout << "0 - back" << endl;
 		cout << "Your choose: ";
-		cin >> c_choose;
+		cin >> s_choose;
 
-
-		if (iswdigit(c_choose))
+		int i_current_id = -1;
+		int i_find_pos = s_choose.find(",");
+		if (i_find_pos != string::npos)
 		{
-			if (atoi(&c_choose) == 0)
+			string s_substr = s_choose.substr(i_find_pos + 1, string::npos);
+			i_current_id = atoi(&s_substr[0u]);
+		}
+
+		if (iswdigit(s_choose[0]))
+		{
+			if (atoi(&s_choose[0]) == 0)
 			{
 				system(CLEAR);
 				break;
 			}
 			else
-				change_amItem_values(atoi(&c_choose));
-		}
-		else{
-			cout << "Wrong Menu-Number, try again" << endl;
-			cin.get();
-			cin.get();
-			system(CLEAR);
+				change_amItem_values(atoi(&s_choose[0]), i_current_id);
 		}
 
 		save->save_file();
@@ -1842,66 +1853,114 @@ void get_amItem_menu()
 	}
 }
 
-void change_amItem_values(int i_choose)
+void change_amItem_values(int i_choose, int i_am_map_id)
 {
+	bool b_isFailure = false;
+
+	if (i_am_map_id < -1 || i_am_map_id > save->get_adventureMode_maxMaps())
+	{
+		b_isFailure = true;
+	}
+
+	if (!b_isFailure && i_am_map_id >= 0 && i_am_map_id < save->get_adventureMode_maxMaps())
+	{
+		if (save->get_amMap(i_am_map_id)->get_isDisabled())
+			b_isFailure = true;
+	}
+
 	//i_choose is number of menu-entry
 
-	switch (i_choose)
+	if (!b_isFailure)
 	{
-	case 1:
-	{
-			  system(CLEAR);
+		switch (i_choose)
+		{
+		case 1:
+		{
+				  if (i_am_map_id == -1)
+				  {
+					  cin.clear();
+					  getchar();
+					  system(CLEAR);
 
-			  int i_max_ids = HWLSaveEdit::HWLAdventureModeItems::amItemPerMapMax * save->get_adventureMode_maxItemCount();
+					  for (int i = 0; i < save->get_adventureMode_maxMaps(); i++)
+					  {
+						  if (save->get_amMap(i)->get_isDisabled())
+							  continue;
 
-			  for (int i = 0; i < i_max_ids; i++)
-			  {
-				  cout << save->get_amItem(i)->get_AMItemForOutput() << endl;
-			  }
+						  cout << save->get_amMap(i)->get_AMMapForOutput() << endl;
 
-			  cout << "Finish. Press a key to go back." << endl;
-			  cin.clear();
-			  getchar();
-			  cin.get();
-			  system(CLEAR);
-			  break;
+						  cout << "Press a key to show the items of the next map." << endl;
+						  cin.clear();
+						  cin.get();
+						  system(CLEAR);
+					  }
+				  }
+				  else{
+					  system(CLEAR);
+					  cout << save->get_amMap(i_am_map_id)->get_AMMapForOutput() << endl;
+				  }
+
+
+				  cout << "Finish. Press a key to go back." << endl;
+				  cin.clear();
+				  if (i_am_map_id != -1)
+					  getchar();
+				  cin.get();
+				  system(CLEAR);
+				  break;
+		}
+		case 2:
+		{
+				  if (i_am_map_id == -1)
+				  {
+					  cout << "Maximize Value of all Adventure-Mode Map-Items" << endl << endl;
+
+					  for (int i = 0; i < save->get_adventureMode_maxMaps(); i++)
+					  {
+						  if (save->get_amMap(i)->get_isDisabled())
+							  continue;
+
+						  for (int j = 0; j < HWLSaveEdit::HWLAdventureModeMaps::amm_MaxItemsPerMap; j++)
+						  {
+							  save->get_amMap(i)->get_amItem(j)->set_value(HWLSaveEdit::HWLAdventureModeItems::amItemValueMax);
+							  save->get_amMap(i)->get_amItem(j)->save_AMItem();
+						  }
+					  }
+
+					  cout << "Finish. You have now enough of all Map-Items" << endl;
+				  }
+				  else{
+					  cout << "Maximize Value of all " << save->get_amMap(i_am_map_id)->get_name() << "-Items" << endl << endl;
+
+					  for (int i = 0; i < HWLSaveEdit::HWLAdventureModeMaps::amm_MaxItemsPerMap; i++)
+					  {
+						  save->get_amMap(i_am_map_id)->get_amItem(i)->set_value(HWLSaveEdit::HWLAdventureModeItems::amItemValueMax);
+						  save->get_amMap(i_am_map_id)->get_amItem(i)->save_AMItem();
+					  }
+
+					  cout << "Finish. You have now enough of those Map-Items" << endl;
+				  }
+
+				  cin.clear();
+				  getchar();
+				  cin.get();
+				  system(CLEAR);
+				  break;
+		}
+
+		default:
+			break;
+
+		}
+	}
+	else{
+		cout << "This Map-ID doesn't exist, sorry. " << endl << endl;
+		cin.clear();
+		getchar();
+		cin.get();
+		system(CLEAR);
 	}
 
-	case 2:
-	case 3:
-	case 4:
-	case 5:
-	case 6:
-	{
-			  if (i_choose == 2)
-				  cout << "Maximize Value of all Adventure-Map Items" << endl;
-			  else if (i_choose == 3)
-				  cout << "Maximize Value of all GreatSea-Map Items" << endl;
-			  else if (i_choose == 4)
-				  cout << "Maximize Value of all MasterQuest-Map Items" << endl;
-			  else if (i_choose == 5)
-				  cout << "Maximize Value of all Twilight-Map Items" << endl;
-			  else
-				  cout << "Maximize Value of all Termina-Map Items" << endl;
-
-			  for (int i = 0; i < HWLSaveEdit::HWLAdventureModeItems::amItemPerMapMax; i++)
-			  {
-				  save->get_amItem(i, i_choose - 2)->set_value(HWLSaveEdit::HWLAdventureModeItems::amItemValueMax);
-				  save->get_amItem(i, i_choose - 2)->save_AMItem();
-			  }
-
-			  cout << "Finish. You have now enough of those Map-Items" << endl;
-			  cin.clear();
-			  getchar();
-			  cin.get();
-			  system(CLEAR);
-			  break;
-	}
-
-	default:
-		break;
-
-	}
 }
 
 

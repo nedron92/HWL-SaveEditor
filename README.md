@@ -46,4 +46,8 @@ http://gbatemp.net/threads/release-hyrule-warriors-legends-save-editor-ntr-plugi
 If you find any kind of failures, bugs and other then post it in the main-thread, which I named above.   
 If you are a programmer, correct the mistake and send me a request here at github.
 
+## Credits
+main-src (core/console/gui): nedron92, 2016  
+lib/HTTP-Client: Eitan Michaelson, Bob Wirka, 2014 (many thanks for that lightweight C-Lib)   
+
 Have fun^^

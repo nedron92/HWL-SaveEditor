@@ -87,9 +87,6 @@
     <ClInclude Include="source\gui\ZeldaAboutDlg.h">
       <Filter>Headerdateien\gui</Filter>
     </ClInclude>
-    <ClInclude Include="source\gui\ZeldaEditAdventureModeItem.h">
-      <Filter>Headerdateien\gui</Filter>
-    </ClInclude>
     <ClInclude Include="source\gui\ZeldaEditCharaStatsDlg.h">
       <Filter>Headerdateien\gui</Filter>
     </ClInclude>
@@ -135,6 +132,18 @@
     <ClInclude Include="source\gui\ZeldaCheckForUpdatesDlg.h">
       <Filter>Headerdateien\gui</Filter>
     </ClInclude>
+    <ClInclude Include="source\core\HWLAdventureModeMaps.h">
+      <Filter>Headerdateien\core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gui\ZeldaEditAdventureModeMaps.h">
+      <Filter>Headerdateien\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gui\ZeldaEditCharaOverviewDlg.h">
+      <Filter>Headerdateien\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="source\gui\ZeldaConfigWeaponCopyDlg.h">
+      <Filter>Headerdateien\gui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\core\HWLWeapon.cpp">
@@ -171,9 +180,6 @@
       <Filter>Quelldateien\gui</Filter>
     </ClCompile>
     <ClCompile Include="source\gui\ZeldaAboutDlg.cpp">
-      <Filter>Quelldateien\gui</Filter>
-    </ClCompile>
-    <ClCompile Include="source\gui\ZeldaEditAdventureModeItem.cpp">
       <Filter>Quelldateien\gui</Filter>
     </ClCompile>
     <ClCompile Include="source\gui\ZeldaEditCharaStatsDlg.cpp">
@@ -216,6 +222,18 @@
       <Filter>Quelldateien\core</Filter>
     </ClCompile>
     <ClCompile Include="source\gui\ZeldaCheckForUpdatesDlg.cpp">
+      <Filter>Quelldateien\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\HWLAdventureModeMaps.cpp">
+      <Filter>Quelldateien\core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gui\ZeldaEditAdventureModeMaps.cpp">
+      <Filter>Quelldateien\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gui\ZeldaEditCharaOverviewDlg.cpp">
+      <Filter>Quelldateien\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\gui\ZeldaConfigWeaponCopyDlg.cpp">
       <Filter>Quelldateien\gui</Filter>
     </ClCompile>
   </ItemGroup>

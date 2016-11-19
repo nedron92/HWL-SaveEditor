@@ -98,6 +98,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="source\core\HWLAdventureModeItems.h" />
+    <ClInclude Include="source\core\HWLAdventureModeMaps.h" />
     <ClInclude Include="source\core\HWLException.h" />
     <ClInclude Include="source\core\HWLFairy.h" />
     <ClInclude Include="source\core\HWLFairyFood.h" />
@@ -113,7 +114,9 @@
     <ClInclude Include="source\gui\targetver.h" />
     <ClInclude Include="source\gui\ZeldaAboutDlg.h" />
     <ClInclude Include="source\gui\ZeldaCheckForUpdatesDlg.h" />
-    <ClInclude Include="source\gui\ZeldaEditAdventureModeItem.h" />
+    <ClInclude Include="source\gui\ZeldaConfigWeaponCopyDlg.h" />
+    <ClInclude Include="source\gui\ZeldaEditAdventureModeMaps.h" />
+    <ClInclude Include="source\gui\ZeldaEditCharaOverviewDlg.h" />
     <ClInclude Include="source\gui\ZeldaEditCharaStatsDlg.h" />
     <ClInclude Include="source\gui\ZeldaEditCharaWeaponsDlg.h" />
     <ClInclude Include="source\gui\ZeldaEditFairyDlg.h" />
@@ -130,6 +133,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\core\HWLAdventureModeItems.cpp" />
+    <ClCompile Include="source\core\HWLAdventureModeMaps.cpp" />
     <ClCompile Include="source\core\HWLException.cpp" />
     <ClCompile Include="source\core\HWLFairy.cpp" />
     <ClCompile Include="source\core\HWLFairyFood.cpp" />
@@ -143,7 +147,9 @@
     <ClCompile Include="source\gui\stdafx.cpp" />
     <ClCompile Include="source\gui\ZeldaAboutDlg.cpp" />
     <ClCompile Include="source\gui\ZeldaCheckForUpdatesDlg.cpp" />
-    <ClCompile Include="source\gui\ZeldaEditAdventureModeItem.cpp" />
+    <ClCompile Include="source\gui\ZeldaConfigWeaponCopyDlg.cpp" />
+    <ClCompile Include="source\gui\ZeldaEditAdventureModeMaps.cpp" />
+    <ClCompile Include="source\gui\ZeldaEditCharaOverviewDlg.cpp" />
     <ClCompile Include="source\gui\ZeldaEditCharaStatsDlg.cpp" />
     <ClCompile Include="source\gui\ZeldaEditCharaWeaponsDlg.cpp" />
     <ClCompile Include="source\gui\ZeldaEditFairyDlg.cpp" />

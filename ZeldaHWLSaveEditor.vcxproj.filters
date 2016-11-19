@@ -96,6 +96,9 @@
     <ClCompile Include="source\core\HWLHttp.cpp">
       <Filter>Quelldateien\core</Filter>
     </ClCompile>
+    <ClCompile Include="source\core\HWLAdventureModeMaps.cpp">
+      <Filter>Quelldateien\core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\core\HWLAdventureModeItems.h">
@@ -150,6 +153,9 @@
       <Filter>Headerdateien\libs\HTTP_Client</Filter>
     </ClInclude>
     <ClInclude Include="source\core\HWLHttp.h">
+      <Filter>Headerdateien\core</Filter>
+    </ClInclude>
+    <ClInclude Include="source\core\HWLAdventureModeMaps.h">
       <Filter>Headerdateien\core</Filter>
     </ClInclude>
   </ItemGroup>

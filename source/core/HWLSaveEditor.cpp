@@ -432,7 +432,7 @@ bool HWLSaveEditor::calc_players_weapons(int i_player_id, int i_weapon_id, strin
 			i_weapon_lvl = 4;
 			return true;
 		}
-		else if (i_weapon_id == i_current_multi_element_weapon_hex)
+		else if (i_weapon_id == i_current_multi_element_weapon_hex && i_weapon_id != 0)
 		{
 			s_weapon_name = HWLWeapon::vs_playerWeaponTypeNames[i_weapon_count + j];
 			i_weapon_type = j;
@@ -601,6 +601,19 @@ void HWLSaveEditor::calc_game_versions_restrictions()
 		|| this->s_savefile_game_version == "1.3.0" || this->s_savefile_game_version == "1.4.0" || !this->vb_game_dlc_installed[2])
 		this->get_player("Toon Zelda")->set_isDisabled(true);
 
+	//disable Ravio on lower versions as 1.6.0 or if DLC is not installed
+	if (this->s_savefile_game_version == "1.0.0" || this->s_savefile_game_version == "1.2.0"
+		|| this->s_savefile_game_version == "1.3.0" || this->s_savefile_game_version == "1.4.0" || this->s_savefile_game_version == "1.5.0"
+		|| !this->vb_game_dlc_installed[3])
+		this->get_player("Ravio")->set_isDisabled(true);
+
+	//disable Yuga on lower versions as 1.6.0 or if DLC is not installed
+	if (this->s_savefile_game_version == "1.0.0" || this->s_savefile_game_version == "1.2.0"
+		|| this->s_savefile_game_version == "1.3.0" || this->s_savefile_game_version == "1.4.0" || this->s_savefile_game_version == "1.5.0"
+		|| !this->vb_game_dlc_installed[3])
+		this->get_player("Yuga")->set_isDisabled(true);
+
+
 	//calc characters restrictions - disabled state -> END
 
 	//calc characters restrictions - weapon-types-disabled state -> BEGIN
@@ -629,7 +642,20 @@ void HWLSaveEditor::calc_game_versions_restrictions()
 	if (!this->vb_game_dlc_installed[2])
 		this->get_amMap(7)->set_isDisabled(1);
 
+	//disable "Lorule-Map",  if DLC is not installed
+	if (!this->vb_game_dlc_installed[3])
+		this->get_amMap(8)->set_isDisabled(1);
+
 	//calc characters restrictions - AM-Maps disabled-state -> END
+
+	//calc characters restrictions - Weapon-Skils disabled-state -> BEGIN
+	
+	//disabed "Heart Power" - Skill below 1.6.0
+	if (this->s_savefile_game_version == "1.0.0" || this->s_savefile_game_version == "1.2.0"
+		|| this->s_savefile_game_version == "1.3.0" || this->s_savefile_game_version == "1.4.0" || this->s_savefile_game_version == "1.5.0")
+		HWLWeapon::set_isWeaponSkillDisabled(0x36);
+
+	//calc characters restrictions - Weapon-Skils  disabled-state -> END
 
 }
 

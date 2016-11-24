@@ -22,6 +22,8 @@ const vector<int> HWLAdventureModeMaps::amItemOffsetBegin =
 	0x11120,  //Start of MasterWindWaker-Map Items (Cannon and so on), only 1st DLC: Master Wind Waker DLC
 	0x136D5,  //Start of KoholintIsland-Map Items (Full Moon Cello and so on), only 2nd DLC: Link's Awakening DLC
 	0x15C8D,  //Start of GrandTravels-Map Items (Railway Track and so on), only 3rd DLC: Phantom Hourglass & Spirit Tracks DLC
+	0x18241,  //Start of Lorule-Map Items (Wall Painting and so on), only 4th DLC: A Link Between Worlds DLC
+
 };
 
 /* @var amItemOffsetBeginSpecial	vector for holding the offsets-begin for AdventureMode items */
@@ -49,6 +51,9 @@ const vector<int> HWLAdventureModeMaps::amItemOffsetBeginSpecial =
 	0x15C8C, //Whirlwind of GrandTravels-Map
 	0x15C68, //Fishing Rod of GrandTravels-Map
 	0x15C78, //Cannon of GrandTravels-Map
+
+	//only 4th DLC: A Link Between Worlds DLC
+	0x18207, //Bomb of Lorule-Map
 };
 
 /* @var si_disabledMapCounter	Counter which holds the current value of disabled AM-Maps */
@@ -68,6 +73,7 @@ const vector<string> HWLAdventureModeMaps::vs_map_names =
 	"MasterWindWaker-Map", //only 1st DLC: Master Wind Waker DLC
 	"KoholintIsland-Map",  //only 2nd DLC: Link's Awakening DLC
 	"GrandTravels-Map",   //only 3rd DLC: Phantom Hourglass & Spirit Tracks DLC
+	"Lorule-Map",		  //only 4th DLC: A Link Between Worlds DLC
 };
 
 /* @var amItemPerMapMax		maximal-value of AdventureMode-Items per AM-Map */
@@ -176,20 +182,28 @@ vector<shared_ptr<HWLAdventureModeItems>> HWLAdventureModeMaps::calc_amiItems()
 		case 87: //Cannon, GrandTravels Map, only 3rd DLC: Phantom Hourglass & Spirit Tracks DLC
 			i_offset = this->amItemOffsetBeginSpecial[13];
 			break;
+
+		case 96: //Bombs, Lorule Map, only 4th DLC: A Link Between Worlds DLC
+			i_offset = this->amItemOffsetBeginSpecial[14];
+			break;
+
 			//END SPECIAL ITEMS-OFFSETS
 
 			//BEGIN NORMAL ITEMS-OFFSETS
-		case 14: //Wind Waker, Great-Sea map
+		case 0:  //Compass, Adventure-Map
+		case 14: //Wind Waker, Great-Sea Map
+		case 24: //Compass, MasterQuest-Map
 		case 40: //Lantern, Twilight Map
 		case 51: //Song of Time, Termina Map
 		case 63: //Cannon, MasterWindWaker Map, only 1st DLC: Master Wind Waker DLC
 		case 73: //Full Moon Cello, KoholintIsland Map, only 2nd DLC: Link's Awakening DLC
 		case 88: //Railway Track, GrandTravels Map, only 3rd DLC: Phantom Hourglass & Spirit Tracks DLC
+		case 97: //Wall Painting, Lorule Map, only 4th DLC: A Link Between Worlds DLC
 			i_offset = this->amItemOffsetBegin[this->i_id];
 			break;
 
-		default: //normal
-			i_offset = this->amItemOffsetBegin[this->i_id];
+		default: //normal, calculate the next offset
+			i_offset = i_offset + this->amItemOffsetLength;
 			break;
 			//END NORMAL ITEMS-OFFSETS
 		}
@@ -201,7 +215,7 @@ vector<shared_ptr<HWLAdventureModeItems>> HWLAdventureModeMaps::calc_amiItems()
 		vsp_hwlami_items_tmp.push_back(hwlami_tmp);
 
 		//calculate the next offset
-		i_offset = i_offset + this->amItemOffsetLength;
+		//i_offset = i_offset + this->amItemOffsetLength;
 	}
 
 	return vsp_hwlami_items_tmp;

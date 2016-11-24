@@ -82,7 +82,9 @@ const vector<string> HWLPlayer::vs_players =
 	"King Daphnes",
 	"Medli", //Update 1.3.0 (no LVL4-Weapon without any DLC)
 	"Marin", //only 2nd DLC: Link's Awakening DLC
-	"Toon Zelda" //only 3rd DLC: Phantom Hourglass and Spirit Tracks DLC
+	"Toon Zelda", //only 3rd DLC: Phantom Hourglass and Spirit Tracks DLC
+	"Ravio", //only 4th DLC: A Link Between Worlds DLC DLC
+	"Yuga", //only 4th DLC: A Link Between Worlds DLC DLC
 };
 
 /* @var playerLVLMax				maximal-values of the characters LVL */
@@ -90,22 +92,26 @@ const vector<int> HWLPlayer::playerLVLMax =
 {
 	99,  //till Update 1.3.0
 	150, //Update 1.4.0
-	200  //Update 1.5.0 
+	200, //Update 1.5.0 
+	255, //Update 1.6.0
 };
 
 /* @var playerEXPMax				maximal-values of the characters EXP */
 const vector<int> HWLPlayer::playerEXPMax =
 {
-	3178257, //till Update 1.3.0
-	6337707, //Update 1.4.0
-	9435207  //Update 1.5.0 
+	3178257,   //till Update 1.3.0
+	6337707,   //Update 1.4.0
+	9435207,   //Update 1.5.0 
+	12842457,  //Update 1.6.0 
+
 };
 
 /* @var playerATKMax				maximal-values of the characters ATK */
 const vector<int> HWLPlayer::playerATKMax =
 {
-	999, //till Update 1.4.0
-	1300 //Update 1.5.0
+	999,  //till Update 1.4.0
+	1300, //Update 1.5.0
+	1530, //Update 1.6.0
 };
 
 /* @var playerHeartsMax				maximal-values of the characters hearts*/
@@ -113,7 +119,8 @@ const vector<int> HWLPlayer::playerHeartsMax =
 {
 	18, //till Update 1.3.0
 	23, //Update 1.4.0
-	25  //Update 1.5.0
+	25, //Update 1.5.0
+	27, //Update 1.6.0
 };
 
 
@@ -798,6 +805,10 @@ int HWLPlayer::get_max_stati_value(int i_stati_id)
 		//case 0: max LVL-Value
 	case 0:
 	{
+
+			  if (s_savefile_game_version == "1.6.0")
+				  return playerLVLMax[3];
+			  else
 			  if (s_savefile_game_version == "1.5.0")
 				  return playerLVLMax[2];
 			  else
@@ -811,6 +822,9 @@ int HWLPlayer::get_max_stati_value(int i_stati_id)
 		//case 1: max EXP-Value
 	case 1:
 	{
+			  if (s_savefile_game_version == "1.6.0")
+				  return playerEXPMax[3];
+			  else
 			  if (s_savefile_game_version == "1.5.0")
 				  return playerEXPMax[2];
 			  else
@@ -824,6 +838,9 @@ int HWLPlayer::get_max_stati_value(int i_stati_id)
 		//case 2: max ATK-Value
 	case 2:
 	{
+			  if (s_savefile_game_version == "1.6.0")
+				  return playerATKMax[2];
+			  else
 			  if (s_savefile_game_version == "1.5.0")
 				  return playerATKMax[1];
 			  else
@@ -834,6 +851,9 @@ int HWLPlayer::get_max_stati_value(int i_stati_id)
 		//case 3: max Hearts-Value
 	case 3:
 	{
+			  if (s_savefile_game_version == "1.6.0")
+				  return playerHeartsMax[3];
+			  else
 			  if (s_savefile_game_version == "1.5.0")
 				  return playerHeartsMax[2];
 			  else

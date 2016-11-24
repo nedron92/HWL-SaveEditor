@@ -9,6 +9,9 @@
 //use the project-namespace
 using namespace HWLSaveEdit;
 
+//initialization of the static-vector
+vector<int> HWLWeapon::vi_disabledweaponSkillIDs;
+
 
 /* @var weaponIDOffsetLength				offset length of the weapon-id */
 const int HWLWeapon::weaponIDOffsetLength = 0x2;
@@ -59,11 +62,11 @@ const int HWLWeapon::weaponSkillSlotsLength = 0x1;
 /* @var vi_playerWeaponTypeCount	vector for holding information about how many weapon types a chara have */
 const vector<int> HWLWeapon::vi_playerWeaponTypeCount =
 {
-	7, 3, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 0, 0, 2, 1, 2, 1, 1, 1, 1, 1
+	7, 3, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 0, 0, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1
 	// 0.Link, 1.Zelda, 2.Shiek, 3.Impa, 4.Ganondorf, 5.Darunia, 6.Ruto, 7.Agitha, 8.Imp Midna, 
 	// 9.Fi, 10.Ghirahim, 11.Zant, 12.Lana, 13.Cia, 14.Volga, 15.Wizzro, 16.Twili Midna, 17.Young Link, 
 	// 18.Tingle, 19.??? 20.???, 21.Linkle, 22.Skull Kid, 23.Toon Link, 24.Tetra, 25.King Daphnes, 26.Medli
-	// 27.Marin, 28.Toon Zelda
+	// 27.Marin, 28.Toon Zelda, 29.Ravio, 30.Yuga
 };
 
 /* @var vs_playerWeaponTypeNames	vector for holding all weapon-type names */
@@ -165,6 +168,12 @@ const vector<string> HWLWeapon::vs_playerWeaponTypeNames =
 
 	//Toon Zelda - Weapon Types
 	"Phantom Arms", //only 3rd DLC: Phantom Hourglass and Spirit Tracks DLC
+
+	//Ravio - Weapon Types
+	"Hammer", //only 4th DLC: A Link Between Worlds DLC
+
+	//Yuga - Weapon Types
+	"Frame", //only 4th DLC: A Link Between Worlds DLC
 };
 
 /* @var vi_playerWeaponTypeHexValues	vector for holding information about all weapon-type offsets-begin */
@@ -264,8 +273,14 @@ const vector<int> HWLWeapon::vi_playerWeaponTypeHexValues =
 	//Marin - Weapon Types Hex
 	0x93, //only 2nd DLC: Link's Awakening DLC
 
-	//Toon Zelda - Weapon Hex
+	//Toon Zelda - Weapon Types Hex
 	0xA7, //only 3rd DLC: Phantom Hourglass and Spirit Tracks DLC
+
+	//Ravio - Weapon Types Hex 
+	0xBB, //only 4th DLC: A Link Between Worlds DLC
+
+	//Yuga - Weapon Types Hex
+	0xBF, //only 4th DLC: A Link Between Worlds DLC
 };
 
 /* @var vi_playerWeaponTypeHexValuesLVL4	vector for holding information about all weapon-type offsets, LVL 4*/
@@ -367,6 +382,12 @@ const vector<int> HWLWeapon::vi_playerWeaponTypeHexValuesLVL4 =
 
 	//Toon Zelda - Weapon Hex LVL 4
 	0xAA, //only 3rd DLC: Phantom Hourglass and Spirit Tracks DLC
+
+	//Ravio - Weapon Types Hex LVL 4
+	0xBE, //only 4th DLC: A Link Between Worlds DLC
+
+	//Yuga - Weapon Types Hex LVL 4
+	0xC2, //only 4th DLC: A Link Between Worlds DLC
 };
 
 //only from 2nd DLC on. 0x00 => no Multi-Element Weapon for that type
@@ -374,28 +395,28 @@ const vector<int> HWLWeapon::vi_playerWeaponTypeHexValuesLVL4 =
 const vector<int> HWLWeapon::vi_playerWeaponTypeHexValuesMultiElement =
 {
 	//Link - Weapon Types Hex Multi-Element
-	0x00, //Hylian Sword - Multi
+	0xC3, //Hylian Sword - Multi
 	0xAF, //Magic Rod - Multi
-	0x00, //Great Fairy - Multi
+	0xC4, //Great Fairy - Multi
 	0x9B, //Gauntlets - Multi
 	0x00, //Master Sword - Multi, not possible :D 
-	0x00, //Horse (Epona) - Multi
-	0x00, //Spinner - Multi
+	0xC5, //Horse (Epona) - Multi
+	0xC6, //Spinner - Multi
 
 	//Zelda - Weapon Types Hex Multi-Element
-	0x00, //Rapier - Multi
+	0xC9, //Rapier - Multi
 	0xB2, //Baton - Multi
-	0x00, //Dominion Rod - Multi
+	0xCA, //Dominion Rod - Multi
 
 	//Shiek - Weapon Types Hex Multi-Element
 	0x9C, //Harp - Multi
 
 	//Impa - Weapon Types Hex Multi-Element
-	0x00, //Giant Blade - Multi
+	0xC7, //Giant Blade - Multi
 	0xB0, //Naginata - Multi
 
 	//Ganondorf - Weapon Types Hex Multi-Element
-	0x00, //Great Swords - Multi
+	0xCB, //Great Swords - Multi
 	0xB3, //Trident - Multi
 
 	//Darunia - Weapon Types Hex Multi-Element
@@ -420,7 +441,7 @@ const vector<int> HWLWeapon::vi_playerWeaponTypeHexValuesMultiElement =
 	0xB4, //Scimitars - Multi
 
 	//Lana - Weapon Types Hex Multi-Element
-	0x00, //Book of Sorcery - Multi
+	0xC8, //Book of Sorcery - Multi
 	0xB1, //Spear - Multi
 	0x9D, //Summoning Gate - Multi
 
@@ -445,14 +466,14 @@ const vector<int> HWLWeapon::vi_playerWeaponTypeHexValuesMultiElement =
 	//??? - Weapon Types Hex  Multi-Element, 2 times, without any weapon-type hex for Multi-Element
 
 	//Linkle - Weapon Types Hex  Multi-Element
-	0x00, //Crossbows - Multi
+	0xCC, //Crossbows - Multi
 	0x00, //Boots (only 2nd DLC: Link's Awakening DLC) - Multi
 
 	//Skull Kid - Weapon Types Hex  Multi-Element
 	0xA4, //Ocarina - Multi
 
 	//Toon Link - Weapon Types Hex Multi-Element
-	0x00, //Light Sword - Multi
+	0xCD, //Light Sword - Multi
 	0x00, //Sand Wand - Multi
 
 	//Tetra - Weapon Types Hex Multi-Element
@@ -469,6 +490,12 @@ const vector<int> HWLWeapon::vi_playerWeaponTypeHexValuesMultiElement =
 
 	//Toon Zelda - Weapon Hex Multi-Element
 	0x00, //Phantom Arms (only 3rd DLC: Phantom Hourglass and Spirit Tracks DLC) - Multi
+
+	//Ravio - Weapon Types Hex Multi-Element
+	0x00, //Hammer (only 4th DLC: A Link Between Worlds DLC) - Multi
+
+	//Yuga - Weapon Types Hex Multi-Element
+	0x00, //Frame (only 4th DLC: A Link Between Worlds DLC) - Multi
 };
 
 
@@ -556,6 +583,7 @@ const vector<string> HWLWeapon::weaponSkillNames =
 	"VS Sea",
 	"VS Termina",
 	"MS: Exorcism",
+	"Heart Power",
 	"No Slot",
 };
 
@@ -587,6 +615,10 @@ HWLWeapon::HWLWeapon(int i_offset, int i_character_id, bool b_is_unsued_weapon, 
 {
 	if (!b_will_copied)
 	{
+		//Reset static values if new saveFile is opened
+		if (this->b_isNewSaveFile)
+			vi_disabledweaponSkillIDs.clear();
+
 		//set or calculate all needed members
 		this->i_offset = i_offset;
 		this->i_id = this->calc_weapon_id();
@@ -1166,6 +1198,17 @@ void HWLWeapon::set_multi_element_hex(int i_multi_element_weapon_hex)
 	this->i_multi_element_weapon_hex = i_multi_element_weapon_hex;
 }
 
+/**
+* Setter for the disabled-WeaponSkills
+*
+*	@var int	i_skill_id		Skill-ID to set to disabled
+*
+*/
+void HWLWeapon::set_isWeaponSkillDisabled(int i_skill_id)
+{
+	vi_disabledweaponSkillIDs.push_back(i_skill_id);
+}
+
 
 
 /**
@@ -1456,6 +1499,36 @@ bool HWLWeapon::get_IsMultiElement()
 int HWLWeapon::get_multi_element_hex()
 {
 	return this->i_multi_element_weapon_hex;
+}
+
+/**
+* Getter if given Skill-ID is a disbaled-one
+*
+*	@var int	i_skill_id		skill-id to check
+*
+*	@return bool		TRUE if Skill-ID is diabsled, FALSE otherwise
+*
+*/
+bool HWLWeapon::get_isWeaponSkillDisabled(int i_skill_id)
+{
+	for (int i = 0; i < vi_disabledweaponSkillIDs.size(); i++)
+	{
+		if (vi_disabledweaponSkillIDs[i] == i_skill_id)
+			return true;
+	}
+
+	return false;
+}
+
+/**
+* Getter for how many Weapon-Skills are disabled
+*
+*	@return int		value how many Skills are disabled
+*
+*/
+int HWLWeapon::get_WeaponSkillDisabledCounter()
+{
+	return vi_disabledweaponSkillIDs.size();
 }
 
 

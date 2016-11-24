@@ -58,6 +58,9 @@ namespace HWLSaveEdit
 			/* @var i_multi_element_weapon_hex	hex of the weapons-multi-element type */
 			int i_multi_element_weapon_hex;
 
+			/* @var vi_disabledweaponSkillIDs	vector, which holds disabled WeaponSkill-IDs */
+			static vector<int> vi_disabledweaponSkillIDs;
+
 			//offset-const declaration
 			static const int weaponIDOffsetLength;
 			static const int weaponDamageBaseOffsetLength;
@@ -135,6 +138,7 @@ namespace HWLSaveEdit
 			void set_IsUnused(bool b_is_unsued_weapon);
 			void set_IsMultiElement(bool b_is_multi_element_weapon);
 			void set_multi_element_hex(int i_multi_element_weapon_hex);
+			static void set_isWeaponSkillDisabled(int i_skill_id);
 
 
 			string get_name();
@@ -156,6 +160,8 @@ namespace HWLSaveEdit
 			bool get_IsUnused();
 			bool get_IsMultiElement();
 			int get_multi_element_hex();
+			static bool get_isWeaponSkillDisabled(int i_skill_id);
+			static int get_WeaponSkillDisabledCounter();
 
 			//method to change the damage-base and re-calculate the damage
 			void change_damage_base(int i_damage_base);

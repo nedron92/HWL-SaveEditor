@@ -119,6 +119,20 @@ const vector<string> HWLAdventureModeItems::vs_amItems =
 	"Steel Train",
 	"Golden Train",  //GrandTravels-Map Items End
 
+	//only 4th DLC: A Link Between Worlds DLC
+	"Bomb", //Lorule-Map Items Begin
+	"Wall Painting",
+	"Power Glove",
+	"Fire Rod",
+	"Tornado-Rod",
+	"Ice-Rod",
+	"Sand-Rod",
+	"Baby Maimai",
+	"Hammer",
+	"Boomerang",
+	"Bow",
+	"Hookshot",  //Lorule-Map Items End
+
 };
 
 /* @var amItemValueMax		maximal-value of an AdventureMode-Item */

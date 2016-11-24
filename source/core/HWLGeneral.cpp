@@ -85,7 +85,7 @@ const int HWLGeneral::savefileGameVersionOffset = 0xD3;
 /* @var savefileGameVersionOffsetLength			offset-length for the current-savefie-game-version offset */
 const int HWLGeneral::savefileGameVersionOffsetLength = 0x1;
 
-/* @var savefileGameVersionOffsetPart			offset-part where the savefile-game-version is located */
+/* @var savefileGameVersionOffsetPart			offset-part where the savefile-game-version is located (including 1.5.0)*/
 const int HWLGeneral::savefileGameVersionOffsetPart = 2;
 
 /* @var vs_version_strings		vector, which hold the version strings for calculation  */
@@ -107,6 +107,7 @@ const vector<string> HWLGeneral::vs_game_version_strings =
 	"1.5.0", //XD, offset D3
 	"1.5.0", //XE, offset D3
 	"1.5.0", //XF, offset D3
+	"1.6.0", //XF, offset D3, but X have to be: 9, B, D, F to be 1.6.0
 };
 
 /* @var vi_game_dlc_identifier_offsets_begin		vector, which hold the offset-begins of the DLC-Content */
@@ -115,7 +116,7 @@ const vector<int> HWLGeneral::vi_game_dlc_identifier_offsets_begin =
 	0x25D5, //Check for 'Master Wind Waker DLC' BEGIN
 	0X2F11E, //Check for 'Link's Awakening DLC' BEGIN
 	0x2F14E, //Check for 'Phantom Hourglass and Spirit Tracks DLC' BEGIN
-	0x0, //Check for 'A Link Between Worlds DLC' BEGIN
+	0x2F17E, //Check for 'A Link Between Worlds DLC' BEGIN
 };
 
 /* @var vi_game_dlc_identifier_offsets_end		vector, which hold the offset-ends of the DLC-Content */
@@ -124,7 +125,7 @@ const vector<int> HWLGeneral::vi_game_dlc_identifier_offsets_end =
 	0x25DD, //Check for 'Master Wind Waker DLC' END
 	0x2F121, //Check for 'Link's Awakening DLC' END
 	0x2F151, //Check for 'Phantom Hourglass and Spirit Tracks DLC' END
-	0x0, //Check for 'A Link Between Worlds DLC' END
+	0x2F181, //Check for 'A Link Between Worlds DLC' END
 };
 
 /* @var vs_game_dlc_hexstring_standard_values		vector, which hold the dlc-default-hexStrings (if they NOT installed) */
@@ -133,7 +134,7 @@ const vector<string> HWLGeneral::vs_game_dlc_default_hexStrings =
 	"ffffffffffffffffff", //Default-hexString if NOT 'Master Wind Waker DLC' installed
 	"ffff00ff", //Default-hexString if NOT 'Link's Awakening DLC' installed
 	"ffff00ff", //Default-hexString if NOT 'Phantom Hourglass and Spirit Tracks DLC' installed
-	"00000000", //Default-hexString if NOT 'A Link Between Worlds DLC installed
+	"ffff00ff", //Default-hexString if NOT 'A Link Between Worlds DLC installed
 };
 
 /* @var vs_game_dlc_strings		vector, which hold the dlc-strings  */
@@ -191,17 +192,28 @@ HWLGeneral::~HWLGeneral()
 string HWLGeneral::calc_current_savefile_game_version()
 {
 	//declare needed variables
-	string s_savefile_game_version, s_savefile_game_version_tmp;
+	string s_savefile_game_version, s_savefile_game_version_tmp1, s_savefile_game_version_tmp2;
 	int i_savefile_game_version_offset = this->savefileGameVersionOffset;
 
 	//get the current savefile-version as an hexString
 	s_savefile_game_version = this->getHexStringFromFileContent(i_savefile_game_version_offset, this->savefileGameVersionOffsetLength);
 
-	//we need only one part of the offset, get it here
-	s_savefile_game_version_tmp = s_savefile_game_version[this->savefileGameVersionOffsetPart - 1];
+	//we need both parts saparetly to get the right-version, so get it here
+	s_savefile_game_version_tmp1 = s_savefile_game_version[this->savefileGameVersionOffsetPart - 2];
+	s_savefile_game_version_tmp2 = s_savefile_game_version[this->savefileGameVersionOffsetPart - 1];
+
+	//chck if we have mi. 1.5.0 (==0xF), if yes, check the first-part, so we
+	//could know if it's 1.6.0 instead 1.5.0 and return the last-version entry 
+	if (this->HexStringToInt(s_savefile_game_version_tmp2) == 0xF)
+	{
+		if ((this->HexStringToInt(s_savefile_game_version_tmp1) == 0x9) || (this->HexStringToInt(s_savefile_game_version_tmp1) == 0xB) ||
+			(this->HexStringToInt(s_savefile_game_version_tmp1) == 0xD) || (this->HexStringToInt(s_savefile_game_version_tmp1) == 0xF) )
+			return (this->vs_game_version_strings[this->vs_game_version_strings.size()-1]);
+	}
+
 
 	//return the current version based on the value and the vector-index
-	return (this->vs_game_version_strings[this->HexStringToInt(s_savefile_game_version_tmp)]);
+	return (this->vs_game_version_strings[this->HexStringToInt(s_savefile_game_version_tmp2)]);
 }
 
 /**

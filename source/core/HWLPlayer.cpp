@@ -407,12 +407,19 @@ void HWLPlayer::save_players_canUseAttackBadgesState()
 {
 	//declare/define needed variables
 	bool b_canUseAttackBadges_tmp = this->b_canUseAttackBadges;
+	int i_canUseAttackBadges_tmp;
+
+	if (b_canUseAttackBadges_tmp)
+		i_canUseAttackBadges_tmp = 0xF;
+	else
+		i_canUseAttackBadges_tmp = 0x00;
+
 	string s_playerCanUseAttackBadges;
 	int i_player_canUseAttackBadges_offset = this->i_offset + this->playerCanUseAttackBadgesOffsetDiff;
 
 	//convert the current integer-value (casted from bool) to hex and add needed zeros, if we
 	//don't have the complete length (calculate with offset-length multiplied by 2)
-	s_playerCanUseAttackBadges = this->intToHexString(b_canUseAttackBadges_tmp, false);
+	s_playerCanUseAttackBadges = this->intToHexString(i_canUseAttackBadges_tmp, false);
 	this->addZeroToHexString(s_playerCanUseAttackBadges, this->playerCanUseAttackBadgesOffsetLength * 2);
 
 	//set converted hex-value to the file-content holder

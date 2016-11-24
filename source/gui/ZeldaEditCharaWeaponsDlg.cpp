@@ -19,6 +19,8 @@ CZeldaEditCharaWeaponsDlg::CZeldaEditCharaWeaponsDlg(CWnd* pParent /*=NULL*/, in
 	this->i_skipped_charas = i_skipped_charas;
 
 	this->i_weapon_type = this->i_weapon_slot = this->i_skipped_weaponTypes = 0;
+	this->i_disabledWeaponSkillsCounter = HWLSaveEdit::HWLWeapon::get_WeaponSkillDisabledCounter();
+
 }
 
 CZeldaEditCharaWeaponsDlg::~CZeldaEditCharaWeaponsDlg()
@@ -31,11 +33,18 @@ BOOL CZeldaEditCharaWeaponsDlg::OnInitDialog()
 	for (int i = IDC_COMBO_CWEAPON_SKILLS_SLOT_1; i <= IDC_COMBO_CWEAPON_SKILLS_SLOT_8; i++)
 	{
 		CComboBox *cb_skill = (CComboBox*)GetDlgItem(i);
+		int i_skipped_skills = 0;
 
 		for (int j = 0; j < HWLSaveEdit::HWLWeapon::weaponSkillNames.size(); j++)
 		{
+			if (HWLSaveEdit::HWLWeapon::get_isWeaponSkillDisabled(j))
+			{
+				i_skipped_skills++;
+				continue;
+			}
+
 			CString cs_skill_name(HWLSaveEdit::HWLWeapon::weaponSkillNames[j].c_str());
-			cb_skill->InsertString(j,cs_skill_name);
+			cb_skill->InsertString(j - i_skipped_skills, cs_skill_name);
 		}
 	}
 
@@ -96,6 +105,13 @@ void CZeldaEditCharaWeaponsDlg::DoDataExchange(CDataExchange* pDX)
 		{
 			this->i_skipped_weaponTypes = 0;
 			this->i_weapon_type = 0;
+		}
+
+		if (this->i_disabledWeaponSkillsCounter != HWLSaveEdit::HWLWeapon::get_WeaponSkillDisabledCounter())
+		{
+			CZeldaEditCharaWeaponsDlg dlg(NULL, this->i_chara_id, this->i_skipped_charas);
+			EndDialog(this->IDD);
+			dlg.DoModal();
 		}
 
 		std::shared_ptr<HWLSaveEdit::HWLWeapon> hwlpw = save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot);
@@ -379,6 +395,7 @@ ON_COMMAND(ID_MENU_MAIN_EXIT, &CZeldaEditCharaWeaponsDlg::OnMenuMainExit)
 ON_COMMAND(ID_MENU_EDIT_CHARACTERS_OVERVIEW, &CZeldaEditCharaWeaponsDlg::OnMenuEditCharactersOverview)
 ON_BN_CLICKED(IDC_CWEAPON_COPY_VALUES, &CZeldaEditCharaWeaponsDlg::OnBnClickedCweaponCopyValues)
 ON_BN_CLICKED(IDC_CWEAPON_PASTE_VALUES, &CZeldaEditCharaWeaponsDlg::OnBnClickedCweaponPasteValues)
+ON_COMMAND(ID_MENU_EDIT_AM_LRMAP, &CZeldaEditCharaWeaponsDlg::OnMenuEditAmLrmap)
 END_MESSAGE_MAP()
 
 // CZeldaEditCharaWeaponsDlg-Meldungshandler
@@ -500,7 +517,16 @@ void CZeldaEditCharaWeaponsDlg::OnMenuEditAmMwwmap()
 void CZeldaEditCharaWeaponsDlg::OnMenuEditAmKimap()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
-	CZeldaEditAdventureModeMaps dlg(NULL, 6);
+	int i_map_id = 6;
+	int i_skipped_maps = 0;
+
+	for (int i = i_map_id - 1; i < i_map_id; i++)
+	{
+		if (save->get_amMap(i)->get_isDisabled())
+			i_skipped_maps++;
+	}
+
+	CZeldaEditAdventureModeMaps dlg(NULL, i_map_id, i_skipped_maps);
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }
@@ -509,7 +535,33 @@ void CZeldaEditCharaWeaponsDlg::OnMenuEditAmKimap()
 void CZeldaEditCharaWeaponsDlg::OnMenuEditAmGtmap()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
-	CZeldaEditAdventureModeMaps dlg(NULL, 7);
+	int i_map_id = 7;
+	int i_skipped_maps = 0;
+
+	for (int i = i_map_id - 2; i < i_map_id; i++)
+	{
+		if (save->get_amMap(i)->get_isDisabled())
+			i_skipped_maps++;
+	}
+
+	CZeldaEditAdventureModeMaps dlg(NULL, i_map_id, i_skipped_maps);
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+void CZeldaEditCharaWeaponsDlg::OnMenuEditAmLrmap()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	int i_map_id = 8;
+	int i_skipped_maps = 0;
+
+	for (int i = i_map_id - 3; i < i_map_id; i++)
+	{
+		if (save->get_amMap(i)->get_isDisabled())
+			i_skipped_maps++;
+	}
+
+	CZeldaEditAdventureModeMaps dlg(NULL, i_map_id, i_skipped_maps);
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }

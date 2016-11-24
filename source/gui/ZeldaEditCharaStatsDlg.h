@@ -61,5 +61,6 @@ public:
 	afx_msg void OnEnChangeEditCstatsCharaAtk();
 	afx_msg void OnEnChangeEditCstatsCharaHearts();
 	afx_msg void OnBnClickedCheckCstatsCharaUnlock();
+	afx_msg void OnMenuEditAmLrmap();
 };
 

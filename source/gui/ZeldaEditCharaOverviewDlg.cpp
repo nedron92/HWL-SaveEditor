@@ -51,12 +51,12 @@ void CZeldaEditCharaOverviewDlg::DoDataExchange(CDataExchange* pDX)
 
 	if (save != nullptr)
 	{
-		for (int i = IDC_CHECK_CHARA_UNLOCK1; i <= IDC_CHECK_CHARA_UNLOCK27; i++)
+		for (int i = IDC_CHECK_CHARA_UNLOCK1; i <= IDC_CHECK_CHARA_UNLOCK29; i++)
 		{
 			GetDlgItem(i)->EnableWindow(true);
 		}
 
-		for (int i = IDC_BUTTON_CHARA_EDIT1; i <= IDC_BUTTON_CHARA_EDIT27; i++)
+		for (int i = IDC_BUTTON_CHARA_EDIT1; i <= IDC_BUTTON_CHARA_EDIT29; i++)
 		{
 			GetDlgItem(i)->EnableWindow(true);
 		}
@@ -66,18 +66,18 @@ void CZeldaEditCharaOverviewDlg::DoDataExchange(CDataExchange* pDX)
 	}
 	else
 	{
-		for (int i = IDC_STATIC_CHARA1; i <= IDC_STATIC_CHARA27; i++)
+		for (int i = IDC_STATIC_CHARA1; i <= IDC_STATIC_CHARA29; i++)
 		{
 			SetDlgItemText(i, L"Chara");
 		}
 
-		for (int i = IDC_CHECK_CHARA_UNLOCK1; i <= IDC_CHECK_CHARA_UNLOCK27; i++)
+		for (int i = IDC_CHECK_CHARA_UNLOCK1; i <= IDC_CHECK_CHARA_UNLOCK29; i++)
 		{
 			((CButton*)GetDlgItem(i))->SetCheck(0);
 			GetDlgItem(i)->EnableWindow(false);
 		}
 
-		for (int i = IDC_BUTTON_CHARA_EDIT1; i <= IDC_BUTTON_CHARA_EDIT27; i++)
+		for (int i = IDC_BUTTON_CHARA_EDIT1; i <= IDC_BUTTON_CHARA_EDIT29; i++)
 		{
 			GetDlgItem(i)->EnableWindow(false);
 		}
@@ -87,8 +87,8 @@ void CZeldaEditCharaOverviewDlg::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CZeldaEditCharaOverviewDlg, CDialogEx)
-	ON_CONTROL_RANGE(BN_CLICKED, IDC_BUTTON_CHARA_EDIT1, IDC_BUTTON_CHARA_EDIT27, &OnBnClickedEditButton)
-	ON_CONTROL_RANGE(BN_CLICKED, IDC_CHECK_CHARA_UNLOCK1, IDC_CHECK_CHARA_UNLOCK27, &OnBnClickedUnlockCheck)
+	ON_CONTROL_RANGE(BN_CLICKED, IDC_BUTTON_CHARA_EDIT1, IDC_BUTTON_CHARA_EDIT29, &OnBnClickedEditButton)
+	ON_CONTROL_RANGE(BN_CLICKED, IDC_CHECK_CHARA_UNLOCK1, IDC_CHECK_CHARA_UNLOCK29, &OnBnClickedUnlockCheck)
 	ON_BN_CLICKED(ID_SAVE, &CZeldaEditCharaOverviewDlg::OnBnClickedSave)
 	ON_BN_CLICKED(ID_EXIT, &CZeldaEditCharaOverviewDlg::OnBnClickedExit)
 	ON_BN_CLICKED(IDC_CHARA_MAX_STATS_ALL, &CZeldaEditCharaOverviewDlg::OnBnClickedCharaMaxStatsAll)
@@ -111,6 +111,7 @@ BEGIN_MESSAGE_MAP(CZeldaEditCharaOverviewDlg, CDialogEx)
 	ON_COMMAND(ID_MENU_EDIT_AM_KIMAP, &CZeldaEditCharaOverviewDlg::OnMenuEditAmKimap)
 	ON_COMMAND(ID_MENU_EDIT_AM_GTMAP, &CZeldaEditCharaOverviewDlg::OnMenuEditAmGtmap)
 	ON_COMMAND(ID_MENU_EDIT_FAIRIES, &CZeldaEditCharaOverviewDlg::OnMenuEditFairies)
+	ON_COMMAND(ID_MENU_EDIT_AM_LRMAP, &CZeldaEditCharaOverviewDlg::OnMenuEditAmLrmap)
 END_MESSAGE_MAP()
 
 
@@ -141,17 +142,17 @@ void CZeldaEditCharaOverviewDlg::calc_players()
 		i_last_IDC_id = IDC_STATIC_CHARA1 + i - i_current_disabled_count;
 	}
 
-	int i_to_disabled_charas = IDC_STATIC_CHARA27 - i_last_IDC_id;
+	int i_to_disabled_charas = IDC_STATIC_CHARA29 - i_last_IDC_id;
 
 	for (int i = 0; i < i_to_disabled_charas; i++)
 	{
-		SetDlgItemText(IDC_STATIC_CHARA27 - i, L"Chara: ");
-		CButton *cb_check = (CButton*)GetDlgItem((IDC_CHECK_CHARA_UNLOCK27 - i));
+		SetDlgItemText(IDC_STATIC_CHARA29 - i, L"Chara: ");
+		CButton *cb_check = (CButton*)GetDlgItem((IDC_CHECK_CHARA_UNLOCK29 - i));
 		cb_check->SetCheck(0);
 
-		GetDlgItem(IDC_STATIC_CHARA27 - i)->EnableWindow(false);
-		GetDlgItem(IDC_CHECK_CHARA_UNLOCK27 - i)->EnableWindow(false);
-		GetDlgItem(IDC_BUTTON_CHARA_EDIT27 - i)->EnableWindow(false);
+		GetDlgItem(IDC_STATIC_CHARA29 - i)->EnableWindow(false);
+		GetDlgItem(IDC_CHECK_CHARA_UNLOCK29 - i)->EnableWindow(false);
+		GetDlgItem(IDC_BUTTON_CHARA_EDIT29 - i)->EnableWindow(false);
 	}
 }
 
@@ -525,7 +526,16 @@ void CZeldaEditCharaOverviewDlg::OnMenuEditAmMwwmap()
 void CZeldaEditCharaOverviewDlg::OnMenuEditAmKimap()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
-	CZeldaEditAdventureModeMaps dlg(NULL, 6);
+	int i_map_id = 6;
+	int i_skipped_maps = 0;
+
+	for (int i = i_map_id - 1; i < i_map_id; i++)
+	{
+		if (save->get_amMap(i)->get_isDisabled())
+			i_skipped_maps++;
+	}
+
+	CZeldaEditAdventureModeMaps dlg(NULL, i_map_id, i_skipped_maps);
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }
@@ -534,7 +544,33 @@ void CZeldaEditCharaOverviewDlg::OnMenuEditAmKimap()
 void CZeldaEditCharaOverviewDlg::OnMenuEditAmGtmap()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
-	CZeldaEditAdventureModeMaps dlg(NULL, 7);
+	int i_map_id = 7;
+	int i_skipped_maps = 0;
+
+	for (int i = i_map_id - 2; i < i_map_id; i++)
+	{
+		if (save->get_amMap(i)->get_isDisabled())
+			i_skipped_maps++;
+	}
+
+	CZeldaEditAdventureModeMaps dlg(NULL, i_map_id, i_skipped_maps);
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+void CZeldaEditCharaOverviewDlg::OnMenuEditAmLrmap()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	int i_map_id = 8;
+	int i_skipped_maps = 0;
+
+	for (int i = i_map_id - 3; i < i_map_id; i++)
+	{
+		if (save->get_amMap(i)->get_isDisabled())
+			i_skipped_maps++;
+	}
+
+	CZeldaEditAdventureModeMaps dlg(NULL, i_map_id, i_skipped_maps);
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }

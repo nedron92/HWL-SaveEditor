@@ -58,4 +58,5 @@ public:
 	afx_msg void OnBnClickedFairyUnlockAll();
 	afx_msg void OnMenuMainExit();
 	afx_msg void OnMenuEditCharactersOverview();
+	afx_msg void OnMenuEditAmLrmap();
 };

@@ -133,6 +133,7 @@ BEGIN_MESSAGE_MAP(CZeldaEditFairyFoods, CDialogEx)
 	ON_COMMAND(ID_MENU_EDIT_AM_KIMAP, &CZeldaEditFairyFoods::OnMenuEditAmKimap)
 	ON_COMMAND(ID_MENU_EDIT_AM_GTMAP, &CZeldaEditFairyFoods::OnMenuEditAmGtmap)
 	ON_COMMAND(ID_MENU_EDIT_CHARACTERS_OVERVIEW, &CZeldaEditFairyFoods::OnMenuEditCharactersOverview)
+	ON_COMMAND(ID_MENU_EDIT_AM_LRMAP, &CZeldaEditFairyFoods::OnMenuEditAmLrmap)
 END_MESSAGE_MAP()
 
 
@@ -390,7 +391,16 @@ void CZeldaEditFairyFoods::OnMenuEditAmMwwmap()
 void CZeldaEditFairyFoods::OnMenuEditAmKimap()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
-	CZeldaEditAdventureModeMaps dlg(NULL, 6);
+	int i_map_id = 6;
+	int i_skipped_maps = 0;
+
+	for (int i = i_map_id - 1; i < i_map_id; i++)
+	{
+		if (save->get_amMap(i)->get_isDisabled())
+			i_skipped_maps++;
+	}
+
+	CZeldaEditAdventureModeMaps dlg(NULL, i_map_id, i_skipped_maps);
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }
@@ -399,7 +409,33 @@ void CZeldaEditFairyFoods::OnMenuEditAmKimap()
 void CZeldaEditFairyFoods::OnMenuEditAmGtmap()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
-	CZeldaEditAdventureModeMaps dlg(NULL, 7);
+	int i_map_id = 7;
+	int i_skipped_maps = 0;
+
+	for (int i = i_map_id - 2; i < i_map_id; i++)
+	{
+		if (save->get_amMap(i)->get_isDisabled())
+			i_skipped_maps++;
+	}
+
+	CZeldaEditAdventureModeMaps dlg(NULL, i_map_id, i_skipped_maps);
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+void CZeldaEditFairyFoods::OnMenuEditAmLrmap()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	int i_map_id = 8;
+	int i_skipped_maps = 0;
+
+	for (int i = i_map_id - 3; i < i_map_id; i++)
+	{
+		if (save->get_amMap(i)->get_isDisabled())
+			i_skipped_maps++;
+	}
+
+	CZeldaEditAdventureModeMaps dlg(NULL, i_map_id, i_skipped_maps);
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }

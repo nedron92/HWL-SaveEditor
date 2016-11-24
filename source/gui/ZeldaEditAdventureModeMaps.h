@@ -8,7 +8,7 @@ class CZeldaEditAdventureModeMaps : public CDialogEx
 	DECLARE_DYNAMIC(CZeldaEditAdventureModeMaps)
 
 public:
-	CZeldaEditAdventureModeMaps(CWnd* pParent = NULL, int i_map = -1);   // Standardkonstruktor
+	CZeldaEditAdventureModeMaps(CWnd* pParent = NULL, int i_map = -1, int i_skipped_maps = 0);   // Standardkonstruktor
 	virtual ~CZeldaEditAdventureModeMaps();
 
 // Dialogfelddaten
@@ -57,4 +57,5 @@ public:
 	afx_msg void OnMenuEditAmGtmap();
 	afx_msg void OnBnClickedAmmapMaxValueAll();
 	afx_msg void OnMenuEditCharactersOverview();
+	afx_msg void OnMenuEditAmLrmap();
 };

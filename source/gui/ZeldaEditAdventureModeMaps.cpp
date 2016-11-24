@@ -11,12 +11,12 @@
 
 IMPLEMENT_DYNAMIC(CZeldaEditAdventureModeMaps, CDialogEx)
 
-CZeldaEditAdventureModeMaps::CZeldaEditAdventureModeMaps(CWnd* pParent /*=NULL*/, int i_map)
+CZeldaEditAdventureModeMaps::CZeldaEditAdventureModeMaps(CWnd* pParent /*=NULL*/, int i_map, int i_skipped_maps)
 : CDialogEx(CZeldaEditAdventureModeMaps::IDD, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	this->i_map = i_map;
-	this->i_skipped_maps = 0;
+	this->i_skipped_maps = i_skipped_maps;
 }
 
 CZeldaEditAdventureModeMaps::~CZeldaEditAdventureModeMaps()
@@ -51,7 +51,7 @@ void CZeldaEditAdventureModeMaps::DoDataExchange(CDataExchange* pDX)
 	{
 		if (this->i_map > -1)
 		{
-			if (this->i_map >= save->get_adventureMode_maxMaps() || save->get_amMap(this->i_map)->get_isDisabled())
+			if (this->i_map > save->get_adventureMode_maxMaps() || save->get_amMap(this->i_map)->get_isDisabled())
 			{
 				this->i_skipped_maps = 0;
 				this->i_map = 0;
@@ -74,7 +74,7 @@ void CZeldaEditAdventureModeMaps::DoDataExchange(CDataExchange* pDX)
 			else
 				GetDlgItem(IDC_AMMAP_PAGE_PREVIOUS)->EnableWindow(true);
 
-			if (this->i_map + 1 >= save->get_adventureMode_maxMaps() - HWLSaveEdit::HWLAdventureModeMaps::get_disabledMapCounter())
+			if (this->i_map + 1 > save->get_adventureMode_maxMaps() - HWLSaveEdit::HWLAdventureModeMaps::get_disabledMapCounter())
 				GetDlgItem(IDC_AMMAP_PAGE_NEXT)->EnableWindow(false);
 			else
 				GetDlgItem(IDC_AMMAP_PAGE_NEXT)->EnableWindow(true);
@@ -152,6 +152,7 @@ BEGIN_MESSAGE_MAP(CZeldaEditAdventureModeMaps, CDialogEx)
 	ON_COMMAND(ID_MENU_EDIT_AM_GTMAP, &CZeldaEditAdventureModeMaps::OnMenuEditAmGtmap)
 	ON_BN_CLICKED(IDC_AMMAP_MAX_VALUE_ALL, &CZeldaEditAdventureModeMaps::OnBnClickedAmmapMaxValueAll)
 	ON_COMMAND(ID_MENU_EDIT_CHARACTERS_OVERVIEW, &CZeldaEditAdventureModeMaps::OnMenuEditCharactersOverview)
+	ON_COMMAND(ID_MENU_EDIT_AM_LRMAP, &CZeldaEditAdventureModeMaps::OnMenuEditAmLrmap)
 END_MESSAGE_MAP()
 
 
@@ -300,9 +301,8 @@ void CZeldaEditAdventureModeMaps::OnMenuEditAmAvmap()
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
 	if (this->i_map != 0)
 	{
-		CZeldaEditAdventureModeMaps dlg(NULL, 0);
-		EndDialog(this->IDD);
-		dlg.DoModal();
+		this->i_map = 0;
+		this->UpdateData();
 	}
 }
 
@@ -312,9 +312,8 @@ void CZeldaEditAdventureModeMaps::OnMenuEditAmGsmap()
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
 	if (this->i_map != 1)
 	{
-		CZeldaEditAdventureModeMaps dlg(NULL, 1);
-		EndDialog(this->IDD);
-		dlg.DoModal();
+		this->i_map = 1;
+		this->UpdateData();
 	}
 
 }
@@ -325,9 +324,8 @@ void CZeldaEditAdventureModeMaps::OnMenuEditAmMqmap()
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
 	if (this->i_map != 2)
 	{
-		CZeldaEditAdventureModeMaps dlg(NULL, 2);
-		EndDialog(this->IDD);
-		dlg.DoModal();
+		this->i_map = 2;
+		this->UpdateData();
 	}
 
 }
@@ -337,9 +335,8 @@ void CZeldaEditAdventureModeMaps::OnMenuEditAmTlmap()
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
 	if (this->i_map != 3)
 	{
-		CZeldaEditAdventureModeMaps dlg(NULL, 3);
-		EndDialog(this->IDD);
-		dlg.DoModal();
+		this->i_map = 3;
+		this->UpdateData();
 	}
 
 }
@@ -349,9 +346,8 @@ void CZeldaEditAdventureModeMaps::OnMenuEditAmTmmap()
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
 	if (this->i_map != 4)
 	{
-		CZeldaEditAdventureModeMaps dlg(NULL, 4);
-		EndDialog(this->IDD);
-		dlg.DoModal();
+		this->i_map = 4;
+		this->UpdateData();
 	}
 }
 
@@ -360,9 +356,8 @@ void CZeldaEditAdventureModeMaps::OnMenuEditAmMwwmap()
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
 	if (this->i_map != 5)
 	{
-		CZeldaEditAdventureModeMaps dlg(NULL, 5);
-		EndDialog(this->IDD);
-		dlg.DoModal();
+		this->i_map = 5;
+		this->UpdateData();
 	}
 }
 
@@ -371,9 +366,16 @@ void CZeldaEditAdventureModeMaps::OnMenuEditAmKimap()
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
 	if (this->i_map != 6)
 	{
-		CZeldaEditAdventureModeMaps dlg(NULL, 6);
-		EndDialog(this->IDD);
-		dlg.DoModal();
+		this->i_map = 6;
+		int skipped_maps = 0;
+		for (int i = this->i_map - 1; i < this->i_map; i++)
+		{
+			if (save->get_amMap(i)->get_isDisabled())
+				skipped_maps++;
+		}
+
+		this->i_skipped_maps = skipped_maps;
+		this->UpdateData();
 	}
 }
 
@@ -383,12 +385,37 @@ void CZeldaEditAdventureModeMaps::OnMenuEditAmGtmap()
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
 	if (this->i_map != 7)
 	{
-		CZeldaEditAdventureModeMaps dlg(NULL, 7);
-		EndDialog(this->IDD);
-		dlg.DoModal();
+		this->i_map = 7;
+		int skipped_maps = 0;
+		for (int i = this->i_map - 2; i < this->i_map; i++)
+		{
+			if (save->get_amMap(i)->get_isDisabled())
+				skipped_maps++;
+		}
+
+		this->i_skipped_maps = skipped_maps;
+		this->UpdateData();
 	}
 }
 
+
+void CZeldaEditAdventureModeMaps::OnMenuEditAmLrmap()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	if (this->i_map != 8)
+	{
+		this->i_map = 8;
+		int skipped_maps = 0;
+		for (int i = this->i_map - 3; i < this->i_map; i++)
+		{
+			if (save->get_amMap(i)->get_isDisabled())
+				skipped_maps++;
+		}
+
+		this->i_skipped_maps = skipped_maps;
+		this->UpdateData();
+	}
+}
 
 void CZeldaEditAdventureModeMaps::calc_amItems()
 {

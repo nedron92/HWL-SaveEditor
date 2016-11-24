@@ -20,7 +20,7 @@ protected:
 
 	HICON m_hIcon;
 	HWLSaveEdit::HWLSaveEditor *save;
-	int i_chara_id, i_weapon_type, i_weapon_slot, i_skipped_charas, i_skipped_weaponTypes;
+	int i_chara_id, i_weapon_type, i_weapon_slot, i_skipped_charas, i_skipped_weaponTypes, i_disabledWeaponSkillsCounter;
 
 	DECLARE_MESSAGE_MAP()
 
@@ -69,4 +69,5 @@ public:
 	afx_msg void OnMenuEditCharactersOverview();
 	afx_msg void OnBnClickedCweaponCopyValues();
 	afx_msg void OnBnClickedCweaponPasteValues();
+	afx_msg void OnMenuEditAmLrmap();
 };

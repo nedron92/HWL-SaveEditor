@@ -53,4 +53,5 @@ public:
 	afx_msg void OnMenuEditAmKimap();
 	afx_msg void OnMenuEditAmGtmap();
 	afx_msg void OnMenuEditFairies();
+	afx_msg void OnMenuEditAmLrmap();
 };

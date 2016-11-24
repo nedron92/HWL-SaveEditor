@@ -80,15 +80,19 @@ void CZeldaEditCharaStatsDlg::DoDataExchange(CDataExchange* pDX)
 	else
 	{
 		SetDlgItemText(IDC_CSTATS_PLAYERNAME, L"");
-		SetDlgItemText(IDC_STATIC_CSTATS_PLAYER_COUNT, L"00/99");
+		SetDlgItemText(IDC_STATIC_CSTATS_PLAYER_COUNT, L"00 / 99");
 		SetDlgItemText(IDC_STATIC_CSTATS_WEAPONTYPES, L"0");
-		SetDlgItemText(IDC_STATIC_CSTATS_USED_WEAPONS, L"00/99");
+		SetDlgItemText(IDC_STATIC_CSTATS_USED_WEAPONS, L"00 / 99");
 
 		for (int i = IDC_CSTATS_PAGE_PREVIOUS; i <= IDC_BUTTON_CSTATS_EDIT_WEAPONS; i++)
 		{
 			GetDlgItem(i)->EnableWindow(false);
 		}
 
+		for (int i = IDC_EDIT_CSTATS_CHARA_LVL; i <= IDC_EDIT_CSTATS_CHARA_HEARTS; i++)
+		{
+			SetDlgItemText(i, L"");
+		}
 	}
 	
 	CDialogEx::DoDataExchange(pDX);
@@ -127,6 +131,7 @@ ON_EN_CHANGE(IDC_EDIT_CSTATS_CHARA_EXP, &CZeldaEditCharaStatsDlg::OnEnChangeEdit
 ON_EN_CHANGE(IDC_EDIT_CSTATS_CHARA_ATK, &CZeldaEditCharaStatsDlg::OnEnChangeEditCstatsCharaAtk)
 ON_EN_CHANGE(IDC_EDIT_CSTATS_CHARA_HEARTS, &CZeldaEditCharaStatsDlg::OnEnChangeEditCstatsCharaHearts)
 ON_BN_CLICKED(IDC_CHECK_CSTATS_CHARA_UNLOCK, &CZeldaEditCharaStatsDlg::OnBnClickedCheckCstatsCharaUnlock)
+ON_COMMAND(ID_MENU_EDIT_AM_LRMAP, &CZeldaEditCharaStatsDlg::OnMenuEditAmLrmap)
 END_MESSAGE_MAP()
 
 
@@ -390,7 +395,16 @@ void CZeldaEditCharaStatsDlg::OnMenuEditAmMwwmap()
 void CZeldaEditCharaStatsDlg::OnMenuEditAmKimap()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
-	CZeldaEditAdventureModeMaps dlg(NULL, 6);
+	int i_map_id = 6;
+	int i_skipped_maps = 0;
+
+	for (int i = i_map_id - 1; i < i_map_id; i++)
+	{
+		if (save->get_amMap(i)->get_isDisabled())
+			i_skipped_maps++;
+	}
+
+	CZeldaEditAdventureModeMaps dlg(NULL, i_map_id, i_skipped_maps);
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }
@@ -399,7 +413,24 @@ void CZeldaEditCharaStatsDlg::OnMenuEditAmKimap()
 void CZeldaEditCharaStatsDlg::OnMenuEditAmGtmap()
 {
 	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
-	CZeldaEditAdventureModeMaps dlg(NULL, 7);
+	int i_map_id = 8;
+	int i_skipped_maps = 0;
+
+	for (int i = i_map_id - 3; i < i_map_id; i++)
+	{
+		if (save->get_amMap(i)->get_isDisabled())
+			i_skipped_maps++;
+	}
+
+	CZeldaEditAdventureModeMaps dlg(NULL, i_map_id, i_skipped_maps);
+	EndDialog(this->IDD);
+	dlg.DoModal();
+}
+
+void CZeldaEditCharaStatsDlg::OnMenuEditAmLrmap()
+{
+	// TODO: Fügen Sie hier Ihren Befehlsbehandlungscode ein.
+	CZeldaEditAdventureModeMaps dlg(NULL, 8);
 	EndDialog(this->IDD);
 	dlg.DoModal();
 }

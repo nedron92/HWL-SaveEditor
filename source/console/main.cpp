@@ -1345,6 +1345,9 @@ void change_skill_values(int i_chara_id, int i_weapon_type_id, int i_weapon_slot
 			  system(CLEAR);
 			  for (int i = 0; i < (signed)HWLSaveEdit::HWLWeapon::weaponSkillNames.size(); i++)
 			  {
+				  if (HWLSaveEdit::HWLWeapon::get_isWeaponSkillDisabled(i))
+					  continue;
+
 				  cout << "ID: " << i << "  -  " << HWLSaveEdit::HWLWeapon::weaponSkillNames[i] << endl;
 			  }
 			  cin.clear();
@@ -1355,7 +1358,7 @@ void change_skill_values(int i_chara_id, int i_weapon_type_id, int i_weapon_slot
 
 	case 2:
 	{
-			  if (i_skill_slot_id == 0 || i_skill_id == -1)
+			  if (i_skill_slot_id == 0 || i_skill_id == -1 || HWLSaveEdit::HWLWeapon::get_isWeaponSkillDisabled(i_skill_id))
 			  {
 				  cout << endl;
 				  cout << "Edit Skills " << endl;

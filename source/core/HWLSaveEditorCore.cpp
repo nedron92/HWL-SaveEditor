@@ -47,7 +47,7 @@ vector<bool> HWLSaveEditorCore::vb_game_dlc_installed;
 
 //public members
 /* @var version  hold the current version-number as string */
-const string HWLSaveEditorCore::version = "2.9.6.0";
+const string HWLSaveEditorCore::version = "3.0";
 
 
 

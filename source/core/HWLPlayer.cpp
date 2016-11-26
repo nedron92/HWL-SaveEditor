@@ -128,8 +128,10 @@ const vector<int> HWLPlayer::playerHeartsMax =
 const int HWLPlayer::playerIsUnlockMax = 0xF;
 
 /* @var playerWeaponSlotsMax		maximal-value of the characters Weapons, which it can take */
-const int HWLPlayer::playerWeaponSlotsMax = 10;
+const int HWLPlayer::playerWeaponSlotsMax = 15;
 
+/* @var playerWeaponSlotsMaxIngame		the ingame max-value of Weapons a character can take */
+const int HWLPlayer::playerWeaponSlotsMaxIngame = 10;
 
 
 /**
@@ -752,17 +754,9 @@ int HWLPlayer::get_weapon_count(int i_weapon_type)
 {
 	//declare/define needed variables
 	int i_weapon_count = 0;
-	int i_max_iterations = 0;
-
-	//check if we have Link's Master Sword, so we have only ONE Iteration,
-	//cause of that unique weapon, else we have the maximal-value
-	if (this->i_id == 0 && i_weapon_type == 4)
-		i_max_iterations = 1;
-	else
-		i_max_iterations = this->playerWeaponSlotsMax;
 
 	//iterate over the iterations-max-variable and count the weapons, they are used
-	for (int i = 0; i < i_max_iterations; i++)
+	for (int i = 0; i < this->playerWeaponSlotsMax; i++)
 	{
 		//check if the weapon is NOT an Unsed one, increment the counter then
 		if (!this->m_player_weapon[i_weapon_type][i]->get_IsUnused())

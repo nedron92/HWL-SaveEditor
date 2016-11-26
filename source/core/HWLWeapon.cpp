@@ -583,7 +583,7 @@ const vector<string> HWLWeapon::weaponSkillNames =
 	"VS Sea",
 	"VS Termina",
 	"MS: Exorcism",
-	"Heart Power",
+	"Heart Power", //only with Update 1.6.0
 	"No Slot",
 };
 
@@ -1656,7 +1656,8 @@ void HWLWeapon::change_multi_element_state(bool b_is_multi_element_weapon)
 
 	//do it only if we have a right game-version and one of the needed DLCs is installed 
 	if (this->s_savefile_game_version != "1.0.0" && this->s_savefile_game_version != "1.2.0"
-		&& this->s_savefile_game_version != "1.3.0" && (this->vb_game_dlc_installed[1] || this->vb_game_dlc_installed[2])
+		&& this->s_savefile_game_version != "1.3.0" && (this->vb_game_dlc_installed[1] || this->vb_game_dlc_installed[2]
+													||  this->vb_game_dlc_installed[3])
 		)
 	{
 		//change only, if we have not the same multi-element-state and if we have a valid-hex for that type

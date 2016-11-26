@@ -299,12 +299,6 @@ void HWLSaveEditor::calc_players()
 		//create an temp-variable which hold the current number of weapon-types of that chara
 		int i_weapon_types = HWLWeapon::vi_playerWeaponTypeCount[i];
 
-		//Check for Link's Master Sword, cause we have only one (unique) and set set the slots-max correctly
-		if (i == 0 && i_count_weapon_slots[4] > 0)
-			i_count_weapon_slots[4] = HWLPlayer::playerWeaponSlotsMax;
-		else if (i == 0 && i_count_weapon_slots[4] == 0)
-			i_count_weapon_slots[4] = (HWLPlayer::playerWeaponSlotsMax - 1);
-
 		//define an weapon-counter, and calculate all used weapon-types
 		int i_weapon_count = 0;
 		for (int j = 0; j < i; j++)

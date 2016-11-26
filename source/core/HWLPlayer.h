@@ -97,6 +97,7 @@ namespace HWLSaveEdit
 			static const vector<string> vs_players;
 			static const int playerIsUnlockMax;
 			static const int playerWeaponSlotsMax;
+			static const int playerWeaponSlotsMaxIngame;
 
 			//constructor and destructor
 			HWLPlayer(int i_id, string s_name, int i_offset, int i_weapon_type_count);

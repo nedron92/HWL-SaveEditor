@@ -152,10 +152,8 @@ void CZeldaEditCharaWeaponsDlg::DoDataExchange(CDataExchange* pDX)
 
 		//Weapon-Slot activate
 		CString s_weapon_slot_count;
-		if (hwlpw->get_id() == HWLSaveEdit::HWLWeapon::vi_playerWeaponTypeHexValues[4] || (this->i_weapon_type == 4 && this->i_chara_id == 0))
-			s_weapon_slot_count.Format(L"%d / %d", this->i_weapon_slot + 1, this->i_weapon_slot + 1);
-		else
-			s_weapon_slot_count.Format(L"%d / %d", this->i_weapon_slot + 1, HWLSaveEdit::HWLPlayer::playerWeaponSlotsMax);
+		s_weapon_slot_count.Format(L"%d / %d", this->i_weapon_slot + 1, HWLSaveEdit::HWLPlayer::playerWeaponSlotsMax);
+
 
 		SetDlgItemText(IDC_STATIC_CWEAPON_SLOT_COUNT, s_weapon_slot_count);
 		GetDlgItem(IDC_CWEAPON_SLOT_PAGE_PREVIOUS)->EnableWindow(true);
@@ -166,16 +164,10 @@ void CZeldaEditCharaWeaponsDlg::DoDataExchange(CDataExchange* pDX)
 		else
 			GetDlgItem(IDC_CWEAPON_SLOT_PAGE_PREVIOUS)->EnableWindow(true);
 
-		if (hwlpw->get_id() == HWLSaveEdit::HWLWeapon::vi_playerWeaponTypeHexValues[4] || (this->i_weapon_type == 4 && this->i_chara_id == 0))
-		{
+		if (this->i_weapon_slot + 1 >= HWLSaveEdit::HWLPlayer::playerWeaponSlotsMax)
 			GetDlgItem(IDC_CWEAPON_SLOT_PAGE_NEXT)->EnableWindow(false);
-		}
-		else{
-			if (this->i_weapon_slot + 1 >= HWLSaveEdit::HWLPlayer::playerWeaponSlotsMax)
-				GetDlgItem(IDC_CWEAPON_SLOT_PAGE_NEXT)->EnableWindow(false);
-			else
-				GetDlgItem(IDC_CWEAPON_SLOT_PAGE_NEXT)->EnableWindow(true);
-		}
+		else
+			GetDlgItem(IDC_CWEAPON_SLOT_PAGE_NEXT)->EnableWindow(true);
 
 		for (int i = IDC_COMBO_CWEAPON_SKILLS_SLOT_1; i <= IDC_COMBO_CWEAPON_SKILLS_SLOT_8; i++)
 		{
@@ -753,6 +745,16 @@ void CZeldaEditCharaWeaponsDlg::OnBnClickedCweaponDefaultWeapon()
 {
 	// TODO: Fügen Sie hier Ihren Kontrollbehandlungscode für die Benachrichtigung ein.
 	save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot)->generate_default_weapon();
+	
+	if (save->get_player(this->i_chara_id)->get_weapon_count(this->i_weapon_type) > HWLSaveEdit::HWLPlayer::playerWeaponSlotsMaxIngame)
+	{
+		CString cs_info;
+		cs_info.Format(L"You add more Weapons then the game allowed you to take (Max: %d) so you have to sell %d Weapon(s) at the start of the game itself.",
+			HWLSaveEdit::HWLPlayer::playerWeaponSlotsMaxIngame, 
+			save->get_player(this->i_chara_id)->get_weapon_count(this->i_weapon_type) - HWLSaveEdit::HWLPlayer::playerWeaponSlotsMaxIngame);
+		MessageBox(cs_info, L"Information", MB_OK | MB_ICONINFORMATION);
+	}
+
 	this->UpdateData();
 }
 

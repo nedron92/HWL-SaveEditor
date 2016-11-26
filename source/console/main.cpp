@@ -1104,18 +1104,20 @@ void change_weapon_values(int i_chara_id, int i_type_id, int i_current_id, int i
 			  cout << "Generate a new Weapon " << endl;
 
 			  int i_used_slot_count = save->get_player(i_chara_id)->get_weapon_count(i_type_id);
-			  int i_max_used_slots = 0;
-
-			  if (i_type_id == 4 && i_chara_id == 0)
-				  i_max_used_slots = 1;
-			  else
-				  i_max_used_slots = HWLSaveEdit::HWLPlayer::playerWeaponSlotsMax;
+			  int i_max_used_slots = HWLSaveEdit::HWLPlayer::playerWeaponSlotsMax;
 
 			  if (i_used_slot_count < i_max_used_slots)
 			  {
 				  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_used_slot_count)->generate_default_weapon();
 				  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_used_slot_count)->save_weapon();
 				  cout << "Finish. You now have a new Default Weapon." << endl;
+
+				  if (i_used_slot_count + 1 >  HWLSaveEdit::HWLPlayer::playerWeaponSlotsMaxIngame)
+				  {
+					  cout << "\nYou add more Weapons then the game allowed you to take (Max: " << HWLSaveEdit::HWLPlayer::playerWeaponSlotsMaxIngame  << ")" << endl;
+					  cout << "so you have to sell " << (i_used_slot_count + 1) - HWLSaveEdit::HWLPlayer::playerWeaponSlotsMaxIngame << " Weapon(s) at the start of the game itself. " << endl;
+
+				  }
 			  }
 			  else
 			  {
@@ -1133,14 +1135,10 @@ void change_weapon_values(int i_chara_id, int i_type_id, int i_current_id, int i
 			  cout << "Delete last weapon of that type. " << endl;
 
 			  int i_used_slot_count = save->get_player(i_chara_id)->get_weapon_count(i_type_id);
-			  int i_max_used_slots = 0;
+			  int i_max_used_slots = HWLSaveEdit::HWLPlayer::playerWeaponSlotsMax;
 
 			  if (i_used_slot_count > 0)
 			  {
-				  if (i_type_id == 4 && i_chara_id == 0)
-					  i_max_used_slots = 1;
-				  else
-					  i_max_used_slots = HWLSaveEdit::HWLPlayer::playerWeaponSlotsMax;
 
 				  int i_current_last_weapon_id = (i_max_used_slots - 1) - (i_max_used_slots - i_used_slot_count);
 
@@ -1157,11 +1155,6 @@ void change_weapon_values(int i_chara_id, int i_type_id, int i_current_id, int i
 							  << "This can be a dangerous operation for your save and can result in a \nunstable state"
 							  << "of your savegame. \nDue to security reasons you can't delete it per console-variant\n"
 							  << "of that programm. Sorry! \nPlease use the GUI-Version for that." << endl;
-						  //<< "Make sure, that you lock this character after that to avoid such problems. \n"
-						  //<< "Do you really want to delete this last weapon?" << endl;
-						  //save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_id)->delete_weapon();
-						  //save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_current_id)->save_weapon();
-						  //cout << "Finish. You deleted it." << endl;
 					  }
 				  }
 				  else{

@@ -128,7 +128,7 @@ void CZeldaEditCharaWeaponsDlg::DoDataExchange(CDataExchange* pDX)
 		else
 			GetDlgItem(IDC_CWEAPON_CHAR_PAGE_PREVIOUS)->EnableWindow(true);
 
-		if (this->i_chara_id + 1 >= HWLSaveEdit::HWLPlayer::vs_players.size() - HWLSaveEdit::HWLPlayer::get_disabledPlayerCounter() + 2)
+		if ((this->i_chara_id + 1) - this->i_skipped_charas >= HWLSaveEdit::HWLPlayer::vs_players.size() - HWLSaveEdit::HWLPlayer::get_disabledPlayerCounter())
 			GetDlgItem(IDC_CWEAPON_CHAR_PAGE_NEXT)->EnableWindow(false);
 		else
 			GetDlgItem(IDC_CWEAPON_CHAR_PAGE_NEXT)->EnableWindow(true);

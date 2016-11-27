@@ -74,7 +74,7 @@ void CZeldaEditAdventureModeMaps::DoDataExchange(CDataExchange* pDX)
 			else
 				GetDlgItem(IDC_AMMAP_PAGE_PREVIOUS)->EnableWindow(true);
 
-			if (this->i_map + 1 > save->get_adventureMode_maxMaps() - HWLSaveEdit::HWLAdventureModeMaps::get_disabledMapCounter())
+			if ((this->i_map - this->i_skipped_maps) + 1 >= save->get_adventureMode_maxMaps() - HWLSaveEdit::HWLAdventureModeMaps::get_disabledMapCounter())
 				GetDlgItem(IDC_AMMAP_PAGE_NEXT)->EnableWindow(false);
 			else
 				GetDlgItem(IDC_AMMAP_PAGE_NEXT)->EnableWindow(true);

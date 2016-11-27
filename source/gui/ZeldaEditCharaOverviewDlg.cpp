@@ -194,32 +194,46 @@ void CZeldaEditCharaOverviewDlg::OnBnClickedEditButton(UINT nID)
 		{
 			i_skipped_charas += 2;
 			i_chara_id += 2;
-		}
 
-		if (save->get_player(i_chara_id)->get_isDisabled())
-		{
-			int i_old_chara_id = i_chara_id;
-
-			for (int i = i_chara_id + 1; i < HWLSaveEdit::HWLPlayer::vs_players.size(); i++)
+			if (save->get_player(i_chara_id)->get_isDisabled())
 			{
-				if (save->get_player(i)->get_isDisabled())
+				int i_old_chara_id = i_chara_id;
+				i_skipped_charas++;
+
+				for (int i = i_chara_id + 1; i < HWLSaveEdit::HWLPlayer::vs_players.size(); i++)
 				{
-					i_skipped_charas++;
-					continue;
+					if (save->get_player(i)->get_isDisabled())
+					{
+						i_skipped_charas++;
+						continue;
+					}
+					else
+					{
+						i_chara_id = i;
+						break;
+					}
 				}
-				else
-					i_chara_id = i;
-				break;
-			}
 
-			if (i_old_chara_id == i_chara_id)
+				if (i_old_chara_id == i_chara_id)
+				{
+					CString cs_info("This character is disabled, that mean you don't have the right Update/DLC installed to edit "
+						"this character.");
+					MessageBox(cs_info, L"Information", MB_OK | MB_ICONINFORMATION);
+					b_failure = true;
+				}
+			}else
 			{
-				CString cs_info("This character is disabled, that mean you don't have the right Update/DLC installed to edit "
-					"this character.");
-				MessageBox(cs_info, L"Information", MB_OK | MB_ICONINFORMATION);
-				b_failure = true;
+				for (int i = 21; i < i_chara_id; i++)
+				{
+					if (save->get_player(i)->get_isDisabled())
+					{
+						i_skipped_charas++;
+						i_chara_id++;
+					}
+				}
 			}
 		}
+
 
 		if (!b_failure)
 		{

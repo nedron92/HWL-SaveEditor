@@ -220,6 +220,13 @@ void HWLSaveEditor::calc_weapons()
 		if (s_weapon != HWLWeapon::weaponBlankWeaponHex)
 		{
 			shared_ptr<HWLWeapon> hwlw_tmp = make_shared<HWLWeapon>(i);
+
+			if (hwlw_tmp->get_id() == 0x0000ffff)
+			{
+				vi_blank_weapons.push_back(i);
+				continue;
+			}
+
 			this->v_weapon.push_back(hwlw_tmp);
 		}
 		else{

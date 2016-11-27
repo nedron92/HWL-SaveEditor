@@ -1012,7 +1012,11 @@ void HWLWeapon::set_lvl(int i_lvl)
 		else if (i_lvl <= 1)
 			i_lvl = 1;
 
-		this->i_lvl = i_lvl;
+
+		if (!this->b_is_unsued_weapon)
+			this->i_lvl = i_lvl;
+		else
+			this->i_lvl = 0;
 	}
 }
 
@@ -1043,7 +1047,10 @@ void HWLWeapon::set_damage_base(int i_damage_base)
 	else if (i_damage_base <= 0)
 		i_damage_base = 1;
 
-	this->i_damage_base = i_damage_base;
+	if (!this->b_is_unsued_weapon)
+		this->i_damage_base = i_damage_base;
+	else
+		this->i_damage_base = 0;
 }
 
 /**
@@ -1072,7 +1079,10 @@ void HWLWeapon::set_stars(int i_stars)
 */
 void HWLWeapon::set_state(int i_state)
 {
-	this->i_state = i_state;
+	if (!this->b_is_unsued_weapon)
+		this->i_state = i_state;
+	else
+		this->i_state = 0x00;
 }
 
 /**

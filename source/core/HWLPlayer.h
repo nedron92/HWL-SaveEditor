@@ -1,3 +1,6 @@
+/*
+* @author: nedron92, 2016
+*/
 #pragma once
 
 //include the parent-class and the weapon-class
@@ -46,6 +49,9 @@ namespace HWLSaveEdit
 
 			/* @var b_isDisabled		vector, which hold weapon-type-IDs of chara, which are complety disabled (not editable) */
 			vector<int> vi_weapon_disabled_ids;
+
+			/* @var b_wasUnlocked			unlock-state, if character was freshly unlocked*/
+			bool b_wasUnlocked;
 
 			/* @var m_player_weapon		holding all weapons of that character */
 			map<int, vector<shared_ptr<HWLWeapon>> > m_player_weapon;

@@ -1,9 +1,14 @@
+/*
+ * @author: nedron92, 2016
+ */
 #pragma once
 #include <fstream>
+#include <cstring> //needed for compiling with gcc
+#include <time.h> //needed for date-functions
 
 //include the other needed classes
-#include "HWLSaveEditorCore.h"
 #include "HWLException.h"
+#include "HWLSaveEditorCore.h"
 #include "HWLGeneral.h"
 #include "HWLPlayer.h"
 #include "HWLMaterial.h"
@@ -39,6 +44,8 @@ namespace HWLSaveEdit
 			/* @var b_auto_trim		TRUE, if auto-trim for too large savefiles are enabled, FALSE if not
 			Default: TRUE: */
 			static bool b_auto_trim;
+
+			string s_update_message = "";
 
 			//offset-const declaration
 			static const int fileHeaderOffsetBegin;
@@ -99,13 +106,17 @@ namespace HWLSaveEdit
 			void calc_myFairies();
 			void calc_game_versions_restrictions();
 
+			//method for creating a backup-file
+			void create_backup_file();
+
 		public:
-			HWLSaveEditor(string s_filepathname = "zmha.bin", bool b_isNewSaveFile=false);
+			HWLSaveEditor(string s_filepathname = "zmha.bin", bool b_isNewSaveFile = false);
 			~HWLSaveEditor();
 
 			//getter for errors, general things, players(with weapons), materials, fairyFoods, 
 			//am-items and fairies
 			int get_error();
+			shared_ptr<HWLConfig> get_config();
 			shared_ptr<HWLHttp> get_http_object();
 			shared_ptr<HWLGeneral> get_general_things();
 			shared_ptr<HWLPlayer> get_player(int i_id);
@@ -126,6 +137,9 @@ namespace HWLSaveEdit
 
 			//method for setting the automatic trim
 			static void enable_auto_trim(bool b_auto_trim = true);
+
+			//method to get the update-message
+			string get_update_message();
 
 			//saving file method
 			void save_file();

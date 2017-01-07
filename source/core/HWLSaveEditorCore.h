@@ -1,3 +1,6 @@
+/*
+ * @author: nedron92, 2016
+ */
 #pragma once
 #include <string>
 #include <map>
@@ -6,6 +9,9 @@
 #include <iomanip>
 #include <memory>
 //#include <thread> //for later usage with threads
+
+//include the application-wide config-class
+#include "HWLConfig.h"
 
 //add the class to the project-namespace
 namespace HWLSaveEdit
@@ -33,6 +39,7 @@ namespace HWLSaveEdit
 			static bool b_isNewSaveFile;
 			static string s_savefile_game_version;
 			static vector<bool> vb_game_dlc_installed;
+			static shared_ptr<HWLConfig> hwlc_config;
 
 		public:
 			//needed public static-constants
@@ -62,5 +69,5 @@ namespace HWLSaveEdit
 			/* Methods to get and set content from/to the save-file */
 			string getHexStringFromFileContent(int i_offset, int i_offset_length, bool b_is_char = false);
 			void   setHexStringToFileContent(string s_hexString, int i_offset, bool b_is_char = false);
-		};
+	};
 }

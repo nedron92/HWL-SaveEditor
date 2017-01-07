@@ -1,3 +1,6 @@
+/*
+ * @author: nedron92, 2016
+ */
 #pragma once
 
 //include the parent-class
@@ -57,6 +60,9 @@ namespace HWLSaveEdit
 
 			/* @var i_multi_element_weapon_hex	hex of the weapons-multi-element type */
 			int i_multi_element_weapon_hex;
+                
+					/* @var b_weapon_has_changed	state, if a weapon-state was changed */
+					bool b_weapon_has_changed;
 
 			/* @var vi_disabledweaponSkillIDs	vector, which holds disabled WeaponSkill-IDs */
 			static vector<int> vi_disabledweaponSkillIDs;
@@ -160,6 +166,7 @@ namespace HWLSaveEdit
 			bool get_IsUnused();
 			bool get_IsMultiElement();
 			int get_multi_element_hex();
+					bool get_HasWeaponChanged();
 			static bool get_isWeaponSkillDisabled(int i_skill_id);
 			static int get_WeaponSkillDisabledCounter();
 
@@ -180,7 +187,7 @@ namespace HWLSaveEdit
 			void change_multi_element_state(bool b_is_multi_element_weapon);
 
 			//method to generate a default weapon 
-			void generate_default_weapon();
+			void generate_default_weapon(bool b_is_first_weapon = false);
 
 			//method to delete a weapon
 			void delete_weapon();

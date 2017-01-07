@@ -1,3 +1,6 @@
+/*
+ * @author: nedron92, 2016
+ */
 //include the correct header-file
 #include "HWLHttp.h"
 
@@ -32,6 +35,27 @@ HWLHttp::~HWLHttp()
 {
 }
 
+
+/**
+* This method change the current proxy-settings and set the proxy if
+* using it is enabled
+*
+* @var bool     b_use_proxy     state, if proxy will be used or not
+* @var string   s_proxyHost     the proxyHost
+* @var int      i_proxyPort     the proxyPort
+*
+*/
+void HWLHttp::change_proxy(bool b_use_proxy, string s_proxyHost, int i_proxyPort)
+{
+	this->o_http_client.use_proxy(b_use_proxy);
+
+	if (b_use_proxy)
+		this->o_http_client.set_current_proxy(s_proxyHost, i_proxyPort);
+
+}
+
+
+
 /**
 * This method return the current latest stable version of the editor itself
 *
@@ -64,10 +88,13 @@ string HWLHttp::get_current_nightly_version()
 * This methods compare the current program-version with the newest version of the stable or nightly
 * releases and return some information + if a download is needed or not.
 *
+*   @var bool     b_compare_with_nightly    state, if we have compare to the nightly-version
+*   @var bool     b_return_as_intString     state, if we have to return the integer-representation as string
+*
 * @return string       a string with information based on the compare between editor-version and latest versions
 *
 */
-string HWLHttp::compare_with_current_version(bool b_compare_with_nightly)
+string HWLHttp::compare_with_current_version(bool b_compare_with_nightly, bool b_return_as_intString)
 {
 	//get the current version and define a 'clean' compare-variable
 	string s_program_version = HWLSaveEditorCore::version;
@@ -128,6 +155,10 @@ string HWLHttp::compare_with_current_version(bool b_compare_with_nightly)
 
 		//do a string-compare
 		int compare = s_program_version.compare(s_compare_version);
+
+		//return the compare-value as string, if we have to
+		if (b_return_as_intString)
+			return (to_string(compare));
 
 		//define a 'clean' output variable
 		string s_current_output = "";

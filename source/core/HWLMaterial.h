@@ -1,3 +1,6 @@
+/*
+ * @author: nedron92, 2016
+ */
 #pragma once
 
 //include the parent-class 

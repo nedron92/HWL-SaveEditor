@@ -1,3 +1,6 @@
+/*
+ * @author: nedron92, 2016
+ */
 //needed for including in a MFC-App
 #ifdef __MFC__
 #include "../gui/stdafx.h" 

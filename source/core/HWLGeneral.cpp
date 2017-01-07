@@ -1,3 +1,6 @@
+/*
+ * @author: nedron92, 2016
+ */
 //needed for including in a MFC-App
 #ifdef __MFC__
 #include "../gui/stdafx.h" 
@@ -207,8 +210,8 @@ string HWLGeneral::calc_current_savefile_game_version()
 	if (this->HexStringToInt(s_savefile_game_version_tmp2) == 0xF)
 	{
 		if ((this->HexStringToInt(s_savefile_game_version_tmp1) == 0x9) || (this->HexStringToInt(s_savefile_game_version_tmp1) == 0xB) ||
-			(this->HexStringToInt(s_savefile_game_version_tmp1) == 0xD) || (this->HexStringToInt(s_savefile_game_version_tmp1) == 0xF) )
-			return (this->vs_game_version_strings[this->vs_game_version_strings.size()-1]);
+			(this->HexStringToInt(s_savefile_game_version_tmp1) == 0xD) || (this->HexStringToInt(s_savefile_game_version_tmp1) == 0xF))
+			return (this->vs_game_version_strings[this->vs_game_version_strings.size() - 1]);
 	}
 
 

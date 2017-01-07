@@ -1,9 +1,14 @@
+/*
+* @author: nedron92, 2016
+*/
 #pragma once
-#include "HWLSaveEditorCore.h" //include the main-class, because of the namespace and using std
+#include <exception>
 
 //add the class to the project-namespace
 namespace HWLSaveEdit
 {
+	using namespace std;
+
 	//extend the standard-exception
 	class HWLException : public exception
 	{
@@ -21,7 +26,7 @@ namespace HWLSaveEdit
 			//extend/overwrite the standard methods
 			virtual const char* what();
 			int get_code();
-	};
+		};
 
 
 }

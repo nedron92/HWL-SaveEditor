@@ -1,3 +1,6 @@
+/*
+* @author: nedron92, 2016
+*/
 //needed for including in a MFC-App
 #ifdef __MFC__
 #include "../gui/stdafx.h" 
@@ -411,10 +414,40 @@ void HWLPlayer::save_players_canUseAttackBadgesState()
 	bool b_canUseAttackBadges_tmp = this->b_canUseAttackBadges;
 	int i_canUseAttackBadges_tmp;
 
-	if (b_canUseAttackBadges_tmp)
+	//check if any weapon was added/changed, for later usage
+	bool b_weapons_has_changed = false;
+
+	for (int i = 0; i < this->get_weapon_type_count(); i++)
+	{
+		for (int j = 0; j < this->playerWeaponSlotsMax; j++)
+		{
+			if (this->get_weapon_slot(i, j)->get_IsUnused())
+				continue;
+
+			if (this->get_weapon_slot(i, j)->get_HasWeaponChanged())
+			{
+				b_weapons_has_changed = true;
+				break;
+			}
+		}
+
+		if (b_weapons_has_changed)
+			break;
+	}
+
+	//Do a cfomplete check: 
+	// 1. Check if ONLY unlockState was changed -> 0x1 Value of AttackBadges
+	// 2. Check if BOTH unlockState AND WeaponChange -> 0xF Value of AttackBadges
+	// 3. Check if ONLY WeaponChange -> 0xF Value of AttackBadges
+	// 4. ELSE: 0x0 Value of AttackBadges
+	if (b_canUseAttackBadges_tmp && this->b_wasUnlocked && !b_weapons_has_changed)
+		i_canUseAttackBadges_tmp = 0x1;
+	else if (b_canUseAttackBadges_tmp && this->b_wasUnlocked && b_weapons_has_changed)
+		i_canUseAttackBadges_tmp = 0xF;
+	else if (b_canUseAttackBadges_tmp && !this->b_wasUnlocked && b_weapons_has_changed)
 		i_canUseAttackBadges_tmp = 0xF;
 	else
-		i_canUseAttackBadges_tmp = 0x00;
+		i_canUseAttackBadges_tmp = 0x0;
 
 	string s_playerCanUseAttackBadges;
 	int i_player_canUseAttackBadges_offset = this->i_offset + this->playerCanUseAttackBadgesOffsetDiff;
@@ -513,12 +546,24 @@ void HWLPlayer::set_hearts(int i_hearts)
 */
 void HWLPlayer::set_isUnlock(bool b_isUnlock)
 {
+	//calculate all weapons the character has
+	int i_weapon_count_tmp = 0;
+	for (int i = 0; i < this->get_weapon_type_count(); i++)
+	{
+		i_weapon_count_tmp += this->get_weapon_count(i);
+	}
+
+	//check if character was FIRSTLY unlocked
+	if (!this->b_isUnlock && b_isUnlock && i_weapon_count_tmp == 0)
+		this->b_wasUnlocked = true;
+
 	this->b_isUnlock = b_isUnlock;
 
 	//check if character will be unlock and due to a security-reason ingame, we have
 	//to set, that the character can use his Attack-Badges then
 	if (b_isUnlock)
 		this->b_canUseAttackBadges = true;
+
 }
 
 /**

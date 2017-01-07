@@ -1,3 +1,6 @@
+/*
+* @author: nedron92, 2016
+*/
 //needed for including in a MFC-App
 #ifdef __MFC__
 #include "../gui/stdafx.h" 
@@ -7,7 +10,6 @@
 #include "HWLSaveEditor.h"
 //#include <stdio.h>  //for testing purpose as comment
 //#include <iostream> //for testing purpose as comment
-#include <cstring> //needed for compiling with gcc
 
 //use the project-namespace
 using namespace HWLSaveEdit;
@@ -72,6 +74,78 @@ HWLSaveEditor::HWLSaveEditor(string s_filepathname, bool b_isNewSaveFile)
 	//set locale to LC_ALL, for special names (myFairy and so on)
 	setlocale(LC_ALL, "");
 
+	//get/calculate the current global-configuration
+	this->hwlc_config = make_shared<HWLConfig>();
+
+	//get section-id of section "General" for easier usage.
+	int i_section_ID = this->hwlc_config->get_sectionID("General");
+
+	//lastSaveFile-handling
+	// check if we DON'T have a new-opened-savefile (second-time,... NOT first-time)
+	// and if we should opened the last-savefile on start
+	// TRUE: set the filepathname to the config-lastSaveFile-Name
+	if (!b_isNewSaveFile &&
+		stoi(this->hwlc_config->get_param_value("openLastSaveFileOnStart", i_section_ID)) == 1)
+	{
+		s_filepathname = this->hwlc_config->get_param_value("LastSaveFile", i_section_ID);
+	}
+
+	//check the state of the auto-trim-config and set it correctly
+	if (stoi(this->hwlc_config->get_param_value("autoTrim", i_section_ID)) == 0)
+		this->enable_auto_trim(false);
+	else
+		this->enable_auto_trim(true);
+
+	//change-proxy-handling
+	// first:  get proxy-host and proxy-port
+	// second: change the proxy-settings according to the "useHTTPProxy"-state
+	string s_proxyHost = this->hwlc_config->get_param_value("ProxyHost", this->hwlc_config->get_sectionID("HTTP"));
+	int i_proxyPort = 1;
+
+	try{
+		i_proxyPort = stoi(this->hwlc_config->get_param_value("ProxyPort", this->hwlc_config->get_sectionID("HTTP")));
+	}
+	catch (std::invalid_argument &e) {
+		//nothing todo
+	}
+
+	//change the proxy-settings
+	if (stoi(this->hwlc_config->get_param_value("useHTTPProxy", i_section_ID)) == 1)
+		this->http_request->change_proxy(true, s_proxyHost, i_proxyPort);
+	else
+		this->http_request->change_proxy(false, s_proxyHost, i_proxyPort);
+
+	//auto-update-check-handling
+	// check if auto-update-check is enabled.
+	//  TRUE:  check-for-updates and build a message
+	//  FALSE: empty the update-message    
+	if (stoi(this->hwlc_config->get_param_value("autoUpdateCheck", i_section_ID)) == 1)
+	{
+		int i_update_code = 0;
+
+		//try to convert the string-int-representation to an int-value directly
+		try{
+			i_update_code = stoi(this->http_request->compare_with_current_version(false, true));
+		}
+		catch (std::invalid_argument &e) {
+			//nothing todo
+		}
+
+		//check if we have to show a message or not
+		// < 0 means: There is a new version
+		if (i_update_code < 0)
+		{
+			this->s_update_message = "Auto-Update-Check: \nThere is a new stable version, V" + this->http_request->get_current_version() + ". ";
+			this->s_update_message += "You can download it at\n";
+			this->s_update_message += this->http_request->latestURL;
+		}
+		else
+			this->s_update_message = "";
+	}
+	else
+		this->s_update_message = "";
+
+
 	//set the needed values for the file and program
 	//(path/name of file and open it)
 	this->s_filepathname = s_filepathname;
@@ -99,7 +173,19 @@ HWLSaveEditor::HWLSaveEditor(string s_filepathname, bool b_isNewSaveFile)
 			int i_check_savefile_length_state = this->check_savefile_length();
 			if (i_check_savefile_length_state == 0)
 			{
+				//everytime we opened a new savefile successfully,
+				// write it to the config
+				if (b_isNewSaveFile) {
+					this->hwlc_config->set_param_value("LastSaveFile", i_section_ID, s_filepathname);
+					this->hwlc_config->write_config();
+				}
+
+				//set the isNewSafeFile-handler
 				this->b_isNewSaveFile = b_isNewSaveFile;
+
+				//check if we have todo a auto-backup of the current opened savefile on start
+				if (stoi(this->hwlc_config->get_param_value("createBackupFileOnOpening", i_section_ID)) == 1)
+					this->create_backup_file();
 
 				this->calc_general();
 				this->calc_weapons();
@@ -129,7 +215,7 @@ HWLSaveEditor::HWLSaveEditor(string s_filepathname, bool b_isNewSaveFile)
 				case 3:
 					s_tmp = "File '" + s_filepathname + "' is valid, but too long. The editor "
 						+ "created a \ntrimmed file automatically and made a backup of the original save.\n"
-						+ "The original savefile has the name '" + s_filepathname + ".bak' \nand the trimmed save "
+						+ "The original savefile has the name '" + s_filepathname + ".orig' \nand the trimmed save "
 						+ "has the normal name. \nPlease try to import the trimmed file back and if all is ok, then \n"
 						+ "you can edit the savegame. :)";
 					break;
@@ -582,6 +668,9 @@ void HWLSaveEditor::calc_myFairies()
 */
 void HWLSaveEditor::calc_game_versions_restrictions()
 {
+	//get the config-value, if DlcSafetyChecks are enabled
+	bool b_dlc_safety_checks = stoi(this->hwlc_config->get_param_value("DlcSafetyCheck", this->hwlc_config->get_sectionID("General")));
+
 	//calc characters restrictions - disabled state -> BEGIN
 
 	//disable the ??? characters
@@ -593,25 +682,30 @@ void HWLSaveEditor::calc_game_versions_restrictions()
 		this->get_player("Medli")->set_isDisabled(true);
 
 	//disable Marin on lower versions as 1.4.0 or if DLC is not installed
+	// (only if DlcSafetyChecks are enabled)
 	if (this->s_savefile_game_version == "1.0.0" || this->s_savefile_game_version == "1.2.0"
-		|| this->s_savefile_game_version == "1.3.0" || !this->vb_game_dlc_installed[1])
+		|| this->s_savefile_game_version == "1.3.0" || (b_dlc_safety_checks && !this->vb_game_dlc_installed[1]))
 		this->get_player("Marin")->set_isDisabled(true);
 
 	//disable Toon-Zelda on lower versions as 1.5.0 or if DLC is not installed
+	// (only if DlcSafetyChecks are enabled)
 	if (this->s_savefile_game_version == "1.0.0" || this->s_savefile_game_version == "1.2.0"
-		|| this->s_savefile_game_version == "1.3.0" || this->s_savefile_game_version == "1.4.0" || !this->vb_game_dlc_installed[2])
+		|| this->s_savefile_game_version == "1.3.0" || this->s_savefile_game_version == "1.4.0"
+		|| (b_dlc_safety_checks && !this->vb_game_dlc_installed[2]))
 		this->get_player("Toon Zelda")->set_isDisabled(true);
 
 	//disable Ravio on lower versions as 1.6.0 or if DLC is not installed
+	// (only if DlcSafetyChecks are enabled)
 	if (this->s_savefile_game_version == "1.0.0" || this->s_savefile_game_version == "1.2.0"
-		|| this->s_savefile_game_version == "1.3.0" || this->s_savefile_game_version == "1.4.0" || this->s_savefile_game_version == "1.5.0"
-		|| !this->vb_game_dlc_installed[3])
+		|| this->s_savefile_game_version == "1.3.0" || this->s_savefile_game_version == "1.4.0"
+		|| this->s_savefile_game_version == "1.5.0" || (b_dlc_safety_checks && !this->vb_game_dlc_installed[3]))
 		this->get_player("Ravio")->set_isDisabled(true);
 
 	//disable Yuga on lower versions as 1.6.0 or if DLC is not installed
+	// (only if DlcSafetyChecks are enabled)
 	if (this->s_savefile_game_version == "1.0.0" || this->s_savefile_game_version == "1.2.0"
-		|| this->s_savefile_game_version == "1.3.0" || this->s_savefile_game_version == "1.4.0" || this->s_savefile_game_version == "1.5.0"
-		|| !this->vb_game_dlc_installed[3])
+		|| this->s_savefile_game_version == "1.3.0" || this->s_savefile_game_version == "1.4.0"
+		|| this->s_savefile_game_version == "1.5.0" || (b_dlc_safety_checks && !this->vb_game_dlc_installed[3]))
 		this->get_player("Yuga")->set_isDisabled(true);
 
 
@@ -620,11 +714,13 @@ void HWLSaveEditor::calc_game_versions_restrictions()
 	//calc characters restrictions - weapon-types-disabled state -> BEGIN
 
 	//disable Linkles Boots, if DLC is not installed
-	if (!this->vb_game_dlc_installed[1])
+	// (only if DlcSafetyChecks are enabled)
+	if (b_dlc_safety_checks && !this->vb_game_dlc_installed[1])
 		this->get_player("Linkle")->set_disabled_weaponTypeID(1);
 
 	//disable Toon-Links SandWand if DLC is not installed
-	if (!this->vb_game_dlc_installed[2])
+	// (only if DlcSafetyChecks are enabled)
+	if (b_dlc_safety_checks && !this->vb_game_dlc_installed[2])
 		this->get_player("Toon Link")->set_disabled_weaponTypeID(1);
 
 	//calc characters restrictions - weapon-types-disabled state -> END
@@ -632,25 +728,29 @@ void HWLSaveEditor::calc_game_versions_restrictions()
 	//calc characters restrictions - AM-Maps disabled-state -> BEGIN
 
 	//disable "MasterWindWaker-Map",  if DLC is not installed
-	if (!this->vb_game_dlc_installed[0])
+	// (only if DlcSafetyChecks are enabled)
+	if (b_dlc_safety_checks && !this->vb_game_dlc_installed[0])
 		this->get_amMap(5)->set_isDisabled(1);
 
 	//disable "KoholintIsland-Map",  if DLC is not installed
-	if (!this->vb_game_dlc_installed[1])
+	// (only if DlcSafetyChecks are enabled)
+	if (b_dlc_safety_checks && !this->vb_game_dlc_installed[1])
 		this->get_amMap(6)->set_isDisabled(1);
 
 	//disable "GrandTravels-Map",  if DLC is not installed
-	if (!this->vb_game_dlc_installed[2])
+	// (only if DlcSafetyChecks are enabled)
+	if (b_dlc_safety_checks && !this->vb_game_dlc_installed[2])
 		this->get_amMap(7)->set_isDisabled(1);
 
 	//disable "Lorule-Map",  if DLC is not installed
-	if (!this->vb_game_dlc_installed[3])
+	// (only if DlcSafetyChecks are enabled)
+	if (b_dlc_safety_checks && !this->vb_game_dlc_installed[3])
 		this->get_amMap(8)->set_isDisabled(1);
 
 	//calc characters restrictions - AM-Maps disabled-state -> END
 
 	//calc characters restrictions - Weapon-Skils disabled-state -> BEGIN
-	
+
 	//disabed "Heart Power" - Skill below 1.6.0
 	if (this->s_savefile_game_version == "1.0.0" || this->s_savefile_game_version == "1.2.0"
 		|| this->s_savefile_game_version == "1.3.0" || this->s_savefile_game_version == "1.4.0" || this->s_savefile_game_version == "1.5.0")
@@ -658,6 +758,43 @@ void HWLSaveEditor::calc_game_versions_restrictions()
 
 	//calc characters restrictions - Weapon-Skils  disabled-state -> END
 
+}
+
+/**
+* This method creat a backup file of the current opened one
+*
+*/
+void HWLSaveEditor::create_backup_file()
+{
+	//get time-depended variables/structure
+	time_t rawtime;
+	struct tm * timeinfo;
+	char buffer[80];
+	time(&rawtime);
+	timeinfo = localtime(&rawtime);
+	strftime(buffer, 80, "%Y-%m-%d", timeinfo); //get current time, formatted
+
+	//declare/define needed variables
+	// the named of the file will be: <filename>.YYYY-MM-DD.bak
+	string s_filepathname_backup = this->s_filepathname + "." + buffer + ".bak";
+
+	//create/open new empty-backup-file
+	fstream fs_filehandler_backup = fstream(s_filepathname_backup, fstream::binary | fstream::out);
+
+	//check if new backup-file is open, else do nothing 
+	if (fs_filehandler_backup.is_open())
+	{
+		//set the new file-pointer to te begin of the file and clear all other things
+		//before we will write
+		fs_filehandler_backup.seekp(0, fs_filehandler_backup.beg);
+		fs_filehandler_backup.clear();
+
+		//write the whole content to the backup-savefile
+		//and clear/close handler after it
+		fs_filehandler_backup.write((char*)cp_filecontent, this->i_filelength);
+		fs_filehandler_backup.clear();
+		fs_filehandler_backup.close();
+	}
 }
 
 
@@ -669,6 +806,15 @@ void HWLSaveEditor::calc_game_versions_restrictions()
 int HWLSaveEditor::get_error()
 {
 	return this->i_error;
+}
+
+/**
+* This method return the complete current config-object
+*
+*/
+shared_ptr<HWLConfig> HWLSaveEditor::get_config()
+{
+	return this->hwlc_config;
 }
 
 /**
@@ -814,7 +960,7 @@ int HWLSaveEditor::get_adventureMode_maxMaps()
 int HWLSaveEditor::check_savefile_length()
 {
 	//check if we have the normal length, then all is ok.
-	if (this->i_filelength == this->fileNormalLength || !this->b_auto_trim)
+	if (this->i_filelength == this->fileNormalLength)
 		return 0;
 	//check if we have a smaller savegame-file and return 1 
 	// = throw exception with specified massage then
@@ -826,9 +972,13 @@ int HWLSaveEditor::check_savefile_length()
 	}
 	else if (this->i_filelength > this->fileNormalLength)
 	{
+		//check if auto-trim is disabled, if yes: return 0 (success)
+		if (!this->b_auto_trim)
+			return 0;
+
 		//declare/define needed variables
 		string s_filepathname_trimmed = this->s_filepathname + ".trimmed";
-		string s_filepathname_backup = this->s_filepathname + ".bak";
+		string s_filepathname_backup = this->s_filepathname + ".orig";
 
 		//create new trimmed-file, clear and close handler
 		fstream fs_filehandler_trimmed = fstream(s_filepathname_trimmed, fstream::out);
@@ -902,13 +1052,23 @@ bool HWLSaveEditor::check_savefile()
 
 
 /**
-* This method is for triggering the autmatic trim.
+* This method is for triggering the automatic trim.
 * Default: TRUE, and auto-trim is enabled.
 *
 */
 void HWLSaveEditor::enable_auto_trim(bool b_auto_trim_value)
 {
 	b_auto_trim = b_auto_trim_value;
+}
+
+
+
+/**
+* This method return the current update-message
+*/
+string HWLSaveEditor::get_update_message()
+{
+	return this->s_update_message;
 }
 
 

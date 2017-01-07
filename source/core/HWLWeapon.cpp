@@ -1,3 +1,6 @@
+/*
+* @author: nedron92, 2016
+*/
 //needed for including in a MFC-App
 #ifdef __MFC__
 #include "../gui/stdafx.h" 
@@ -633,9 +636,10 @@ HWLWeapon::HWLWeapon(int i_offset, int i_character_id, bool b_is_unsued_weapon, 
 		this->i_type = 0;
 		this->b_is_unsued_weapon = b_is_unsued_weapon;
 		this->b_is_multi_element_weapon = false;
+		this->b_weapon_has_changed = false;
 	}
 
-		
+
 }
 
 /**
@@ -1512,6 +1516,17 @@ int HWLWeapon::get_multi_element_hex()
 }
 
 /**
+* Getter for the weapons Changed-State
+*
+*	@return int		the Changed-State of the weapon
+*
+*/
+bool HWLWeapon::get_HasWeaponChanged()
+{
+	return this->b_weapon_has_changed;
+}
+
+/**
 * Getter if given Skill-ID is a disbaled-one
 *
 *	@var int	i_skill_id		skill-id to check
@@ -1576,20 +1591,28 @@ void HWLWeapon::change_lvl(int i_lvl)
 	//with a second element, nth more. So no LVL-Change with it.
 	if (!this->b_is_multi_element_weapon)
 	{
+		//get the DlcSafetyCheck-State
+		bool b_dlc_safety_checks = stoi(this->hwlc_config->get_param_value("DlcSafetyCheck", this->hwlc_config->get_sectionID("General")));
+
 		//check if we have "MedlI" as character (ID: 26) and if we have no DLCs installed
 		//If TRUE and if we want to set the Max-LVL (4) set it to 3. Cause game will freeze otherwise.
+		// only if DlcSafetyCheck is activated
 		if (i_lvl == this->weaponLVLMax && this->i_character_id == 26 && this->i_type == 0
 			&& this->s_savefile_game_version != "1.0.0" && this->s_savefile_game_version != "1.2.0")
 		{
-			int i_dlcs_installed = 0;
-			for (int i = 0; i < this->vb_game_dlc_installed.size(); i++)
+			if (b_dlc_safety_checks)
 			{
-				if (this->vb_game_dlc_installed[i])
-					i_dlcs_installed++;
+				int i_dlcs_installed = 0;
+				for (int i = 0; i < this->vb_game_dlc_installed.size(); i++)
+				{
+					if (this->vb_game_dlc_installed[i])
+						i_dlcs_installed++;
+				}
+
+				if (i_dlcs_installed == 0)
+					i_lvl--;
 			}
 
-			if (i_dlcs_installed == 0)
-				i_lvl--;
 		}
 
 
@@ -1634,7 +1657,7 @@ void HWLWeapon::change_stars(int i_stars)
 /**
 * This method change the current legendary-sate with safety-checks
 *
-*	@var int	b_is_legendary		the legendary-state to set
+*	@var bool	b_is_legendary		the legendary-state to set
 *
 */
 void HWLWeapon::change_legendary_state(int b_is_legendary)
@@ -1647,7 +1670,8 @@ void HWLWeapon::change_legendary_state(int b_is_legendary)
 			this->set_state(HWLSaveEdit::HWLWeapon::weaponStateValuesHex[1]);
 		else
 			this->set_state(HWLSaveEdit::HWLWeapon::weaponStateValuesHex[0]);
-	}else
+	}
+	else
 	{
 		this->set_state(HWLSaveEdit::HWLWeapon::weaponStateValuesHex[2]);
 	}
@@ -1658,17 +1682,33 @@ void HWLWeapon::change_legendary_state(int b_is_legendary)
 * This method change the current Multi-Element state and re-calculate
 *  lvl and implicit others.
 *
-*	@var int	b_is_multi_element_weapon       the multi-element-state to set
+*	@var bool	b_is_multi_element_weapon       the multi-element-state to set
 *
 */
 void HWLWeapon::change_multi_element_state(bool b_is_multi_element_weapon)
 {
+	//get the DlcSafetyCheck-State
+	bool b_dlc_safety_checks = stoi(this->hwlc_config->get_param_value("DlcSafetyCheck", this->hwlc_config->get_sectionID("General")));
 
-	//do it only if we have a right game-version and one of the needed DLCs is installed 
+	bool b_really_change = false;
 	if (this->s_savefile_game_version != "1.0.0" && this->s_savefile_game_version != "1.2.0"
 		&& this->s_savefile_game_version != "1.3.0" && (this->vb_game_dlc_installed[1] || this->vb_game_dlc_installed[2]
-													||  this->vb_game_dlc_installed[3])
+		|| this->vb_game_dlc_installed[3])
 		)
+	{
+		b_really_change = true;
+	}
+	else{
+		if (b_dlc_safety_checks || this->s_savefile_game_version == "1.0.0" || this->s_savefile_game_version == "1.2.0"
+			|| this->s_savefile_game_version == "1.3.0")
+			b_really_change = false;
+		else
+			b_really_change = true;
+	}
+
+	//do it only if we have a right game-version and one of the needed DLCs is installed
+	// and DlcSafetyCheck is activated
+	if (b_really_change)
 	{
 		//change only, if we have not the same multi-element-state and if we have a valid-hex for that type
 		if ((this->b_is_multi_element_weapon != b_is_multi_element_weapon)
@@ -1700,9 +1740,15 @@ void HWLWeapon::change_multi_element_state(bool b_is_multi_element_weapon)
 * All needed member-variables are setting to their default values
 *  (also a special-check for the unique Master-Sword)
 *
+*	@var bool	b_is_first_weapon       state, if its charas first-weapon
 */
-void HWLWeapon::generate_default_weapon()
+void HWLWeapon::generate_default_weapon(bool b_is_first_weapon)
 {
+	//If we have an unsued weapon and NOT the first calculated weapon
+	// that we changed/add - noticed it for later-usage
+	if (this->b_is_unsued_weapon && !b_is_first_weapon)
+		this->b_weapon_has_changed;
+
 	//define an weapon-counter, and calculate all used weapon-types
 	int i_weapon_count = 0;
 	for (int i = 0; i < this->i_character_id; i++)

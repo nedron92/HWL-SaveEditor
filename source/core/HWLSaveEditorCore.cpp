@@ -1,3 +1,6 @@
+/*
+* @author: nedron92, 2016
+*/
 //needed for including in a MFC-App
 #ifdef __MFC__
 #include "../gui/stdafx.h" 
@@ -45,9 +48,12 @@ string HWLSaveEditorCore::s_savefile_game_version = "";
 /* @var vb_game_dlc_installed			hold state if a DLC is installed */
 vector<bool> HWLSaveEditorCore::vb_game_dlc_installed;
 
+/* @var hwlc_config	  pointer for hwl-config-values */
+shared_ptr<HWLConfig> HWLSaveEditorCore::hwlc_config;
+
 //public members
 /* @var version  hold the current version-number as string */
-const string HWLSaveEditorCore::version = "3.0.1";
+const string HWLSaveEditorCore::version = "3.1";
 
 
 

@@ -82,7 +82,7 @@ BOOL CZeldaHWLSaveEditorGUIApp::InitInstance()
 	//get the current command-line parameter
 	CString cs_cmd_param = theApp.m_lpCmdLine;
 
-	//check if we have to disable the auto-trim fucntion or not
+	//check if we have to disable the auto-trim function or not
 	if (cs_cmd_param == L"--disable-auto-trim")
 	{
 		HWLSaveEdit::HWLSaveEditor::enable_auto_trim(false);
@@ -94,6 +94,50 @@ BOOL CZeldaHWLSaveEditorGUIApp::InitInstance()
 		b_is_update_check = true;
 	}
 
+	//check if we have to try to create a new default-config-file
+	if (cs_cmd_param == L"--create-default-config")
+	{
+		HWLSaveEdit::HWLConfig hwlc_tmp_config = HWLSaveEdit::HWLConfig(false);
+
+		try
+		{
+			hwlc_tmp_config.write_config();
+			MessageBox(dlg, CString("A new default-config was created successfully."), L"Information", MB_OK | MB_ICONINFORMATION);
+			return FALSE;
+		}
+		catch (HWLSaveEdit::HWLException &e)
+		{
+			CString str(e.what());
+			CString str2(to_string(e.get_code()).c_str());
+
+			str = L"Error: \nCode:" + str2 + L"\n\nMessage: " + str;
+			MessageBox(dlg, str, L"Error", MB_OK | MB_ICONWARNING);
+			return FALSE;
+		}
+	}
+
+	//check if we have to try to create a new config-file with all params + changed ones
+	if (cs_cmd_param == L"--create-config")
+	{
+		HWLSaveEdit::HWLConfig hwlc_tmp_config = HWLSaveEdit::HWLConfig();
+
+		try
+		{
+			hwlc_tmp_config.write_config();
+			MessageBox(dlg, CString("A new config, with all current parameters, was created successfully."), L"Information", MB_OK | MB_ICONINFORMATION);
+			return FALSE;
+		}
+		catch (HWLSaveEdit::HWLException &e)
+		{
+			CString str(e.what());
+			CString str2(to_string(e.get_code()).c_str());
+
+			str = L"Error: \nCode:" + str2 + L"\n\nMessage: " + str;
+			MessageBox(dlg, str, L"Error", MB_OK | MB_ICONWARNING);
+			return FALSE;
+		}
+	}
+
 	//check if we have NOT the commnad-line for update-checking
 	if (!b_is_update_check)
 	{
@@ -101,24 +145,26 @@ BOOL CZeldaHWLSaveEditorGUIApp::InitInstance()
 		try
 		{
 			this->save = new HWLSaveEdit::HWLSaveEditor();
-			if (MessageBox(dlg, L"Found a 'zmha.bin' within this dir. Open it?", L"Information", MB_YESNO | MB_ICONASTERISK) == IDNO)
-				this->save = nullptr;
+
+			if (stoi(this->save->get_config()->get_param_value("openLastSaveFileOnStart", this->save->get_config()->get_sectionID("General"))) == 0)
+			{
+				if (MessageBox(dlg, L"Found a 'zmha.bin' within this dir. Open it?", L"Information", MB_YESNO | MB_ICONASTERISK) == IDNO)
+					this->save = nullptr;
+			}
+
 		}
 		catch (HWLSaveEdit::HWLException &e)
 		{
-			CString str(e.what());
-			if (e.get_code() == 400)
-			{
-				str = L"Found a 'zmha.bin' within this dir, but an error occured: \n" + str + L"\n\nShould Application start with no SaveFile opened?";
-			}
-			else{
-				str = str + L"\n\nShould Application start with no SaveFile opened?";
 
-			}
+			CString str(e.what());
+			str = L"An error occured: \n" + str + L"\n\nShould Application start with no SaveFile opened?";
 
 			if (MessageBox(dlg, str, L"Information", MB_YESNO | MB_ICONASTERISK) == IDNO)
 				return FALSE;
 		}
+
+		if (save->get_update_message() != "")
+			MessageBox(dlg, CString(save->get_update_message().c_str()), L"Information", MB_OK | MB_ICONINFORMATION);
 
 		m_pMainWnd = &dlg;
 		nResponse = dlg.DoModal();

@@ -308,13 +308,15 @@ void CZeldaEditGeneralDlg::OnMenuMainFileOpen()
 			}
 			catch (HWLSaveEdit::HWLException &e)
 			{
-				delete CZeldaHWLSaveEditorGUIApp::save;
 				CZeldaHWLSaveEditorGUIApp::save = nullptr;
 				save = CZeldaHWLSaveEditorGUIApp::save;
+				GetActiveWindow()->UpdateData();
 
-				CStringA str(e.what());
-				MessageBoxA(GetActiveWindow()->m_hWnd, str, "Error", MB_OK | MB_ICONWARNING);
-				
+				CString str(e.what());
+				str = L"An error occured: \n" + str + L"\n\nIf you have had opened a SaveFile, then it's closed now.";
+
+				MessageBoxA(GetActiveWindow()->m_hWnd, CStringA(str), "Error", MB_OK | MB_ICONWARNING);
+
 				GetActiveWindow()->ShowWindow(SW_MAXIMIZE);
 				GetActiveWindow()->ShowWindow(SW_SHOWNORMAL);
 			}

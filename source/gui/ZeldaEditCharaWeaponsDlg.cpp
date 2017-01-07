@@ -954,18 +954,27 @@ void CZeldaEditCharaWeaponsDlg::OnCbnSelchangeComboCweaponLevel()
 	CComboBox *cb_lvl = (CComboBox*)GetDlgItem(IDC_COMBO_CWEAPON_LEVEL);
 	int i_lvl = cb_lvl->GetCurSel() + 1;
 
+	bool b_dlc_safety_checks = stoi(save->get_config()->get_param_value("DlcSafetyCheck", save->get_config()->get_sectionID("General")));
+
 	if (i_lvl == HWLSaveEdit::HWLWeapon::weaponLVLMax && this->i_chara_id == 26 && this->i_weapon_type == 0 
 		&& save->get_general_things()->get_current_savefile_game_version() != "1.0.0"
 		&& save->get_general_things()->get_current_savefile_game_version() != "1.2.0"
 		&& save->get_general_things()->get_dlc_installed_dlcs_value() == 0)
 	{
-		save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot)->change_lvl(i_lvl-1);
+		if (b_dlc_safety_checks)
+		{
+			save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot)->change_lvl(i_lvl - 1);
 
-		CString cs_info;
-		cs_info.Format
-			(L"Due to a security reason and because the game doesn't recognize LVL-%d Weapons of %s without a DLC. \nSo this Weapon is set to LVL-%d instead."
-			, i_lvl, CString(save->get_player(this->i_chara_id)->get_name().c_str()), i_lvl - 1);
-		MessageBox(cs_info, L"Information", MB_OK | MB_ICONINFORMATION);
+			CString cs_info;
+			cs_info.Format
+				(L"Due to a security reason and because the game doesn't recognize LVL-%d Weapons of %s without a DLC. \nSo this Weapon is set to LVL-%d instead."
+				, i_lvl, CString(save->get_player(this->i_chara_id)->get_name().c_str()), i_lvl - 1);
+			MessageBox(cs_info, L"Information", MB_OK | MB_ICONINFORMATION);
+		}
+		else{
+			save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot)->change_lvl(i_lvl);
+		}
+
 
 	}else
 		save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot)->change_lvl(i_lvl);
@@ -1159,8 +1168,38 @@ void CZeldaEditCharaWeaponsDlg::OnBnClickedCheckCweaponMultielement()
 	CButton *cb_check_multiElement_state = (CButton*)GetDlgItem(IDC_CHECK_CWEAPON_MULTIELEMENT);
 	bool b_is_multiElement = cb_check_multiElement_state->GetCheck();
 
-	save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot)->change_multi_element_state(b_is_multiElement);
-	save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot)->save_weapon();
+	bool b_dlc_safety_checks = stoi(save->get_config()->get_param_value("DlcSafetyCheck", save->get_config()->get_sectionID("General")));
+
+	if (save->get_general_things()->get_current_savefile_game_version() != "1.0.0"
+		&& save->get_general_things()->get_current_savefile_game_version() != "1.2.0"
+		&& save->get_general_things()->get_current_savefile_game_version() != "1.3.0"
+		&& (save->get_general_things()->get_dlc_installed_state(1) || save->get_general_things()->get_dlc_installed_state(2) || save->get_general_things()->get_dlc_installed_state(3)))
+	{
+		save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot)->change_multi_element_state(b_is_multiElement);
+		save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot)->save_weapon();
+	}
+	else{
+		if (b_dlc_safety_checks || save->get_general_things()->get_current_savefile_game_version() == "1.0.0"
+			|| save->get_general_things()->get_current_savefile_game_version() == "1.2.0"
+			|| save->get_general_things()->get_current_savefile_game_version() == "1.3.0")
+		{
+			CString cs_info;
+			cs_info.Format
+				(L"This option is only available, if you on GameVersion '1.4.0' or higher \nand if you have one of the following DLCs installed:\n\n%s\n%s\n%s"
+				, CString(save->get_general_things()->get_dlc_name(1).c_str()), CString(save->get_general_things()->get_dlc_name(2).c_str()), CString(save->get_general_things()->get_dlc_name(3).c_str()));
+			MessageBox(cs_info, L"Information", MB_OK | MB_ICONINFORMATION);
+		}
+		else{
+			save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot)->change_multi_element_state(b_is_multiElement);
+			save->get_player(this->i_chara_id)->get_weapon_slot(this->i_weapon_type, this->i_weapon_slot)->save_weapon();
+		}
+
+
+
+	}
+
+
+
 
 	this->UpdateData();
 

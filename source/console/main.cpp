@@ -1,3 +1,6 @@
+/*
+* @author: nedron92, 2016
+*/
 #include <iostream>
 #include "../core/HWLSaveEditor.h"
 
@@ -8,7 +11,6 @@
 #else //any other OS
 #define CLEAR "clear"
 #endif
-
 
 using namespace std;
 HWLSaveEdit::HWLSaveEditor *save;
@@ -44,6 +46,9 @@ void get_skills(int i_chara_id, int i_weapon_type_id, int i_weapon_slot_id);
 void change_skill_values(int i_chara_id, int i_weapon_type_id, int i_weapon_slot_id, int i_skill_slot_id, int i_skill_id, int i_choose);
 
 void get_check_update_menu();
+void get_check_config_menu();
+
+void get_about_information();
 
 int main(int argc, char* argv[])
 {
@@ -68,6 +73,45 @@ int main(int argc, char* argv[])
 		{
 			get_check_update_menu();
 		}
+
+		//if we have --create-default-config, try to create a new default-config-file
+		if (argv[1] == string("--create-default-config"))
+		{
+			HWLSaveEdit::HWLConfig hwlc_tmp_config = HWLSaveEdit::HWLConfig(false);
+
+			try
+			{
+				hwlc_tmp_config.write_config();
+				cout << "A new default-config was created successfully." << endl;
+				return 0;
+			}
+			catch (HWLSaveEdit::HWLException &e)
+			{
+				cout << "Error: " << e.get_code() << endl;
+				cout << e.what() << endl;
+				return 0;
+			}
+		}
+
+		//if we have --create-config, try to create a new config-file with all params + changed ones
+		if (argv[1] == string("--create-config"))
+		{
+			HWLSaveEdit::HWLConfig hwlc_tmp_config = HWLSaveEdit::HWLConfig();
+
+			try
+			{
+				hwlc_tmp_config.write_config();
+				cout << "A new config, with all current parameters, was created successfully." << endl;
+				return 0;
+			}
+			catch (HWLSaveEdit::HWLException &e)
+			{
+				cout << "Error: " << e.get_code() << endl;
+				cout << e.what() << endl;
+				return 0;
+			}
+		}
+
 	}
 
 	try
@@ -81,6 +125,9 @@ int main(int argc, char* argv[])
 			cout << "  Hyrule Warriors Legends - SaveEditor, V" << HWLSaveEdit::HWLSaveEditorCore::version << endl;
 			cout << "________________________________________________" << endl << endl;
 
+			if (save->get_update_message() != "")
+				cout << save->get_update_message() << endl << endl;
+
 			cout << "Menue: " << endl;
 			cout << "1 - General things (Submenu)" << endl;
 			cout << "2 - Characters (Submenu)" << endl;
@@ -89,6 +136,8 @@ int main(int argc, char* argv[])
 			cout << "5 - Adventure Mode-Items (Submenu)" << endl;
 			cout << "6 - My Fairies (Submenu)" << endl;
 			cout << "7 - Check for Updates (Submenu)" << endl;
+			cout << "8 - Check Configuration (Submenu)" << endl;
+			cout << "9 - About..." << endl;
 			cout << "0 - Quit" << endl;
 			cout << "Your choose: ";
 			cin >> i_choose;
@@ -113,12 +162,65 @@ int main(int argc, char* argv[])
 	}
 	catch (HWLSaveEdit::HWLException &e)
 	{
-		cout << "  Hyrule Warriors Legends - SaveEditor, V" << HWLSaveEdit::HWLSaveEditorCore::version << endl;
-		cout << "________________________________________________" << endl << endl;
+		while (1)
+		{
+			cout << "  Hyrule Warriors Legends - SaveEditor, V" << HWLSaveEdit::HWLSaveEditorCore::version << endl;
+			cout << "________________________________________________" << endl << endl;
+
+			cout << e.what() << "\nOnly manual Update- and Configuration-Check available" << endl << endl;
+			string s_choose;
+
+			cout << "Menue: " << endl;
+			cout << "1 - Check for Updates (Submenu)" << endl;
+			cout << "2 - Check Configuration (Submenu)" << endl;
+			cout << "3 - About..." << endl;
+			cout << "0 - Quit" << endl;
+			cout << "Your choose: ";
+			cin >> s_choose;
+
+			if (iswdigit(s_choose[0]))
+			{
+				if (atoi(&s_choose[0]) == 0)
+				{
+					system(CLEAR);
+					break;
+				}
+				else {
+					switch (atoi(&s_choose[0]))
+					{
+					case 1:
+					{
+							  system(CLEAR);
+							  get_check_update_menu();
+							  break;
+					}
+
+					case 2:
+					{
+							  system(CLEAR);
+							  get_check_config_menu();
+							  break;
+					}
+
+					case 3:
+					{
+							  system(CLEAR);
+							  get_about_information();
+							  break;
+					}
+					default:
+						break;
+					}
+
+				}
+
+				if (atoi(&s_choose[0]) > 0)
+					system(CLEAR);
+
+			}
+		}
 
 		save = nullptr;
-		cout << e.what() << "- Only Update-Check available" << endl << endl;
-		get_check_update_menu();
 	}
 
 	delete save;
@@ -172,6 +274,18 @@ void get_submenu(int i_menu_code)
 	case 7:
 	{
 			  get_check_update_menu();
+			  break;
+	}
+
+	case 8:
+	{
+			  get_check_config_menu();
+			  break;
+	}
+
+	case 9:
+	{
+			  get_about_information();
 			  break;
 	}
 
@@ -553,7 +667,7 @@ void change_chara_values(int i_type, int i_chara_id)
 					  if (save->get_player(i)->get_weapon_count(0) == 0)
 					  {
 						  b_no_weapon = true;
-						  save->get_player(i)->get_weapon_slot(0, 0)->generate_default_weapon();
+						  save->get_player(i)->get_weapon_slot(0, 0)->generate_default_weapon(true);
 						  save->get_player(i)->get_weapon_slot(0, 0)->save_weapon();
 					  }
 
@@ -879,13 +993,20 @@ void change_weapon_values(int i_chara_id, int i_type_id, int i_current_id, int i
 						  i_multi_element_weapon_counter++;
 				  }
 
+
+				  bool b_dlc_safety_checks = stoi(save->get_config()->get_param_value("DlcSafetyCheck", save->get_config()->get_sectionID("General")));
+
 				  if (i_chara_id == 26 && i_type_id == 0 && save->get_general_things()->get_current_savefile_game_version() != "1.0.0"
 					  && save->get_general_things()->get_current_savefile_game_version() != "1.2.0"
-					  && save->get_general_things()->get_dlc_installed_dlcs_value() == 0)
+					  && (save->get_general_things()->get_dlc_installed_dlcs_value() == 0))
 				  {
-					  cout << endl << "Due to a security reason and because the game doesn't \n" <<
-						  "recognize LVL-4 Weapons of " << save->get_player(i_chara_id)->get_name() << " without a DLC, the calculation \n" <<
-						  "maximize the Weapons to LVL-3 instead." << endl << endl;
+					  if (b_dlc_safety_checks)
+					  {
+						  cout << endl << "Due to a security reason and because the game doesn't \n" <<
+							  "recognize LVL-4 Weapons of " << save->get_player(i_chara_id)->get_name() << " without a DLC, the calculation \n" <<
+							  "maximize the Weapons to LVL-3 instead." << endl << endl;
+					  }
+
 				  }
 
 				  if (i_multi_element_weapon_counter > 0)
@@ -1108,13 +1229,13 @@ void change_weapon_values(int i_chara_id, int i_type_id, int i_current_id, int i
 
 			  if (i_used_slot_count < i_max_used_slots)
 			  {
-				  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_used_slot_count)->generate_default_weapon();
+				  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_used_slot_count)->generate_default_weapon(true);
 				  save->get_player(i_chara_id)->get_weapon_slot(i_type_id, i_used_slot_count)->save_weapon();
 				  cout << "Finish. You now have a new Default Weapon." << endl;
 
 				  if (i_used_slot_count + 1 >  HWLSaveEdit::HWLPlayer::playerWeaponSlotsMaxIngame)
 				  {
-					  cout << "\nYou add more Weapons then the game allowed you to take (Max: " << HWLSaveEdit::HWLPlayer::playerWeaponSlotsMaxIngame  << ")" << endl;
+					  cout << "\nYou add more Weapons then the game allowed you to take (Max: " << HWLSaveEdit::HWLPlayer::playerWeaponSlotsMaxIngame << ")" << endl;
 					  cout << "so you have to sell " << (i_used_slot_count + 1) - HWLSaveEdit::HWLPlayer::playerWeaponSlotsMaxIngame << " Weapon(s) at the start of the game itself. " << endl;
 
 				  }
@@ -1179,9 +1300,26 @@ void change_weapon_values(int i_chara_id, int i_type_id, int i_current_id, int i
 	case 10:
 	{
 			   string s_savefile_game_version = save->get_general_things()->get_current_savefile_game_version();
+			   bool b_dlc_safety_checks = stoi(save->get_config()->get_param_value("DlcSafetyCheck", save->get_config()->get_sectionID("General")));
 
+			   bool b_really_change = false;
 			   if (s_savefile_game_version != "1.0.0" && s_savefile_game_version != "1.2.0"
-				   && s_savefile_game_version != "1.3.0" && (save->get_general_things()->get_dlc_installed_state(1) || save->get_general_things()->get_dlc_installed_state(2)))
+				   && s_savefile_game_version != "1.3.0" && (save->get_general_things()->get_dlc_installed_state(1) || save->get_general_things()->get_dlc_installed_state(2)
+				   || save->get_general_things()->get_dlc_installed_state(3)
+				   ))
+			   {
+				   b_really_change = true;
+			   }
+			   else{
+				   if (b_dlc_safety_checks || s_savefile_game_version == "1.0.0" || s_savefile_game_version == "1.2.0"
+					   || s_savefile_game_version == "1.3.0")
+					   b_really_change = false;
+				   else
+					   b_really_change = true;
+			   }
+
+
+			   if (b_really_change)
 			   {
 				   if (i_type_id == 4 && i_chara_id == 0)
 				   {
@@ -1244,7 +1382,8 @@ void change_weapon_values(int i_chara_id, int i_type_id, int i_current_id, int i
 				   cout << "This option is only available, if you on GameVersion '1.4.0' or higher \n"
 					   << "and if you have one of the following DLCs installed: \n"
 					   << save->get_general_things()->get_dlc_name(1) << endl
-					   << save->get_general_things()->get_dlc_name(2) << endl;
+					   << save->get_general_things()->get_dlc_name(2) << endl
+					   << save->get_general_things()->get_dlc_name(3) << endl;
 			   }
 
 			   cin.clear();
@@ -2298,4 +2437,113 @@ void get_check_update_menu()
 		}
 	}
 
+}
+
+void get_check_config_menu()
+{
+	string s_choose;
+
+
+	while (1)
+	{
+		cout << "Menue: " << endl;
+		cout << "1 - Check current Configuration (Readonly)" << endl;
+		cout << "2 - Create a new config-file (with all current parameters)" << endl;
+		cout << "3 - Create a new default config-file" << endl;
+		cout << "0 - back" << endl;
+		cout << "Your choose: ";
+		cin >> s_choose;
+
+		if (iswdigit(s_choose[0]))
+		{
+			if (atoi(&s_choose[0]) == 0)
+			{
+				system(CLEAR);
+				break;
+			}
+			else {
+				switch (atoi(&s_choose[0]))
+				{
+				case 1:
+				{
+						  system(CLEAR);
+						  cout << endl;
+						  cout << save->get_config()->get_ConfigForOutput() << endl;
+						  cout << endl;
+						  break;
+				}
+
+				case 2:
+				{
+						  system(CLEAR);
+						  cout << endl;
+
+						  try
+						  {
+							  save->get_config()->write_config();
+							  cout << "A new config, with all current parameters, was created successfully." << endl;
+							  save->get_config()->read_config();
+						  }
+						  catch (HWLSaveEdit::HWLException &e)
+						  {
+							  cout << "Error: " << e.get_code() << endl;
+							  cout << e.what() << endl;
+						  }
+
+						  cout << endl;
+						  break;
+				}
+
+				case 3:
+				{
+						  system(CLEAR);
+						  cout << endl;
+
+						  try
+						  {
+							  save->get_config()->write_config(true);
+							  cout << "A new default-config was created successfully." << endl;
+						  }
+						  catch (HWLSaveEdit::HWLException &e)
+						  {
+							  cout << "Error: " << e.get_code() << endl;
+							  cout << e.what() << endl;
+						  }
+
+						  cout << endl;
+						  break;
+				}
+
+				default:
+					break;
+				}
+
+				cout << "Press any key to go back to the menu" << endl;
+				cin.clear();
+
+				getchar();
+				cin.get();
+
+			}
+
+			if (atoi(&s_choose[0]) > 0)
+				system(CLEAR);
+
+		}
+	}
+
+}
+
+void get_about_information()
+{
+	cout << "About this programm" << endl;
+	cout << "___________________" << endl << endl;
+	cout << "Editor to manipulate your SaveGame of Hyrule Warriors Legends, Nintendo 3DS" << endl;
+	cout << "Author/Creator: nedron92, 2016" << endl << endl;
+
+	cout << "Press any key to go back to the menu" << endl;
+	cin.clear();
+	getchar();
+	cin.get();
+	system(CLEAR);
 }

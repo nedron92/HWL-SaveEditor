@@ -1,3 +1,7 @@
+/*
+ * @author: nedron92, 2016 
+ * @desc: C++ - Wrapper with code from the original example. See License.txt for more information
+ */
 #pragma once
 
 /*
@@ -81,17 +85,18 @@ class HTTP_Client
 
 	public:
 		//constructor and destructor
-		HTTP_Client(string s_url = "");
+		HTTP_Client(string s_url = "", bool b_useProxy = false, string s_proxyHost = "127.0.0.1", int i_proxyPort = 8080);
 		~HTTP_Client();
 
 		//needed getter/setter methods
 		string get_current_url();
-		//string get_proxy_settings - not implemented yet
+		string get_current_proxy();
 		//string get_auth_settings - not implemented yet
 		string get_current_output();
 
 		void set_current_url(string s_url);
-		//void change_proxy_settings - not implemented yet
+		void set_current_proxy(string s_proxyHost, int i_proxyPort);
+                void use_proxy(bool b_use_proxy);
 		//void change_auth_settings - not implemented yet
 
 		//method for sending http-requests

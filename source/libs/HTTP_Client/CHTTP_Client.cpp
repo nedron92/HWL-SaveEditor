@@ -1,3 +1,7 @@
+/*
+ * @author: nedron92, 2016 
+ * @desc: C++ - Wrapper with code from the original example. See License.txt for more information
+ */
 //include needed and correct header-files
 #include <string>
 #include "CHTTP_Client.h"
@@ -10,10 +14,19 @@
 * @var string  s_url       the url as a string
 *
 */
-HTTP_Client::HTTP_Client(string s_url)
+HTTP_Client::HTTP_Client(string s_url, bool b_useProxy, string s_proxyHost, int i_proxyPort)
 {
+    //check if we have a given and not empty url
 	if (s_url != "")
 		this->s_current_url = s_url;
+
+        //check if we should use the proxy and set it
+	if (b_useProxy)
+	{
+		this->b_use_proxy = b_useProxy;
+		this->s_http_proxy_host = s_proxyHost;
+		this->i_http_proxy_port = i_proxyPort;
+	}
 
 	memset(&this->o_request_parameters, 0, sizeof(HTTPParameters));
 	this->init();
@@ -68,6 +81,26 @@ string HTTP_Client::get_current_url()
 }
 
 /**
+* This method return the current proxy-settings as a string
+*  but only if we really use a proxy.
+*
+* @return string       the current proxy-settings (Host:port)
+*
+*/
+string HTTP_Client::get_current_proxy()
+{
+	if (this->b_use_proxy)
+	{
+		return (this->s_http_proxy_host + ":" + to_string(this->i_http_proxy_port));
+	}
+	else
+	{
+		return "";
+	}
+
+}
+
+/**
 * This method return the current output. At default the variable is empty, but after
 * an successfull request it has the output of the request itself.
 *
@@ -90,6 +123,32 @@ string HTTP_Client::get_current_output()
 void HTTP_Client::set_current_url(string s_url)
 {
 	this->s_current_url = s_url;
+	this->init();
+}
+
+/**
+* This method set the current proxy for an http-request
+*
+* @var string  s_proxyHost      the proxyHost
+* @var int     i_proxyPort      the proxyPort
+*
+*/
+void HTTP_Client::set_current_proxy(string s_proxyHost, int i_proxyPort)
+{
+	this->s_http_proxy_host = s_proxyHost;
+	this->i_http_proxy_port = i_proxyPort;
+	this->init();
+}
+
+/**
+* This method change the state, if the proxy-server is used or not
+*
+* @var bool  b_use_proxy      state, if we have to use the proxy-settings
+*
+*/
+void HTTP_Client::use_proxy(bool b_use_proxy)
+{
+	this->b_use_proxy = b_use_proxy;
 	this->init();
 }
 
@@ -118,7 +177,6 @@ void HTTP_Client::send_http_request()
 			if ((this->i_return_code = HTTPClientSetProxy(this->o_http_session, this->o_request_parameters.ProxyHost,
 				this->o_request_parameters.ProxyPort, NULL, NULL)) != HTTP_CLIENT_SUCCESS)
 			{
-
 				break;
 			}
 		}

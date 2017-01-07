@@ -163,7 +163,7 @@ BOOL CZeldaHWLSaveEditorGUIApp::InitInstance()
 				return FALSE;
 		}
 
-		if (save->get_update_message() != "")
+		if (save != nullptr && save->get_update_message() != "")
 			MessageBox(dlg, CString(save->get_update_message().c_str()), L"Information", MB_OK | MB_ICONINFORMATION);
 
 		m_pMainWnd = &dlg;

@@ -144,6 +144,9 @@
     <ClInclude Include="source\gui\ZeldaConfigWeaponCopyDlg.h">
       <Filter>Headerdateien\gui</Filter>
     </ClInclude>
+    <ClInclude Include="source\core\HWLConfig.h">
+      <Filter>Headerdateien\core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\core\HWLWeapon.cpp">
@@ -235,6 +238,9 @@
     </ClCompile>
     <ClCompile Include="source\gui\ZeldaConfigWeaponCopyDlg.cpp">
       <Filter>Quelldateien\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\core\HWLConfig.cpp">
+      <Filter>Quelldateien\core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

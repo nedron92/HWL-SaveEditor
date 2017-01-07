@@ -99,6 +99,7 @@
   <ItemGroup>
     <ClInclude Include="source\core\HWLAdventureModeItems.h" />
     <ClInclude Include="source\core\HWLAdventureModeMaps.h" />
+    <ClInclude Include="source\core\HWLConfig.h" />
     <ClInclude Include="source\core\HWLException.h" />
     <ClInclude Include="source\core\HWLFairy.h" />
     <ClInclude Include="source\core\HWLFairyFood.h" />
@@ -134,6 +135,7 @@
   <ItemGroup>
     <ClCompile Include="source\core\HWLAdventureModeItems.cpp" />
     <ClCompile Include="source\core\HWLAdventureModeMaps.cpp" />
+    <ClCompile Include="source\core\HWLConfig.cpp" />
     <ClCompile Include="source\core\HWLException.cpp" />
     <ClCompile Include="source\core\HWLFairy.cpp" />
     <ClCompile Include="source\core\HWLFairyFood.cpp" />

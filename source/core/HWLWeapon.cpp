@@ -188,13 +188,13 @@ const vector<int> HWLWeapon::vi_playerWeaponTypeHexValues =
 	0x06,
 	0x09,
 	0x3C,
-	0x5A,
-	0x60,
+	0x15, //Horse
+	0x63, //Spinner
 
 	//Zelda - Weapon Types Hex
-	0x15,
+	0x60, //Rapier
 	0x18,
-	0x63,
+	0x21, //Dominion Rod
 
 	//Shiek - Weapon Types Hex
 	0x24,
@@ -204,7 +204,7 @@ const vector<int> HWLWeapon::vi_playerWeaponTypeHexValues =
 	0x1E,
 
 	//Ganondorf - Weapon Types Hex
-	0x21,
+	0x0C, //Great Swords
 	0x6E,
 
 	//Darunia - Weapon Types Hex
@@ -229,7 +229,7 @@ const vector<int> HWLWeapon::vi_playerWeaponTypeHexValues =
 	0x39,
 
 	//Lana - Weapon Types Hex
-	0x0C,
+	0x5A, //Book of Sorcery
 	0x0F,
 	0x12,
 

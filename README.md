@@ -52,7 +52,7 @@ If you don't want to wait for a new stable-release, then you can check the night
 It will build automatically windows- and linux-builds every night (about 3 o'clock CET) after there was a new commit to  
 this repository.  
 But use them on your own risk, the nightly-builds can be unstable and with more failures/bugs as a new release.  
-You can download them on https://nightly.nedron92.php-friends.de/hwl_save-editor/
+You can download them on https://nightly.nedron92.de/hwl_save-editor/
 
 
 ## Questions?

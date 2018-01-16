@@ -15,11 +15,11 @@
 
 //set user-defined content or define hardcoded-standard instead
 #ifndef VERSION_CHECK_NIGHTLY_HTTP_URL
-#define VERSION_CHECK_NIGHTLY_HTTP_URL "http://nightly.nedron92.php-friends.de/hwl_save-editor/builds/version_nightly.txt"
+#define VERSION_CHECK_NIGHTLY_HTTP_URL "http://nightly.nedron92.de/hwl_save-editor/builds/version_nightly.txt"
 #endif
 
 #ifndef NIGHTLY_URL
-#define NIGHTLY_URL "https://nightly.nedron92.php-friends.de/hwl_save-editor/"
+#define NIGHTLY_URL "https://nightly.nedron92.de/hwl_save-editor/"
 #endif
 
 
@@ -35,7 +35,7 @@ namespace HWLSaveEdit
 		private:
 
 			/* @var s_version_check_http_url		the url of the version-check-file */
-			string s_version_check_http_url = "http://nightly.nedron92.php-friends.de/hwl_save-editor/builds/version.txt";
+			string s_version_check_http_url = "http://nightly.nedron92.de/hwl_save-editor/builds/version.txt";
 
 			/* @var s_version_check_nightly_http_url		the url of the nightly-version-check-file, user defined */
 			string s_version_check_nightly_http_url = VERSION_CHECK_NIGHTLY_HTTP_URL;

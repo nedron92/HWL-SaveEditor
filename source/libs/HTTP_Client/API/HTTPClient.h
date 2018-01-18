@@ -49,7 +49,7 @@ extern "C" {
 #define HTTP_CLIENT_DEFAULT_VERB            0           // GET
 #define HTTP_CLIENT_DEFAULT_VER             "HTTP/1.1"  // We will send this in the outgoing header
 #define HTTP_CLIENT_DEFAULT_PROXY_VER       "HTTP/1.0"  // We will send this in the outgoing header (proxy)
-#define HTTP_CLIENT_DEFAULT_AGENT           "Mozilla/4.0 (compatible; MSIE 5.5; Windows NT 5.0)"
+#define HTTP_CLIENT_DEFAULT_AGENT           "HWL-SaveEditor"
 #define HTTP_CLIENT_DEFAULT_TIMEOUT         30          // Default timeout in seconds
 #define HTTP_CLIENT_DEFAULT_KEEP_ALIVE      30          // Default Keep-alive value in seconds
 #define HTTP_CLIENT_DEFAULT_DIGEST_AUTH     "MD5"       // This is for bypassing a known bug in AMT05..

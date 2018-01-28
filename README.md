@@ -1,3 +1,5 @@
+[![Build Status](https://jenkins.nedron92.de/job/HWL_githubCompileAuto/badge/icon)](https://jenkins.nedron92.de/job/HWL_githubCompileAuto/)
+
 # HWL-SaveEditor (3DS)
 This is an Save-Editor for the game Hyrule Warriors Legends (Nintendo 3DS)
 
@@ -52,7 +54,7 @@ If you don't want to wait for a new stable-release, then you can check the night
 It will build automatically windows- and linux-builds every night (about 3 o'clock CET) after there was a new commit to  
 this repository.  
 But use them on your own risk, the nightly-builds can be unstable and with more failures/bugs as a new release.  
-You can download them on https://nightly.nedron92.php-friends.de/hwl_save-editor/
+You can download them on https://nightly.nedron92.de/hwl_save-editor/
 
 
 ## Questions?

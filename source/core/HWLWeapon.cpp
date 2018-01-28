@@ -403,13 +403,13 @@ const vector<int> HWLWeapon::vi_playerWeaponTypeHexValuesMultiElement =
 	0xC4, //Great Fairy - Multi
 	0x9B, //Gauntlets - Multi
 	0x00, //Master Sword - Multi, not possible :D 
-	0xC5, //Horse (Epona) - Multi
-	0xC6, //Spinner - Multi
+	0xC9, //Horse (Epona) - Multi
+	0xCA, //Spinner - Multi
 
 	//Zelda - Weapon Types Hex Multi-Element
-	0xC9, //Rapier - Multi
+	0xC6, //Rapier - Multi
 	0xB2, //Baton - Multi
-	0xCA, //Dominion Rod - Multi
+	0xCB, //Dominion Rod - Multi
 
 	//Shiek - Weapon Types Hex Multi-Element
 	0x9C, //Harp - Multi
@@ -419,7 +419,7 @@ const vector<int> HWLWeapon::vi_playerWeaponTypeHexValuesMultiElement =
 	0xB0, //Naginata - Multi
 
 	//Ganondorf - Weapon Types Hex Multi-Element
-	0xCB, //Great Swords - Multi
+	0xC8, //Great Swords - Multi
 	0xB3, //Trident - Multi
 
 	//Darunia - Weapon Types Hex Multi-Element
@@ -444,7 +444,7 @@ const vector<int> HWLWeapon::vi_playerWeaponTypeHexValuesMultiElement =
 	0xB4, //Scimitars - Multi
 
 	//Lana - Weapon Types Hex Multi-Element
-	0xC8, //Book of Sorcery - Multi
+	0xC5, //Book of Sorcery - Multi
 	0xB1, //Spear - Multi
 	0x9D, //Summoning Gate - Multi
 

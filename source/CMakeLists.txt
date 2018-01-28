@@ -19,8 +19,8 @@ option(USE_OWN_URLS "Use your own URLs for some HTTP-Requests" OFF)
 if(USE_OWN_URLS)
 #add messager.....
   MESSAGE(STATUS "Your using USE_OWN_URLS")
-  SET(VERSION_CHECK_NIGHTLY_HTTP_URL '\"http://nightly.nedron92.php-friends.de/hwl_save-editor/builds/version_nightly.txt\"' CACHE STRING "Own Version-Nighly-Check-URL")
-  SET(NIGHTLY_URL '\"https://nightly.nedron92.php-friends.de/hwl_save-editor/\"' CACHE STRING "Own Nightly-Server-URL")
+  SET(VERSION_CHECK_NIGHTLY_HTTP_URL '\"http://nightly.nedron92.de/hwl_save-editor/builds/version_nightly.txt\"' CACHE STRING "Own Version-Nighly-Check-URL")
+  SET(NIGHTLY_URL '\"https://nightly.nedron92.de/hwl_save-editor/\"' CACHE STRING "Own Nightly-Server-URL")
 
   add_definitions( -DVERSION_CHECK_NIGHTLY_HTTP_URL=${VERSION_CHECK_NIGHTLY_HTTP_URL} )
   add_definitions( -DNIGHTLY_URL=${NIGHTLY_URL} )

@@ -53,7 +53,7 @@ shared_ptr<HWLConfig> HWLSaveEditorCore::hwlc_config;
 
 //public members
 /* @var version  hold the current version-number as string */
-const string HWLSaveEditorCore::version = "3.2a";
+const string HWLSaveEditorCore::version = "3.2b";
 
 
 

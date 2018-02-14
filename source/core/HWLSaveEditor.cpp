@@ -761,7 +761,8 @@ void HWLSaveEditor::calc_game_versions_restrictions()
 }
 
 /**
-* This method creat a backup file of the current opened one
+* This method will create a backup file of the current opened one (and 
+* will take care of old backups of the same day)
 *
 */
 void HWLSaveEditor::create_backup_file()
@@ -769,14 +770,23 @@ void HWLSaveEditor::create_backup_file()
 	//get time-depended variables/structure
 	time_t rawtime;
 	struct tm * timeinfo;
-	char buffer[80];
+	char buffer[120];
 	time(&rawtime);
 	timeinfo = localtime(&rawtime);
-	strftime(buffer, 80, "%Y-%m-%d", timeinfo); //get current time, formatted
+
+	//get time-indicator, am/pm, based on 0-11 = am, 12-23 = pm 
+	string s_timeIndicator;
+	if (timeinfo->tm_hour >= 12) {
+		s_timeIndicator = "PM";
+	}else{
+		s_timeIndicator = "AM";
+	}
+		
+	strftime(buffer, 120, "%Y-%m-%d_%I.%M.%S", timeinfo); //get current time, formatted
 
 	//declare/define needed variables
-	// the named of the file will be: <filename>.YYYY-MM-DD.bak
-	string s_filepathname_backup = this->s_filepathname + "." + buffer + ".bak";
+	// the name of the file will be: <filename>.YYYY-MM-DD_HH.MM:SS AM/PM.bak
+	string s_filepathname_backup = this->s_filepathname + "." + buffer + s_timeIndicator + ".bak";
 
 	//create/open new empty-backup-file
 	fstream fs_filehandler_backup = fstream(s_filepathname_backup, fstream::binary | fstream::out);

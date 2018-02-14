@@ -1,3 +1,5 @@
+[![Build Status](https://jenkins.nedron92.de/job/HWL_githubCompileAuto/badge/icon)](https://jenkins.nedron92.de/job/HWL_githubCompileAuto/)
+
 # HWL-SaveEditor (3DS)
 This is an Save-Editor for the game Hyrule Warriors Legends (Nintendo 3DS)
 
